@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class mutable="false" name="org.n52.sensorweb.awi.data.entities.Sensor" optimistic-lock="version" schema="public" table="sensor">
+    <id column="sensor_id" name="id" type="int"/>
+    <many-to-one class="org.n52.sensorweb.awi.data.entities.Device" column="device_id" fetch="select" lazy="false" name="device"/>
+    <property column="sensor" name="name" type="string"/>
+    <property column="unit" name="unit" type="string"/>
+    <property column="code" name="code" type="string"/>
+  </class>
+</hibernate-mapping>

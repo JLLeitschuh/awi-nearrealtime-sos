@@ -1,0 +1,40 @@
+dependencies {
+  runtime project(":nrt")
+
+  // iceland
+  runtime "org.n52.iceland:iceland:$icelandVersion"
+
+  // sos
+  runtime "org.n52.sensorweb.sos:api:$sosVersion"
+  runtime "org.n52.sensorweb.sos:profile-coding:$sosVersion"
+  runtime "org.n52.sensorweb.sos:cache:$sosVersion"
+  runtime "org.n52.sensorweb.sos:gc-dao:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-ows-v110:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-sensorML:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-sensorML-v101:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-sensorML-v20:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-sos-v20:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-json:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-kvp:$sosVersion"
+  runtime "org.n52.sensorweb.sos:core-v20:$sosVersion"
+  runtime "org.n52.sensorweb.sos:binding-exi:$sosVersion"
+  runtime "org.n52.sensorweb.sos:coding-soap:$sosVersion"
+  runtime "org.n52.sensorweb.sos:gda-operation:$sosVersion"
+  runtime "org.n52.sensorweb.sos:split-and-merge:$sosVersion"
+
+  // logging
+  runtime "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+  runtime "org.slf4j:jul-to-slf4j:$slf4jVersion"
+  runtime "org.slf4j:log4j-over-slf4j:$slf4jVersion"
+  runtime "ch.qos.logback:logback-classic:$logbackVersion"
+
+  // CORS
+  runtime "com.thetransactioncompany:cors-filter:$corsFilterVersion"
+
+  // spring
+  runtime "org.springframework:spring-web:$springVersion"
+  runtime "org.springframework:spring-webmvc:$springVersion"
+  runtime "org.springframework:spring-orm:$springVersion"
+
+  providedCompile "javax.servlet:javax.servlet-api:$servletApiVersion"
+}
