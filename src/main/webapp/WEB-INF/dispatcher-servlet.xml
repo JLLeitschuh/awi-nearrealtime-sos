@@ -20,7 +20,7 @@
         <description>This calls SettingsManager#configure for all beans.</description>
     </bean>
 
-    <bean class="org.n52.iceland.coding.DocumentBuilderProvider"/>
+    <!--<bean class="org.n52.iceland.coding.DocumentBuilderProvider"/>-->
     <bean class="org.n52.iceland.util.http.HttpUtils"/>
     <bean id="icelandServlet" class="org.n52.iceland.service.Service" />
 
@@ -45,7 +45,8 @@
     </bean>
 
     <bean class="org.n52.sensorweb.awi.sensor.SensorApiClientImpl">
-        <constructor-arg value="https://handlesrv1.awi.de:8543/sensorManagement-web/rest/sensors" />
+        <!--<constructor-arg value="https://handlesrv1.awi.de:8543/sensorManagement-web/rest/sensors" />-->
+        <constructor-arg value="https://sensor.awi.de/rest/sensors" />
     </bean>
 
     <!-- dummy shit -->

@@ -25,6 +25,7 @@ import org.hibernate.transform.ResultTransformer;
  * @author Christian Autermann
  */
 @FunctionalInterface
+@SuppressWarnings("serial")
 public interface DefaultResultTransfomer extends ResultTransformer {
     @Override
     @SuppressWarnings(value = "rawtypes")
