@@ -1,5 +1,0 @@
-rootProject.name = 'nearrealtime'
-
-include ':nrt'
-include ':webapp'
-
