@@ -32,7 +32,12 @@ public class NRTEnvelope {
     private final MinMax<DateTime> resultTime;
     private final Envelope envelope;
 
-    public NRTEnvelope(MinMax<DateTime> phenomenonTime, MinMax<DateTime> resultTime, Envelope envelope) {
+    public NRTEnvelope() {
+        this(new MinMax<>(), new MinMax<>(), new Envelope());
+    }
+
+    public NRTEnvelope(MinMax<DateTime> phenomenonTime,
+                       MinMax<DateTime> resultTime, Envelope envelope) {
         this.phenomenonTime = phenomenonTime;
         this.resultTime = resultTime;
         this.envelope = envelope;
@@ -50,4 +55,12 @@ public class NRTEnvelope {
         return envelope;
     }
 
+    public NRTEnvelope extend(NRTEnvelope envelope) {
+        this.phenomenonTime.extend(envelope.getPhenomenonTime(), DateTime::compareTo);
+        this.resultTime.extend(envelope.getResultTime(), DateTime::compareTo);
+        if (envelope.getEnvelope() != null) {
+            this.envelope.expandToInclude(envelope.getEnvelope());
+        }
+        return this;
+    }
 }

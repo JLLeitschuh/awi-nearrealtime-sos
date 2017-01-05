@@ -6,14 +6,59 @@
         <artifactId>parent</artifactId>
         <version>4</version>
     </parent>
-    <artifactId>webapp</artifactId>
-    <name>52°North AWI NRT</name>
+
+    <groupId>org.n52.awi</groupId>
+    <artifactId>nrt-sos</artifactId>
+    <version>1-SNAPSHOT</version>
+
+    <name>52&deg;North AWI NRT SOS</name>
+    <description>52&deg;North AWI NRT SOS</description>
+    <inceptionYear>2016</inceptionYear>
+
+    <!--
+    <repositories>
+        <repository>
+            <id>52n-snapshots</id>
+            <name>52n snapshots</name>
+            <url>http://52north.org/maven/repo/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>52n-releases</id>
+            <name>52n plugin releases</name>
+            <url>http://52north.org/maven/repo/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    -->
+
+    <developers>
+        <developer>
+            <id>autermann</id>
+            <name>Christian Autermann</name>
+            <email>c.autermann@52north.org</email>
+            <organization>52&deg;North GmbH</organization>
+            <organizationUrl>https://52north.org</organizationUrl>
+        </developer>
+    </developers>
+
+    <contributors></contributors>
     <packaging>war</packaging>
     <properties>
         <version.c3p0>0.9.5.2</version.c3p0>
         <version.commons.io>2.4</version.commons.io>
         <version.corsFilter>2.5</version.corsFilter>
-        <version.guava>18.0</version.guava>
+        <version.guava>20.0</version.guava>
         <version.hibernate>4.3.11.Final</version.hibernate>
         <version.iceland>2-SNAPSHOT</version.iceland>
         <version.jackson>2.8.5</version.jackson>
@@ -37,7 +82,7 @@
         <jetty.port.stop>3001</jetty.port.stop>
     </properties>
     <dependencies>
-        
+
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -77,7 +122,7 @@
             <artifactId>guava</artifactId>
             <version>${version.guava}</version>
         </dependency>
-       
+
         <!--logging-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -97,6 +142,12 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${version.jackson}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -108,6 +159,16 @@
             <artifactId>jackson-datatype-joda</artifactId>
             <version>${version.jackson}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>joda-time</groupId>
+                    <artifactId>joda-time</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--resteasy-->
@@ -151,6 +212,10 @@
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-core</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-annotations</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -163,6 +228,10 @@
                 <exclusion>
                     <groupId>xml-apis</groupId>
                     <artifactId>xml-apis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -177,12 +246,28 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${version.hibernate}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-c3p0</artifactId>
             <version>${version.hibernate}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.mchange</groupId>
+                    <artifactId>c3p0</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.logging</groupId>
+                    <artifactId>jboss-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
@@ -202,7 +287,7 @@
             <version>${version.c3p0}</version>
             <scope>runtime</scope>
         </dependency>
-        
+
         <!--sos-->
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
@@ -331,6 +416,12 @@
             <artifactId>logback-classic</artifactId>
             <version>${version.logback}</version>
             <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--CORS-->

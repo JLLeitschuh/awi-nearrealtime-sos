@@ -15,12 +15,11 @@
  */
 package org.n52.sensorweb.awi;
 
-import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -66,31 +65,19 @@ public class NRTDaoImpl implements NRTDao {
                                                   device.getDescription(),
                                                   parent,
                                                   getOutputs(device));
-        procedure.setChildren(getProcedures(this.sensorApiClient.getChildren(device).stream(), procedure)
-                .collect(toSet()));
+        List<JsonDevice> children = this.sensorApiClient.getChildren(device);
+        procedure.setChildren(getProcedures(children.stream(), procedure).collect(toSet()));
         return procedure;
     }
 
     private Stream<NRTProcedure> getProcedures(Stream<JsonDevice> stream, NRTProcedure parent) {
-        return stream
-                .map(child -> createProcedure(child, parent))
+        return stream.map(child -> createProcedure(child, parent))
                 .filter(p -> p != null && !(p.getChildren().isEmpty() && p.getOutputs().isEmpty()));
     }
 
     private Optional<NRTProcedure> hasData(NRTProcedure p, Set<String> dataProcedures) {
         // FIXME remove this
         String id = p.getId();
-        int idx = id.indexOf(':');
-        if (idx > 0 && idx < id.length() - 1) {
-            id = id.substring(idx + 1);
-        }
-
-        if (id.startsWith("ps:")) {
-            id = id.replaceFirst("ps", "polarstern");
-        } else if (id.startsWith("he:")) {
-            id = id.replaceFirst("he", "heincke");
-        }
-
         if (dataProcedures.contains(id)) {
             return Optional.of(p);
         }
@@ -118,7 +105,8 @@ public class NRTDaoImpl implements NRTDao {
     public Set<NRTProcedure> getProcedures() {
         Set<String> dataProcedures = this.nearRealTimeDao.getProcedures()
                 .stream().map(NRTProcedure::getId).collect(toSet());
-        return getProcedures(this.sensorApiClient.getPlatforms().stream(), null)
+        List<JsonDevice> platforms = this.sensorApiClient.getPlatforms();
+        return getProcedures(platforms.stream(), null)
                 .map(p -> hasData(p, dataProcedures))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -132,8 +120,10 @@ public class NRTDaoImpl implements NRTDao {
 
     @Override
     public Map<String, NRTEnvelope> getEnvelopes() {
-        return this.nearRealTimeDao.getMinMax().entrySet().stream()
-                .collect(toMap(Entry::getKey, e -> new NRTEnvelope(e.getValue(), e.getValue(), null)));
+//        Map<String, MinMax<DateTime>> minMax = this.nearRealTimeDao.getMinMax();
+//        return minMax.entrySet().stream()
+//                .collect(toMap(Entry::getKey, e -> new NRTEnvelope(e.getValue(), e.getValue(), null)));
+        return this.nearRealTimeDao.getEnvelopes();
     }
 
     private static SessionFactory createSessionFactory() {

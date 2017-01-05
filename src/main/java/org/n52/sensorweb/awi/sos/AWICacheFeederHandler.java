@@ -16,12 +16,10 @@
 package org.n52.sensorweb.awi.sos;
 
 
-import static java.util.stream.Collectors.toMap;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -68,24 +66,10 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         updateCache(cache);
     }
 
-
     public Map<String, NRTEnvelope> getEnvelopes() {
         Map<String, NRTEnvelope> envelopes = this.dao.getEnvelopes();
-
-        return envelopes.entrySet().stream().collect(toMap(e -> {
-            // FIXME remove this
-            String key = e.getKey();
-            if (key.startsWith("polarstern:")) {
-                return key.replaceFirst("polarstern", "ps");
-            } else if (key.startsWith("heincke:")) {
-                return key.replaceFirst("heincke", "he");
-            } else {
-                return key;
-            }
-        }, Entry::getValue));
+        return envelopes;
     }
-
-
 
     @Override
     public void updateCache(SosWritableContentCache cache) throws OwsExceptionReport {
