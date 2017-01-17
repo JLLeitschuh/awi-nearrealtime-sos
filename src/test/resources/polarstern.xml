@@ -1,0 +1,2771 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sml:PhysicalSystem gml:id="sensorManagementID_90"
+                    xmlns:swe="http://www.opengis.net/swe/2.0"
+                    xmlns:gco="http://www.isotc211.org/2005/gco"
+                    xmlns:sml="http://www.opengis.net/sensorml/2.0"
+                    xmlns:gml="http://www.opengis.net/gml/3.2"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://www.opengis.net/sensorml/2.0 http://schemas.opengis.net/sensorML/2.0/sensorML.xsd">
+    <gml:description>The icebreaker R.V. Polarstern operates an average of 310 days a year, typically cruising in the Antarctic from November to March and pursuing research in the Arctic during the summer months. In the process, she covers ca. 50,000 nautical miles every year – the equivalent of two trips around the Equator. A veritable powerhouse, the research icebreaker can even operate in the pack ice zone: a double-walled steel hull and 20,000 horsepower allow her to easily break through 1.5 meter thick ice; thicker ice can be overcome by ramming. Further, the Polarstern is equipped for sustained operations at temperatures down to -50 degrees Celsius, and can even overwinter in the ice of the polar seas</gml:description>
+    <gml:identifier codeSpace="UID">90</gml:identifier>
+    <sml:identification>
+        <sml:IdentifierList>
+            <sml:identifier>
+                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                    <sml:label>uniqueID</sml:label>
+                    <sml:value>90</sml:value>
+                </sml:Term>
+            </sml:identifier>
+            <sml:identifier>
+                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                    <sml:label>Long Name</sml:label>
+                    <sml:value>Polarstern</sml:value>
+                </sml:Term>
+            </sml:identifier>
+            <sml:identifier>
+                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                    <sml:label>Short Name</sml:label>
+                    <sml:value>Polarstern</sml:value>
+                </sml:Term>
+            </sml:identifier>
+            <sml:identifier>
+                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                    <sml:label>Model Number</sml:label>
+                    <sml:value></sml:value>
+                </sml:Term>
+            </sml:identifier>
+            <sml:identifier>
+                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                    <sml:label>Manufacturer</sml:label>
+                    <sml:value></sml:value>
+                </sml:Term>
+            </sml:identifier>
+        </sml:IdentifierList>
+    </sml:identification>
+    <sml:contacts>
+        <sml:ContactList>
+            <sml:contact>
+                <gmd:CI_ResponsibleParty>
+                    <gmd:individualName>
+                        <gco:CharacterString>Marius Hirsekorn</gco:CharacterString>
+                    </gmd:individualName>
+                    <gmd:organisationName>
+                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                    </gmd:organisationName>
+                    <gmd:contactInfo>
+                        <gmd:CI_Contact/>
+                    </gmd:contactInfo>
+                    <gmd:role gco:nilReason="inapplicable"/>
+                </gmd:CI_ResponsibleParty>
+            </sml:contact>
+            <sml:contact>
+                <gmd:CI_ResponsibleParty>
+                    <gmd:individualName>
+                        <gco:CharacterString>Uwe Nixdorf</gco:CharacterString>
+                    </gmd:individualName>
+                    <gmd:organisationName>
+                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                    </gmd:organisationName>
+                    <gmd:contactInfo>
+                        <gmd:CI_Contact>
+                            <gmd:phone>
+                                <gmd:CI_Telephone>
+                                    <gmd:voice>
+                                        <gco:CharacterString>471-4831-1160</gco:CharacterString>
+                                    </gmd:voice>
+                                </gmd:CI_Telephone>
+                            </gmd:phone>
+                            <gmd:address>
+                                <gmd:CI_Address>
+                                    <gmd:city>
+                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                    </gmd:city>
+                                    <gmd:electronicMailAddress>
+                                        <gco:CharacterString>uwe.nixdorf@awi.de</gco:CharacterString>
+                                    </gmd:electronicMailAddress>
+                                </gmd:CI_Address>
+                            </gmd:address>
+                        </gmd:CI_Contact>
+                    </gmd:contactInfo>
+                    <gmd:role gco:nilReason="inapplicable"/>
+                </gmd:CI_ResponsibleParty>
+            </sml:contact>
+        </sml:ContactList>
+    </sml:contacts>
+    <sml:documentation>
+        <sml:DocumentList>
+            <sml:document xlink:arcrole="User Manual">
+                <gmd:CI_OnlineResource id="onlineResource_31_ofDevice_90">
+                    <gmd:linkage>
+                        <gmd:URL>https://spaces.awi.de/confluence/pages/viewpage.action?pageId=44834006</gmd:URL>
+                    </gmd:linkage>
+                    <gmd:name>
+                        <gco:CharacterString>Polarstern Handbook</gco:CharacterString>
+                    </gmd:name>
+                </gmd:CI_OnlineResource>
+            </sml:document>
+            <sml:document xlink:arcrole="Web site">
+                <gmd:CI_OnlineResource id="onlineResource_41_ofDevice_90">
+                    <gmd:linkage>
+                        <gmd:URL>https://dms.awi.de/Polarstern.html</gmd:URL>
+                    </gmd:linkage>
+                    <gmd:name>
+                        <gco:CharacterString>Polarstern DShip data acquisition system</gco:CharacterString>
+                    </gmd:name>
+                    <gmd:description>
+                        <gco:CharacterString>Polarstern DShip data acquisition system</gco:CharacterString>
+                    </gmd:description>
+                </gmd:CI_OnlineResource>
+            </sml:document>
+            <sml:document xlink:arcrole="Web site">
+                <gmd:CI_OnlineResource id="onlineResource_42_ofDevice_90">
+                    <gmd:linkage>
+                        <gmd:URL>https://www.awi.de/en/expedition/ships/polarstern.html</gmd:URL>
+                    </gmd:linkage>
+                    <gmd:name>
+                        <gco:CharacterString>Polarstern web page</gco:CharacterString>
+                    </gmd:name>
+                    <gmd:description>
+                        <gco:CharacterString>Polarstern web page</gco:CharacterString>
+                    </gmd:description>
+                </gmd:CI_OnlineResource>
+            </sml:document>
+        </sml:DocumentList>
+    </sml:documentation>
+    <sml:history>
+        <sml:EventList>
+            <sml:event>
+                <sml:Event>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="Comissioned">
+                                    <sml:label>Comissioned</sml:label>
+                                    <sml:value>Comissioned</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:time>
+                        <gml:TimePeriod gml:id="TimePeriodForEvent_53_ofDevice_90">
+                            <gml:description>TimePeriod</gml:description>
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="ID_TimeBeginForEvent_53_ofDevice_90">
+                                    <gml:timePosition>1982-12-08T23:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="ID_TimeEndForEvent_53_ofDevice_90">
+                                    <gml:timePosition>1982-12-08T23:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:time>
+                </sml:Event>
+            </sml:event>
+        </sml:EventList>
+    </sml:history>
+    <sml:components>
+        <sml:ComponentList>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="Thermosalinograph_Bow" xlink:title="Thermosalinograph">
+                <sml:PhysicalSystem gml:id="sensorManagementID_20">
+                    <gml:description>The thermosalinograph is an instrument used to accurately determine sea surface conductivity and temperature
+                    </gml:description>
+                    <gml:identifier codeSpace="UID">20</gml:identifier>
+                    <gml:name>Thermosalinograph</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>20</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>Thermosalinograph Bow</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>TSB_SBE21</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>SBE21</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>Seabird</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Thermosalinograph</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/133</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_20_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_20_validFrom">
+                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_20_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:contacts>
+                        <sml:ContactList>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Gerd Rohardt</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-1818</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Gerd.Rohardt@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Gerd Rohardt</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-1818</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Gerd.Rohardt@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Ursula Schauer</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-1817</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Ursula.Schauer@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                        </sml:ContactList>
+                    </sml:contacts>
+                    <sml:documentation>
+                        <sml:DocumentList>
+                            <sml:document xlink:arcrole="User Manual">
+                                <gmd:CI_OnlineResource id="onlineResource_11_ofDevice_20">
+                                    <gmd:linkage>
+                                        <gmd:URL>http://hdl.handle.net/10013/epic.45214</gmd:URL>
+                                    </gmd:linkage>
+                                    <gmd:name>
+                                        <gco:CharacterString>Factsheet: Thermosalinograph SBE 21 on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:name>
+                                    <gmd:description>
+                                        <gco:CharacterString>Factsheet for Thermosalinograph SBE 21 on board of R.V. Polarstern</gco:CharacterString>
+                                    </gmd:description>
+                                </gmd:CI_OnlineResource>
+                            </sml:document>
+                            <sml:document xlink:arcrole="User Manual">
+                                <gmd:CI_OnlineResource id="onlineResource_12_ofDevice_20">
+                                    <gmd:linkage>
+                                        <gmd:URL>http://hdl.handle.net/10013/epic.45216</gmd:URL>
+                                    </gmd:linkage>
+                                    <gmd:name>
+                                        <gco:CharacterString>User Manual: Thermosalinograph SBE21 on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:name>
+                                    <gmd:description>
+                                        <gco:CharacterString>User Manual: Thermosalinograph SBE21 on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:description>
+                                </gmd:CI_OnlineResource>
+                            </sml:document>
+                        </sml:DocumentList>
+                    </sml:documentation>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="conductivity_bow">
+                                <swe:Quantity definition="conductivity">
+                                    <swe:label>conductivity</swe:label>
+                                    <swe:uom code="mS/cm"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="salinity_bow">
+                                <swe:Quantity definition="salinity">
+                                    <swe:label>salinity</swe:label>
+                                    <swe:uom code="PSU"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="sound_velocity_bow">
+                                <swe:Quantity definition="sound velocity">
+                                    <swe:label>sound velocity</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="temperature_internal_bow">
+                                <swe:Quantity definition="temperature, water">
+                                    <swe:label>temperature, water</swe:label>
+                                    <swe:uom code="°C"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                    <sml:components>
+                        <sml:ComponentList>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="Temperature_Bow__Water" xlink:title="Thermosalinograph">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_30">
+                                    <gml:description></gml:description>
+                                    <gml:identifier codeSpace="UID">30</gml:identifier>
+                                    <gml:name>Thermosalinograph</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>30</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>Temperature Bow, Water</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>SBE38</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>SBE38</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Seabird</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Thermosalinograph</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/133</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_30_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_30_validFrom">
+                                                    <gml:timePosition>2015-07-07T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_30_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="water_temperature">
+                                                <swe:Quantity definition="temperature, water">
+                                                    <swe:label>temperature, water</swe:label>
+                                                    <swe:uom code="°C"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                        </sml:ComponentList>
+                    </sml:components>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="Weather_Station" xlink:title="Small Scale Facility">
+                <sml:PhysicalSystem gml:id="sensorManagementID_22">
+                    <gml:description>The weather station at Polarstern consists of several devices which measures standard parameters such as temperature, wind, humidity and barometric pressure. Satellite images are received with a dedicated antenna which, together with the data, are used for forecast purposes. The station is operated by a weather technician-observer from the German Weather Service (DWD) who is responsible for the routine 3-hourly synoptic observations and the daily upper air soundings.
+                    </gml:description>
+                    <gml:identifier codeSpace="UID">22</gml:identifier>
+                    <gml:name>Small Scale Facility</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>22</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>Weather Station</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>BWW</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>AWI</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>AWI</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Small Scale Facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>small_scale_facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_22_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_22_validFrom">
+                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_22_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:contacts>
+                        <sml:ContactList>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Bernd Loose</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact/>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Gert König-Langlo</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact/>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Gert König-Langlo</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact/>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Gert König-Langlo</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact/>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                        </sml:ContactList>
+                    </sml:contacts>
+                    <sml:components>
+                        <sml:ComponentList>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="air_temperature" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_23">
+                                    <gml:description>The air temperatures are measured at a height of 29 m above the waterline. Till 2002-06-25
+                                        the measurements were performed with PT100 mounted in radiation shield not ventilated
+                                        artificially. Afterwards, combined humidity and temperature transmitter (HMP 233, Vaisala,
+                                        Finland) - also mounted in not ventilated radiation shields - are used.
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">23</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>23</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>air temperature</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>AIRTEMP</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>HMP 233</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Vaisala</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_23_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_23_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_23_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="air_temperture">
+                                                <swe:Quantity definition="temperature, air">
+                                                    <swe:label>temperature, air</swe:label>
+                                                    <swe:uom code="°C"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="wind" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_24">
+                                    <gml:description>Cup anemometer (SK 565, Thies, Germany) and wind vanes (SK 566, Thies, Germany) at a
+                                        height of 39 m above the waterline are used to measure the relative wind direction and wind
+                                        speed. The true wind was calculated from the relative wind data using the ship speed
+                                        measured relative to the water (ATLAS, DOLOG 22). From 1998-10-15 on - after GPS came
+                                        into use - the true winds are calculated with respect to the ships movement over ground.
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">24</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>24</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>wind</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>WIND</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>SK 565</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Thies</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_24_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_24_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_24_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="true_wind_speed">
+                                                <swe:Quantity definition="wind speed">
+                                                    <swe:label>wind speed</swe:label>
+                                                    <swe:uom code="m/s"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                            <sml:output name="true_wind_direction">
+                                                <swe:Quantity definition="wind direction">
+                                                    <swe:label>wind direction</swe:label>
+                                                    <swe:uom code="°"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="humidity" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_25">
+                                    <gml:description>Air humidity data are obtained at a height of 29 m above the waterline. A hair hygrometer
+                                        (portside, 1.10000.01.48, Thies, Germany) and a dew point sensor (starboard, 3100.0000 BG,
+                                        Friedrichs, Germany) were used. The accuracy of both instruments was rather limited.
+                                        Differences in the derived relative humidity of more than 10 were frequent. When the
+                                        reason for these differences could not be detected, both values were excluded from the
+                                        datasets and the 3-hourly routine surface observations were performed by using a hand held
+                                        psychrometer after Assmann. When the difference between both instruments were lower than
+                                        10 the average of both values were registered.
+                                        At 2001-07-11 the dew point sensor was replaced by a combined humidity and temperature
+                                        transmitter (HMP 233, Vaisala, Finland). At 2002-06-25 also the hair hygrometer got replaced by a HMP 233 sensor mounted in not ventilated radiation shields. The accuracy of these
+                                        sensors can be taken to be better than 5 relative humidity in most cases. Only the windward sensor gets registered.
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">25</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>25</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>humidity</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>HUM</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>HMP 233</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Vaisala</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_25_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_25_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_25_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="humidity">
+                                                <swe:Quantity definition="humidity, relative">
+                                                    <swe:label>humidity, relative</swe:label>
+                                                    <swe:uom code="%"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="surface_air_pressure" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_26">
+                                    <gml:description>The air pressure is measured with an electronic barometer (SETRA B270, Friedrichs,
+                                        Germany). Although the air pressure is measured inside the meteorological office at a height
+                                        of 16 m the measurements are reduced to sea level. To avoid the influence of pressure
+                                        fluctuations within the meteorological office due to air conditioning etc. the inlet of the
+                                        pressure sensor is connected to a pipe leading to the outside close to the craws nest. The end of this pipe is a pressure labyrinth to reduce wind induced pressure fluctuations. Nevertheless, strong winds still influence the air pressure measurements up to 1 hPa. From 1993-05-18 to 1994-10-06 the surface pressure was sampled in hPa once a minute and stored only as integer. Thus, the 10-minute averages - taken during this time - have a rather low resolution.
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">26</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>26</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>surface air pressure</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>AIRPRESS</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>SETRA B270</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Friedrichs</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_26_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_26_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_26_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="air-pressure">
+                                                <swe:Quantity definition="barometric pressure">
+                                                    <swe:label>barometric pressure</swe:label>
+                                                    <swe:uom code="hPa"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="precipitation" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_27">
+                                    <gml:description>Precipitation measurements on board of Polarstern started at 1994-10-18 (DOSA 450,
+                                        Friedrichs, Germany). The sensor is unable to measure solid precipitation. Only rain events
+                                        are quantified. Due to several problems with the sensor, the data should be taken with care.
+                                        Data which are obviously wrong are already excluded from the datasets. Nevertheless, it is still possible that some rain events are missing, that extreme sea spray affects the measurements and that accumulated snow melts within the sensor and gets measured as liquid precipitation hours or days after the snowfall.</gml:description>
+                                    <gml:identifier codeSpace="UID">27</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>27</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>precipitation</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>PRECI</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>DOSA 450</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Friedrichs</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_27_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_27_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_27_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="precipitation">
+                                                <swe:Quantity definition="precipitation">
+                                                    <swe:label>precipitation</swe:label>
+                                                    <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="visibility" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_28">
+                                    <gml:description>The visibility is measured by using a Videograph 3 (Impulsphysik, Germany). The instrument
+                                        generates flashes with a xenon lamp. The backscattered light of these flashes inside a control
+                                        volume some meters apart from the ship gets analysed to estimate the visibility. The
+                                        instrument is limited to a maximum range of 10.000 m. For the automatic synoptic
+                                        observation this sensor is used to quantify the parameter VV (horizontal view distance). All
+                                        measurements at the maximum range are codes as VV 97, see Tab. 1. Values with VV 97
+                                        are given only during manmade synoptic observations.
+
+                                        VV - horizontal view distance
+                                        ----------------------------------------
+                                        90 -- 0.00 km VV  0.05 km
+                                        91 -- 0.05 km VV 0.20 km
+                                        92 -- 0.20 km VV 0.50 km
+                                        93 -- 0.50 km VV 1.00 km
+                                        94 -- 1.00 km VV 2.00 km
+                                        95 -- 2.00 km VV 4.00 km
+                                        96 -- 4.00 km VV 10.00 km
+                                        97 -- 10.00 km VV 20.00 km
+                                        98 -- 20.00 km VV 50.00 km
+                                        99 -- 50.00 km VV
+                                        -- -- missing
+                                        Tab. 1 WMO-code (FM12-13) for visibility observations VV
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">28</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>28</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>visibility</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>VISI</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>Videograph 3</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Impulsphysik</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_28_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_28_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_28_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="visibility">
+                                                <swe:Quantity definition="visibility">
+                                                    <swe:label>visibility</swe:label>
+                                                    <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="cloud_ceiling" xlink:title="Meteorological Package">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_29">
+                                    <gml:description>The height of the cloud base vertical above the ship is measured by using the cloud ceilometer
+                                        LD-WHX 05 (Impulsphysik, Germany). The instrument bases on the LIDAR principle. It has
+                                        a maximum range of 12000 feet ( 3600 m). The data from this instrument are used for the
+                                        automatic synoptic observation of the lowest cloud base h, see Tab. 2. Manmade observations
+                                        include estimated cloud ceilings from clouds not vertical above the ship.
+                                        h - cloud base of lowest cloud (meter above ground)
+                                        --------------------------------------------------------------------
+                                        0 -- 0 to 50 m
+                                        1 -- 50 to 100 m
+                                        2 -- 100 to 200 m
+                                        3 -- 200 to 300 m
+                                        4 -- 300 to 600 m
+                                        5 -- 600 to 1000 m
+                                        6 -- 1000 to 1500 m
+                                        7 -- 1500 to 2000 m
+                                        8 -- 2000 to 2500 m
+                                        9 -- above 2500 m
+                                        - -- unknown
+                                        Tab. 2 WMO-code (FM12-13) for cloud ceiling observations h
+                                    </gml:description>
+                                    <gml:identifier codeSpace="UID">29</gml:identifier>
+                                    <gml:name>Meteorological Package</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>29</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>cloud ceiling</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>CEIL</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>LD-WHX 05</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Impulsphysik</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Meteorological Package</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/102</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_29_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_29_validFrom">
+                                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_29_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="ceiling">
+                                                <swe:Quantity definition="cloud ceiling">
+                                                    <swe:label>cloud ceiling</swe:label>
+                                                    <swe:uom code="m"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                        </sml:ComponentList>
+                    </sml:components>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="Ferrybox" xlink:title="Small Scale Facility">
+                <sml:PhysicalSystem gml:id="sensorManagementID_61">
+                    <gml:description>The FerryBox consists of a water loop that gets its water from the outside, a data management system for control, data acquisition and storage is available</gml:description>
+                    <gml:identifier codeSpace="UID">61</gml:identifier>
+                    <gml:name>Small Scale Facility</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>61</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>Ferrybox</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>FB_PS</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>Ferrybox COSYNA</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>4H Jena</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Small Scale Facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>small_scale_facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_61_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_61_validFrom">
+                                    <gml:timePosition>2016-02-15T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_61_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:contacts>
+                        <sml:ContactList>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Martina Gehrung</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>HZG</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(415)287-2362</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Hamburg</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>martina.gehrung@hzg.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Wilhelm Petersen</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>HZG</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(41)5287-2358</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Hamburg</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>wilhelm.petersen@hzg.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Antje Boetius</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-2269</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Antje.Boetius@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Kristine Carstens</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(4725)819-3240</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Helgoland</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>kristine.carstens@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                        </sml:ContactList>
+                    </sml:contacts>
+                    <sml:documentation>
+                        <sml:DocumentList>
+                            <sml:document xlink:arcrole="Factsheet">
+                                <gmd:CI_OnlineResource id="onlineResource_29_ofDevice_61">
+                                    <gmd:linkage>
+                                        <gmd:URL>http://hdl.handle.net/10013/epic.45639.d001</gmd:URL>
+                                    </gmd:linkage>
+                                    <gmd:name>
+                                        <gco:CharacterString>Factsheet: Ferrybox on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:name>
+                                    <gmd:description>
+                                        <gco:CharacterString>Factsheet: Ferrybox on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:description>
+                                </gmd:CI_OnlineResource>
+                            </sml:document>
+                        </sml:DocumentList>
+                    </sml:documentation>
+                    <sml:history>
+                        <sml:EventList>
+                            <sml:event>
+                                <sml:Event>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="Mount">
+                                                    <sml:label>Mounted</sml:label>
+                                                    <sml:value>Mount</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:time>
+                                        <gml:TimePeriod gml:id="TimePeriodForEvent_55_ofDevice_61">
+                                            <gml:description>TimePeriod</gml:description>
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="ID_TimeBeginForEvent_55_ofDevice_61">
+                                                    <gml:timePosition>2010-06-08T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="ID_TimeEndForEvent_55_ofDevice_61">
+                                                    <gml:timePosition>2010-06-08T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:time>
+                                </sml:Event>
+                            </sml:event>
+                        </sml:EventList>
+                    </sml:history>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="flourescence_chlorophyll_a__raw_">
+                                <swe:Quantity definition="fluorescence">
+                                    <swe:label>fluorescence</swe:label>
+                                    <swe:uom code="microg/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="turbidity">
+                                <swe:Quantity definition="turbidity">
+                                    <swe:label>turbidity</swe:label>
+                                    <swe:uom code="NTU"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="fluorometer_temperature">
+                                <swe:Quantity definition="temperature, water">
+                                    <swe:label>temperature, water</swe:label>
+                                    <swe:uom code="°C"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="ph">
+                                <swe:Quantity definition="pH">
+                                    <swe:label>pH</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="flow">
+                                <swe:Quantity definition="flow">
+                                    <swe:label>flow</swe:label>
+                                    <swe:uom code="l/min"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="pressure">
+                                <swe:Quantity definition="pressure">
+                                    <swe:label>pressure</swe:label>
+                                    <swe:uom code="mbar"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="oxygen_corrected">
+                                <swe:Quantity definition="oxygen">
+                                    <swe:label>oxygen</swe:label>
+                                    <swe:uom code="micromol/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="conductivity">
+                                <swe:Quantity definition="conductivity">
+                                    <swe:label>conductivity</swe:label>
+                                    <swe:uom code="mS/cm"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="water_temperature">
+                                <swe:Quantity definition="temperature, water">
+                                    <swe:label>temperature, water</swe:label>
+                                    <swe:uom code="°C"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="salinity">
+                                <swe:Quantity definition="salinity">
+                                    <swe:label>salinity</swe:label>
+                                    <swe:uom code="PSU"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="phycocyanin">
+                                <swe:Quantity definition="phycocyanin">
+                                    <swe:label>phycocyanin</swe:label>
+                                    <swe:uom code="cells/ml"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="NO2">
+                                <swe:Quantity definition="nitrogen dioxide">
+                                    <swe:label>nitrogen dioxide</swe:label>
+                                    <swe:uom code="micromol/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="NO3">
+                                <swe:Quantity definition="nitrate">
+                                    <swe:label>nitrate</swe:label>
+                                    <swe:uom code="micromol/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="nitrite">
+                                <swe:Quantity definition="nitrite">
+                                    <swe:label>nitrite</swe:label>
+                                    <swe:uom code="µmol/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="flourescence_chloropyll_a__TR_">
+                                <swe:Quantity definition="fluorescence">
+                                    <swe:label>fluorescence</swe:label>
+                                    <swe:uom code="microg/l"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="CDOM">
+                                <swe:Quantity definition="chromophoric sensor">
+                                    <swe:label>chromophoric sensor</swe:label>
+                                    <swe:uom code="ppb"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="ph_temperature">
+                                <swe:Quantity definition="Temperature">
+                                    <swe:label>Temperature</swe:label>
+                                    <swe:uom code="°C"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="pCO2_Analyser" xlink:title="Small Scale Facility">
+                <sml:PhysicalSystem gml:id="sensorManagementID_74">
+                    <gml:description>The pCO2 analyser is a small device which precisely measures CO2 the sea-air exchange
+                    </gml:description>
+                    <gml:identifier codeSpace="UID">74</gml:identifier>
+                    <gml:name>Small Scale Facility</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>74</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>pCO2 Analyser</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>pCO2_ANALYSER</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>OceanPack SAE</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>subCtech GmbH</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Small Scale Facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>small_scale_facility</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_74_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_74_validFrom">
+                                    <gml:timePosition>2016-01-07T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_74_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:contacts>
+                        <sml:ContactList>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Mario Hoppema</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-1884</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Mario.Hoppema@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Mario Hoppema</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-1884</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Mario.Hoppema@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Thomas Liebe</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Laeisz</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)9454915</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>tliebe@laeisz.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                        </sml:ContactList>
+                    </sml:contacts>
+                    <sml:documentation>
+                        <sml:DocumentList>
+                            <sml:document xlink:arcrole="Article">
+                                <gmd:CI_OnlineResource id="onlineResource_10_ofDevice_74">
+                                    <gmd:linkage>
+                                        <gmd:URL>http://hdl.handle.net/10013/epic.45644</gmd:URL>
+                                    </gmd:linkage>
+                                    <gmd:name>
+                                        <gco:CharacterString>Factsheet: pCO2 Analyser on R.V. Polarstern</gco:CharacterString>
+                                    </gmd:name>
+                                    <gmd:description>
+                                        <gco:CharacterString>Factsheet for pCO2 Analyser on board of R.V. Polarstern</gco:CharacterString>
+                                    </gmd:description>
+                                </gmd:CI_OnlineResource>
+                            </sml:document>
+                        </sml:DocumentList>
+                    </sml:documentation>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="CO2__air_">
+                                <swe:Quantity definition="CO2">
+                                    <swe:label>CO2</swe:label>
+                                    <swe:uom code="ppm"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="CO2_corrected__water_">
+                                <swe:Quantity definition="CO2">
+                                    <swe:label>CO2</swe:label>
+                                    <swe:uom code="ppm"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="H2O__air_">
+                                <swe:Quantity definition="density, wet bulk">
+                                    <swe:label>density, wet bulk</swe:label>
+                                    <swe:uom code="ppt"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="H2O_density">
+                                <swe:Quantity definition="density, wet bulk">
+                                    <swe:label>density, wet bulk</swe:label>
+                                    <swe:uom code="mmol/m^3"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="xCO2_dry">
+                                <swe:Quantity definition="CO2">
+                                    <swe:label>CO2</swe:label>
+                                    <swe:uom code="micromol/mol"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="CO2_density">
+                                <swe:Quantity definition="CO2">
+                                    <swe:label>CO2</swe:label>
+                                    <swe:uom code="mmol/m^3"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="Thermosalinograph_Keel" xlink:title="Thermosalinograph">
+                <sml:PhysicalSystem gml:id="sensorManagementID_87">
+                    <gml:description>The thermosalinograph is an instrument used to accurately determine sea surface conductivity and temperature
+                    </gml:description>
+                    <gml:identifier codeSpace="UID">87</gml:identifier>
+                    <gml:name>Thermosalinograph</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>87</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>Thermosalinograph Keel</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>TSK_SBE21</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>SBE21</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>Seabird</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Thermosalinograph</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/133</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_87_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_87_validFrom">
+                                    <gml:timePosition>2016-01-11T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_87_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="conductivity_keel">
+                                <swe:Quantity definition="conductivity">
+                                    <swe:label>conductivity</swe:label>
+                                    <swe:uom code="mS/cm"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="salinity_keel">
+                                <swe:Quantity definition="salinity">
+                                    <swe:label>salinity</swe:label>
+                                    <swe:uom code="PSU"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="sound_velocity_keel">
+                                <swe:Quantity definition="sound velocity">
+                                    <swe:label>sound velocity</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="temperature_internal_keel">
+                                <swe:Quantity definition="temperature, water">
+                                    <swe:label>temperature, water</swe:label>
+                                    <swe:uom code="°C"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                    <sml:components>
+                        <sml:ComponentList>
+                            <sml:component xlink:href="LinkToSensorMLWebservice" name="Temperature_Keel__Water" xlink:title="Thermosalinograph">
+                                <sml:PhysicalSystem gml:id="sensorManagementID_88">
+                                    <gml:description></gml:description>
+                                    <gml:identifier codeSpace="UID">88</gml:identifier>
+                                    <gml:name>Thermosalinograph</gml:name>
+                                    <sml:identification>
+                                        <sml:IdentifierList>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                                    <sml:label>uniqueID</sml:label>
+                                                    <sml:value>88</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                                    <sml:label>Long Name</sml:label>
+                                                    <sml:value>Temperature Keel, Water</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                                    <sml:label>Short Name</sml:label>
+                                                    <sml:value>SBE38</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                                    <sml:label>Model Number</sml:label>
+                                                    <sml:value>SBE38</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                            <sml:identifier>
+                                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                                    <sml:label>Manufacturer</sml:label>
+                                                    <sml:value>Seabird</sml:value>
+                                                </sml:Term>
+                                            </sml:identifier>
+                                        </sml:IdentifierList>
+                                    </sml:identification>
+                                    <sml:classification>
+                                        <sml:ClassifierList>
+                                            <sml:classifier>
+                                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                                    <sml:label>platform type</sml:label>
+                                                    <sml:value>Thermosalinograph</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                            <sml:classifier>
+                                                <sml:Term definition="DeviceCategories">
+                                                    <sml:label>DeviceCategory</sml:label>
+                                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/133</sml:value>
+                                                </sml:Term>
+                                            </sml:classifier>
+                                        </sml:ClassifierList>
+                                    </sml:classification>
+                                    <sml:validTime>
+                                        <gml:TimePeriod gml:id="sensorWebID_88_validDescriptionTimePeriod">
+                                            <gml:begin>
+                                                <gml:TimeInstant gml:id="sensorWebID_88_validFrom">
+                                                    <gml:timePosition>2015-08-21T00:00:00Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:begin>
+                                            <gml:end>
+                                                <gml:TimeInstant gml:id="sensorWebID_88_validTo">
+                                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                                </gml:TimeInstant>
+                                            </gml:end>
+                                        </gml:TimePeriod>
+                                    </sml:validTime>
+                                    <sml:outputs>
+                                        <sml:OutputList>
+                                            <sml:output name="water_temperature">
+                                                <swe:Quantity definition="temperature, water">
+                                                    <swe:label>temperature, water</swe:label>
+                                                    <swe:uom code="°C"/>
+                                                </swe:Quantity>
+                                            </sml:output>
+                                        </sml:OutputList>
+                                    </sml:outputs>
+                                </sml:PhysicalSystem>
+                            </sml:component>
+                        </sml:ComponentList>
+                    </sml:components>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="Water_Vapour_Isotopes_Analyser" xlink:title="Autoanalyser">
+                <sml:PhysicalSystem gml:id="sensorManagementID_571">
+                    <gml:description>The water vapour analyser on-board of Polarstern is dedicated to the continuous measurements in ambient air of humidity level (in ppm), delta-18O and delta-D (in permil).</gml:description>
+                    <gml:identifier codeSpace="UID">571</gml:identifier>
+                    <gml:name>Autoanalyser</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>571</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>Water Vapour Isotopes Analyser</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>isoarc_9999a</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>Picarro</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Autoanalyser</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>Autoanalyser</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_571_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_571_validFrom">
+                                    <gml:timePosition>2016-07-01T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_571_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:contacts>
+                        <sml:ContactList>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Jean-Louis Bonne</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>+49(471)4831-2339</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>jean-louis.bonne@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                            <sml:contact>
+                                <gmd:CI_ResponsibleParty>
+                                    <gmd:individualName>
+                                        <gco:CharacterString>Martin Werner</gco:CharacterString>
+                                    </gmd:individualName>
+                                    <gmd:organisationName>
+                                        <gco:CharacterString>Alfred-Wegener-Institut</gco:CharacterString>
+                                    </gmd:organisationName>
+                                    <gmd:contactInfo>
+                                        <gmd:CI_Contact>
+                                            <gmd:phone>
+                                                <gmd:CI_Telephone>
+                                                    <gmd:voice>
+                                                        <gco:CharacterString>0471 4831-1882</gco:CharacterString>
+                                                    </gmd:voice>
+                                                </gmd:CI_Telephone>
+                                            </gmd:phone>
+                                            <gmd:address>
+                                                <gmd:CI_Address>
+                                                    <gmd:city>
+                                                        <gco:CharacterString>Bremerhaven</gco:CharacterString>
+                                                    </gmd:city>
+                                                    <gmd:electronicMailAddress>
+                                                        <gco:CharacterString>Martin.Werner@awi.de</gco:CharacterString>
+                                                    </gmd:electronicMailAddress>
+                                                </gmd:CI_Address>
+                                            </gmd:address>
+                                        </gmd:CI_Contact>
+                                    </gmd:contactInfo>
+                                    <gmd:role gco:nilReason="inapplicable"/>
+                                </gmd:CI_ResponsibleParty>
+                            </sml:contact>
+                        </sml:ContactList>
+                    </sml:contacts>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="GPS-Receiver_Trimble_Marine_" xlink:title="Satellite Positioning System">
+                <sml:PhysicalSystem gml:id="sensorManagementID_581">
+                    <gml:description>The Trimble SPS852 combines the radio and GPS receiver in a single housing. You can secure the majority of your investment inside a site trailer, vessel cabin, or carrying case, protected from the elements and/or theft, leaving only the antennas outside.
+
+                        Available in a range of options to suit your individual applications, flexibility and performance requirements, versatile Trimble GNSS receivers are a future-proof investment. The SPS852 uses all currently available satellite signals including L1, L2 and the GPS modernized L2C code. The SPS852 receiver can be upgraded with GLONASS and L5 GPS signals to optimize performance in areas of tough GPS-only conditions and maximize your investment well into the future.</gml:description>
+                    <gml:identifier codeSpace="UID">581</gml:identifier>
+                    <gml:name>Satellite Positioning System</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>581</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>GPS-Receiver Trimble Marine </sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>TRIMB_1</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>SPS852</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>Trimble</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Satellite Positioning System</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/301</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_581_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_581_validFrom">
+                                    <gml:timePosition>2016-07-19T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_581_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="latitude">
+                                <swe:Quantity definition="latitude">
+                                    <swe:label>latitude</swe:label>
+                                    <swe:uom code="°"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="longitude">
+                                <swe:Quantity definition="longitude">
+                                    <swe:label>longitude</swe:label>
+                                    <swe:uom code="°"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="GPS-Receiver_Trimble_Marine" xlink:title="Satellite Positioning System">
+                <sml:PhysicalSystem gml:id="sensorManagementID_582">
+                    <gml:description>The Trimble SPS852 combines the radio and GPS receiver in a single housing. You can secure the majority of your investment inside a site trailer, vessel cabin, or carrying case, protected from the elements and/or theft, leaving only the antennas outside.
+
+                        Available in a range of options to suit your individual applications, flexibility and performance requirements, versatile Trimble GNSS receivers are a future-proof investment. The SPS852 uses all currently available satellite signals including L1, L2 and the GPS modernized L2C code. The SPS852 receiver can be upgraded with GLONASS and L5 GPS signals to optimize performance in areas of tough GPS-only conditions and maximize your investment well into the future.</gml:description>
+                    <gml:identifier codeSpace="UID">582</gml:identifier>
+                    <gml:name>Satellite Positioning System</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>582</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>GPS-Receiver Trimble Marine</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>TRIMB_2</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value>SPS852</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value>Trimble</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Satellite Positioning System</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/301</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_582_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_582_validFrom">
+                                    <gml:timePosition>2016-07-19T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_582_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="latitude">
+                                <swe:Quantity definition="latitude">
+                                    <swe:label>latitude</swe:label>
+                                    <swe:uom code="°"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="longitude">
+                                <swe:Quantity definition="longitude">
+                                    <swe:label>longitude</swe:label>
+                                    <swe:uom code="°"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="ADCP" xlink:title="Current Profiler">
+                <sml:PhysicalSystem gml:id="sensorManagementID_625">
+                    <gml:description></gml:description>
+                    <gml:identifier codeSpace="UID">625</gml:identifier>
+                    <gml:name>Current Profiler</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>625</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>ADCP</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>ADCP</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Current Profiler</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/115</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_625_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_625_validFrom">
+                                    <gml:timePosition>2016-08-25T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_625_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="average_east_velocity">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="average_north_velocity">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="averaging_interval">
+                                <swe:Quantity definition="date/time">
+                                    <swe:label>date/time</swe:label>
+                                    <swe:uom code="s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="maximum_depth_for_averaging">
+                                <swe:Quantity definition="depth">
+                                    <swe:label>depth</swe:label>
+                                    <swe:uom code="m"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="minimum_depth_for_averaging">
+                                <swe:Quantity definition="depth">
+                                    <swe:label>depth</swe:label>
+                                    <swe:uom code="m"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="true_horizontal_velocity">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="true_velocity_direction">
+                                <swe:Quantity definition="current direction">
+                                    <swe:label>current direction</swe:label>
+                                    <swe:uom code="degree"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="up_velocity">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="m/s"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="DO-Log" xlink:title="not assigned">
+                <sml:PhysicalSystem gml:id="sensorManagementID_626">
+                    <gml:description></gml:description>
+                    <gml:identifier codeSpace="UID">626</gml:identifier>
+                    <gml:name>not assigned</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>626</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>DO-Log</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>DOLOG</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>not assigned</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>not assigned</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_626_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_626_validFrom">
+                                    <gml:timePosition>2016-08-25T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_626_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="speed_bottomtrack_across">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="knots"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="speed_bottomtrack_ahead">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="knots"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="speed_watertrack_across">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="knots"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="speed_watertrack_ahead">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="knots"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="EM-Log" xlink:title="not assigned">
+                <sml:PhysicalSystem gml:id="sensorManagementID_627">
+                    <gml:description></gml:description>
+                    <gml:identifier codeSpace="UID">627</gml:identifier>
+                    <gml:name>not assigned</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>627</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>EM-Log</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>EMLOG</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>not assigned</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>not assigned</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_627_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_627_validFrom">
+                                    <gml:timePosition>2016-08-25T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_627_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="speed">
+                                <swe:Quantity definition="current speed">
+                                    <swe:label>current speed</swe:label>
+                                    <swe:uom code="knots"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+            <sml:component xlink:href="LinkToSensorMLWebservice" name="GAPS" xlink:title="Ultra Short Baseline Positioning Systems">
+                <sml:PhysicalSystem gml:id="sensorManagementID_628">
+                    <gml:description></gml:description>
+                    <gml:identifier codeSpace="UID">628</gml:identifier>
+                    <gml:name>Ultra Short Baseline Positioning Systems</gml:name>
+                    <sml:identification>
+                        <sml:IdentifierList>
+                            <sml:identifier>
+                                <sml:Term definition="http://mmisw.org/ont/ioos/definition/sensorID.html">
+                                    <sml:label>uniqueID</sml:label>
+                                    <sml:value>628</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/LongName">
+                                    <sml:label>Long Name</sml:label>
+                                    <sml:value>GAPS</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ShortName">
+                                    <sml:label>Short Name</sml:label>
+                                    <sml:value>GAPS</sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/ModelNumber">
+                                    <sml:label>Model Number</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                            <sml:identifier>
+                                <sml:Term definition="http://sensorml.com/ont/swe/property/Manufacturer">
+                                    <sml:label>Manufacturer</sml:label>
+                                    <sml:value></sml:value>
+                                </sml:Term>
+                            </sml:identifier>
+                        </sml:IdentifierList>
+                    </sml:identification>
+                    <sml:classification>
+                        <sml:ClassifierList>
+                            <sml:classifier>
+                                <sml:Term definition="http://www.opengis.net/def/property/OGC/0/PlatformType">
+                                    <sml:label>platform type</sml:label>
+                                    <sml:value>Ultra Short Baseline Positioning Systems</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                            <sml:classifier>
+                                <sml:Term definition="DeviceCategories">
+                                    <sml:label>DeviceCategory</sml:label>
+                                    <sml:value>http://vocab.nerc.ac.uk/collection/L05/current/POS26</sml:value>
+                                </sml:Term>
+                            </sml:classifier>
+                        </sml:ClassifierList>
+                    </sml:classification>
+                    <sml:validTime>
+                        <gml:TimePeriod gml:id="sensorWebID_628_validDescriptionTimePeriod">
+                            <gml:begin>
+                                <gml:TimeInstant gml:id="sensorWebID_628_validFrom">
+                                    <gml:timePosition>2016-08-25T00:00:00Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:begin>
+                            <gml:end>
+                                <gml:TimeInstant gml:id="sensorWebID_628_validTo">
+                                    <gml:timePosition>2017-01-16T09:35:43Z</gml:timePosition>
+                                </gml:TimeInstant>
+                            </gml:end>
+                        </gml:TimePeriod>
+                    </sml:validTime>
+                    <sml:outputs>
+                        <sml:OutputList>
+                            <sml:output name="day">
+                                <swe:Quantity definition="date/time">
+                                    <swe:label>date/time</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="depth">
+                                <swe:Quantity definition="depth">
+                                    <swe:label>depth</swe:label>
+                                    <swe:uom code="m"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="latitude_">
+                                <swe:Quantity definition="latitude">
+                                    <swe:label>latitude</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="longitude">
+                                <swe:Quantity definition="longitude">
+                                    <swe:label>longitude</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="month">
+                                <swe:Quantity definition="date/time">
+                                    <swe:label>date/time</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                            <sml:output name="time_in_hours">
+                                <swe:Quantity definition="date/time">
+                                    <swe:label>date/time</swe:label>
+                                    <swe:uom code="_"/>
+                                </swe:Quantity>
+                            </sml:output>
+                        </sml:OutputList>
+                    </sml:outputs>
+                </sml:PhysicalSystem>
+            </sml:component>
+        </sml:ComponentList>
+    </sml:components>
+</sml:PhysicalSystem>

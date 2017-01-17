@@ -48,6 +48,7 @@ public class SensorApiClientImpl implements SensorApiClient {
                 .build();
 
         this.api = client.target(uri).proxy(SensorAPI.class);
+
     }
 
     @Override
@@ -145,5 +146,9 @@ public class SensorApiClientImpl implements SensorApiClient {
         this.client.close();
     }
 
+    @Override
+    public Optional<String> getSensorML(String urn) {
+        return getDevice(urn).flatMap(this::getSensorML);
+    }
 
 }

@@ -41,6 +41,7 @@ public interface SensorApiClient {
     JsonDevice getRoot(JsonDevice device);
     Optional<String> getSensorML(JsonDevice device);
     Optional<String> getSensorML(int id);
+    Optional<String> getSensorML(String urn);
     List<JsonSensorOutput> getSensorOutputs(JsonDevice device);
     List<JsonSensorOutput> getSensorOutputs(int device);
     void close();

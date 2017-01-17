@@ -16,32 +16,32 @@
     </bean>
 
     <!--  settings related beans -->
-    <bean id="configLocationProvider" class="org.n52.iceland.service.ServletConfigLocationProvider" />
-    <bean id="settingsService" class="org.n52.iceland.config.SettingsServiceImpl" />
-    <bean id="adminUserService" class="org.n52.iceland.config.AdminUserServiceImpl" />
-    <bean id="settingsEncoder" class="org.n52.iceland.config.json.JsonSettingsEncoder" />
-    <bean id="activationService" class="org.n52.iceland.config.ActivationService" />
-    <bean id="activationDao" class="org.n52.iceland.config.json.JsonActivationDao" />
-    <bean id="settingsDao" class="org.n52.iceland.config.json.JsonSettingsDao" />
-    <bean id="adminUserDao" class="org.n52.iceland.config.json.JsonAdminUserDao" />
-    <bean id="settingValueFactory" class="org.n52.iceland.config.json.JsonSettingValueFactory" />
-
-    <bean id="jsonConfiguration" class="org.n52.iceland.config.json.JsonConfiguration" init-method="init">
+    <bean id="settingsService" class="org.n52.faroe.SettingsServiceImpl" />
+    <bean id="settingsEncoder" class="org.n52.faroe.json.JsonSettingsEncoder" />
+    <bean id="settingsDao" class="org.n52.faroe.json.JsonSettingsDao" />
+    <bean id="settingValueFactory" class="org.n52.faroe.json.JsonSettingValueFactory" />
+    <bean id="jsonConfiguration" class="org.n52.faroe.json.JsonConfiguration" init-method="init">
         <property name="fileName" value="configuration.json" />
         <property name="writeTimeout" value="1000" />
         <property name="configLocationProvider" ref="configLocationProvider"/>
     </bean>
 
-    <bean class="org.n52.iceland.config.settings.BooleanSettingDefinition">
-		<property name="key" value="statistics.counting-outputstream" />
-		<property name="title"
-			value="Elasticsearch: The response document size is calculated" />
-		<property name="description"
-			value="The size of the response document which is sent back to the client. This could result in a small performance degradation." />
-		<property name="order" value="8.0" />
-		<property name="group" ref="miscellaneousSettingDefinitionGroup" />
-		<property name="defaultValue" value="false" />
-	</bean>
+
+    <bean id="configLocationProvider" class="org.n52.iceland.service.ServletConfigLocationProvider" />
+    <bean id="adminUserService" class="org.n52.iceland.config.AdminUserServiceImpl" />
+    <bean id="adminUserDao" class="org.n52.iceland.config.json.JsonAdminUserDao" />
+
+    <bean id="activationService" class="org.n52.sos.config.SosActivationService" />
+    <bean id="activationDao" class="org.n52.sos.config.json.SosJsonActivationDao" />
+
+    <bean class="org.n52.faroe.settings.BooleanSettingDefinition">
+        <property name="key" value="statistics.counting-outputstream" />
+        <property name="title" value="Elasticsearch: The response document size is calculated" />
+        <property name="description" value="The size of the response document which is sent back to the client. This could result in a small performance degradation." />
+        <property name="order" value="8.0" />
+        <property name="group" ref="miscellaneousSettingDefinitionGroup" />
+        <property name="defaultValue" value="false" />
+    </bean>
 
     <import resource="classpath*:root-context.xml" />
     <import resource="classpath*:contexts/root.xml" />

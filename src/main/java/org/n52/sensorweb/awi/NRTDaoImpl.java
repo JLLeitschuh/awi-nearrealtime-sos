@@ -76,7 +76,6 @@ public class NRTDaoImpl implements NRTDao {
     }
 
     private Optional<NRTProcedure> hasData(NRTProcedure p, Set<String> dataProcedures) {
-        // FIXME remove this
         String id = p.getId();
         if (dataProcedures.contains(id)) {
             return Optional.of(p);
@@ -124,6 +123,11 @@ public class NRTDaoImpl implements NRTDao {
 //        return minMax.entrySet().stream()
 //                .collect(toMap(Entry::getKey, e -> new NRTEnvelope(e.getValue(), e.getValue(), null)));
         return this.nearRealTimeDao.getEnvelopes();
+    }
+
+    @Override
+    public Optional<String> getDescription(String id) {
+        return this.sensorApiClient.getSensorML(id);
     }
 
     private static SessionFactory createSessionFactory() {

@@ -17,7 +17,7 @@ package org.n52.sensorweb.awi;
 
 import org.joda.time.DateTime;
 
-import org.n52.iceland.util.MinMax;
+import org.n52.shetland.util.MinMax;
 
 import com.vividsolutions.jts.geom.Envelope;
 

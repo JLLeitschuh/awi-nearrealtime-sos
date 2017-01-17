@@ -17,6 +17,7 @@ package org.n52.sensorweb.awi;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * TODO JavaDoc
@@ -28,5 +29,7 @@ public interface NRTDao {
     Collection<NRTProcedure> getProcedures();
 
     Map<String, NRTEnvelope> getEnvelopes();
+
+    Optional<String> getDescription(String id);
 
 }

@@ -42,7 +42,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.n52.iceland.util.MinMax;
 import org.n52.sensorweb.awi.NRTEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
 import org.n52.sensorweb.awi.NRTProcedureOutput;
@@ -51,6 +50,7 @@ import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
 import org.n52.sensorweb.awi.util.Streams;
+import org.n52.shetland.util.MinMax;
 
 import com.vividsolutions.jts.geom.Envelope;
 
