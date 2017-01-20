@@ -196,7 +196,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
             Envelope envelope = geometry.getEnvelopeInternal();
             conjunction.add(Restrictions.and(Restrictions.ge("latitude", envelope.getMinY()),
                                              Restrictions.le("latitude", envelope.getMaxY()),
-                                             Restrictions.le("longitude", envelope.getMaxX()),
+                                             Restrictions.ge("longitude", envelope.getMinX()),
                                              Restrictions.le("longitude", envelope.getMaxX())));
         }
 
