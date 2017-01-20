@@ -44,7 +44,11 @@ public class JsonSensorOutput {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? name : name.toLowerCase();
+    }
+
+    public String getCode() {
+        return this.name == null ? null : this.name.toLowerCase();
     }
 
     public JsonUnitOfMeasurement getUnitOfMeasurement() {

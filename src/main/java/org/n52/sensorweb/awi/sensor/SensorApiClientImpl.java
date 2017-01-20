@@ -22,12 +22,13 @@ import java.util.Optional;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.cache.CacheInterceptor;
+import org.jboss.resteasy.client.jaxrs.cache.BrowserCacheFeature;
 import org.jboss.resteasy.client.jaxrs.cache.LightweightBrowserCache;
 
 import org.n52.sensorweb.awi.sensor.json.JsonDevice;
 import org.n52.sensorweb.awi.sensor.json.JsonSensorOutput;
 import org.n52.sensorweb.awi.sensor.json.JsonType;
+
 
 /**
  * TODO JavaDoc
@@ -39,16 +40,21 @@ public class SensorApiClientImpl implements SensorApiClient {
     private final ResteasyClient client;
 
     public SensorApiClientImpl(URI uri) {
+        LightweightBrowserCache cache = new LightweightBrowserCache();
+        cache.setMaxBytes(1024 * 1024 * 50);
+        BrowserCacheFeature cacheFeature = new BrowserCacheFeature();
+        cacheFeature.setCache(cache);
+
         this.client = new ResteasyClientBuilder()
                 .disableTrustManager()
+                .connectionPoolSize(10)
+                .maxPooledPerRoute(10)
                 .register(new LoggingFilter())
                 .register(new JSONConfiguration())
-                .register(new CacheInterceptor(new LightweightBrowserCache()))
+                .register(cacheFeature)
                 .register(new UserAgentFilter("52N-SOS"))
                 .build();
-
         this.api = client.target(uri).proxy(SensorAPI.class);
-
     }
 
     @Override

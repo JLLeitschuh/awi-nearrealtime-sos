@@ -102,8 +102,8 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
 //                throw new NoDecoderForKeyException(key);
 //            }
 //            return decoder.decode(xml);
-        return new SosProcedureDescriptionUnknownType(identifier, description,
-                SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL);
+        return new SosProcedureDescriptionUnknownType(
+                identifier, SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL, description);
 //        } catch (XmlException | DecodingException ex) {
 //            throw new NoApplicableCodeException().causedBy(ex);
 //        }

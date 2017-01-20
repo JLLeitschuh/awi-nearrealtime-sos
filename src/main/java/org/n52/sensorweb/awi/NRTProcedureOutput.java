@@ -21,11 +21,12 @@ package org.n52.sensorweb.awi;
  * @author Christian Autermann
  */
 public class NRTProcedureOutput {
-
+    private final String code;
     private final String name;
     private final NRTUnit unit;
 
-    public NRTProcedureOutput(String name, NRTUnit unit) {
+    public NRTProcedureOutput(String code, String name, NRTUnit unit) {
+        this.code = code;
         this.name = name;
         this.unit = unit;
     }
@@ -38,9 +39,13 @@ public class NRTProcedureOutput {
         return unit;
     }
 
+    public String getCode() {
+        return code;
+    }
+
     @Override
     public String toString() {
-        return "ProcedureOutput{" + "name=" + name + ", unit=" + unit + '}';
+        return "NRTProcedureOutput{" + "code=" + code + ", name=" + name + ", unit=" + unit + '}';
     }
 
 }

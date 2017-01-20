@@ -21,14 +21,12 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -39,17 +37,16 @@ import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import org.n52.janmayen.stream.Streams;
 import org.n52.sensorweb.awi.NRTEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
 import org.n52.sensorweb.awi.NRTProcedureOutput;
 import org.n52.sensorweb.awi.data.entities.Data;
+import org.n52.sensorweb.awi.data.entities.DataView;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.sensorweb.awi.util.Streams;
 import org.n52.shetland.util.MinMax;
 
 import com.vividsolutions.jts.geom.Envelope;
@@ -61,7 +58,6 @@ import com.vividsolutions.jts.geom.Envelope;
  * @author Christian Autermann
  */
 public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealTimeDao {
-    private static final Logger LOG = LoggerFactory.getLogger(NearRealTimeDaoImpl.class);
     private static final Property CODE = Property.forName("code");
     private static final Property ID = Property.forName("id");
     public NearRealTimeDaoImpl(SessionFactory sessionFactory) {
@@ -127,88 +123,54 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
             return (List<Object[]>) c.setProjection(Projections.projectionList()
                     .add(Projections.groupProperty("platform.code"))
                     .add(Projections.groupProperty("device.code"))
-                    .add(Projections.min("data.date"))
-                    .add(Projections.max("data.date")))
+                    .add(Projections.min("data.time"))
+                    .add(Projections.max("data.time")))
                     .add(Restrictions.isNotNull("platform.code"))
                     .add(Restrictions.isNotNull("device.code"))
                     .add(Restrictions.isNotNull("sensor.code"))
                 .list();
         }).stream().collect(toMap(t -> String.format("%s:%s", t[0], t[1]).toLowerCase(),
-                                 t -> new MinMax<>((DateTime) t[2], (DateTime) t[3]),
-                                 Streams.throwOnDuplicateKey()));
+                                  t -> new MinMax<>((DateTime) t[2], (DateTime) t[3]),
+                                  Streams.throwingMerger()));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Map<String, NRTEnvelope> getEnvelopes() {
-
         return query(s -> {
-            return (List<Object[]>) s.createSQLQuery(
-                    "SELECT\n" +
-                    "  p.code AS platform,\n" +
-                    "  d.code AS device,\n" +
-                    "  min((SELECT min(data.date) FROM data WHERE data.sensor_id = pos.sensor_id)) AS min_time,\n" +
-                    "  max((SELECT max(data.date) FROM data WHERE data.sensor_id = pos.sensor_id)) AS max_time,\n" +
-                    "  min((SELECT min(data.value) FROM data WHERE data.sensor_id = pos.latitude)) AS min_lat,\n" +
-                    "  max((SELECT max(data.value) FROM data WHERE data.sensor_id = pos.latitude)) AS max_lat,\n" +
-                    "  min((SELECT min(data.value) FROM data WHERE data.sensor_id = pos.longitude)) AS min_lon,\n" +
-                    "  max((SELECT max(data.value) FROM data WHERE data.sensor_id = pos.longitude)) AS max_lon\n" +
-                    "FROM position AS pos\n" +
-                    "  INNER JOIN sensor   AS s ON (pos.sensor_id = s.sensor_id)\n" +
-                    "  INNER JOIN device   AS d ON (pos.device_id = d.device_id)\n" +
-                    "  INNER JOIN platform AS p ON (pos.platform_id = p.platform_id)\n" +
-                    "WHERE p.code IS NOT NULL \n" +
-                    "  AND d.code IS NOT NULL \n" +
-                    "  AND s.code IS NOT NULL \n" +
-                    "GROUP BY p.code, d.code").list();
-        }).stream().collect(Collectors.toMap(
-                t -> String.format("%s:%s", t[0], t[1]).toLowerCase(),
+            Criteria c = s.createCriteria(DataView.class, "data");
+            c.createAlias("data.sensor", "sensor");
+            c.createAlias("sensor.device", "device");
+            c.createAlias("device.platform", "platform");
+            return (List<Object[]>) c.setProjection(Projections.projectionList()
+                        .add(Projections.groupProperty("platform.type"))
+                        .add(Projections.groupProperty("platform.code"))
+                        .add(Projections.groupProperty("device.code"))
+                        .add(Projections.min("data.time"))
+                        .add(Projections.max("data.time"))
+                        .add(Projections.min("data.longitude"))
+                        .add(Projections.max("data.longitude"))
+                        .add(Projections.min("data.latitude"))
+                        .add(Projections.max("data.latitude")))
+                    .add(Restrictions.isNotNull("platform.code"))
+                    .add(Restrictions.isNotNull("device.code"))
+                    .add(Restrictions.isNotNull("data.latitude"))
+                    .add(Restrictions.isNotNull("data.longitude"))
+                    .add(Restrictions.isNotNull("data.time"))
+                    .list();
+        }).stream().collect(toMap(
+                t -> String.format("%s:%s:%s", t[0], t[1], t[2]).toLowerCase(),
                 t -> {
-                    MinMax<DateTime> time = new MinMax<>(
-                            new DateTime(((Timestamp) t[2]).getTime()),
-                            new DateTime(((Timestamp) t[3]).getTime()));
-                    Envelope envelope = new Envelope((double) t[6],
-                                                     (double) t[7],
-                                                     (double) t[4],
-                                                     (double) t[5]);
+
+                    MinMax<DateTime> time = new MinMax<>((DateTime) t[3], (DateTime) t[4]);
+                    Envelope envelope = new Envelope((double) t[5], (double) t[6],
+                                                     (double) t[7], (double) t[8]);
                     return new NRTEnvelope(time, time, envelope);
-                }));
 
-
-//        return query(s -> {
-//            return (List<Object[]>) s.createQuery(
-//                    "select\n" +
-//                "  p.code AS platform,\n" +
-//                "  d.code AS device,\n" +
-//                "  s.code AS sensor,\n" +
-//                "  (select min(data.date) from Data AS data where data.sensor.device.platform = p) as min_time,\n" +
-//                "  (select min(data.date) from Data AS data where data.sensor.device.platform = p) as max_time,\n" +
-//                "  (select min(data.value) from Data AS data where data.sensor = pos.latitude) as min_lat,\n" +
-//                "  (select max(data.value) from Data AS data where data.sensor = pos.latitude) as max_lat,\n" +
-//                "  (select min(data.value) from Data AS data where data.sensor = pos.longitude) as min_lon,\n" +
-//                "  (select max(data.value) from Data AS data where data.sensor = pos.longitude) as max_lon\n" +
-//                "from PositionInfo as pos\n" +
-//                "  pos.sensor as s\n" +
-//                "  pos.device as d\n" +
-//                "  pos.platform as p\n" +
-//                "where s.code is not null\n" +
-//                "  and d.code is not null\n" +
-//                "  and p.code is not null\n" +
-//                "group by p.code, d.code, s.code").list();
-//        }).stream().collect(Collectors.groupingBy(t
-//                -> String.format("%s:%s", t[0], t[1]).toLowerCase(), mapping(t -> {
-//                                              MinMax<DateTime> time
-//                                                      = new MinMax<>((DateTime) t[2],
-//                                                                     (DateTime) t[3]);
-//                                              Envelope envelope
-//                                                      = new Envelope((double) t[6],
-//                                                                     (double) t[7],
-//                                                                     (double) t[4],
-//                                                                     (double) t[5]);
-//                                              return new NRTEnvelope(time, time, envelope);
-//                                          }, Collector.of(NRTEnvelope::new, NRTEnvelope::extend, NRTEnvelope::extend))));
-
+                },
+                Streams.throwingMerger()));
     }
+
     @Override
     public Optional<Sensor> getSeries(String urn) {
         String[] split = urn.split(":");
@@ -236,23 +198,21 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
     @Override
     @SuppressWarnings("unchecked")
     public Collection<NRTProcedure> getProcedures() {
-
         return query((Session session) -> {
             Criteria c = session.createCriteria(Sensor.class, "sensor")
                     .createAlias("sensor.device", "device")
                     .createAlias("device.platform", "platform")
                     .setProjection(Projections.projectionList()
+                            .add(Projections.property("platform.type"))
                             .add(Projections.property("platform.code"))
                             .add(Projections.property("device.code"))
                             .add(Projections.property("sensor.code")))
                     .add(Restrictions.isNotNull("platform.code"))
                     .add(Restrictions.isNotNull("device.code"))
                     .add(Restrictions.isNotNull("sensor.code"));
-
-            List<Object[]> result = (List<Object[]>) c.list();
-            return result.stream()
-                    .collect(groupingBy(t -> String.format("%s:%s", t[0], t[1]).toLowerCase(),
-                                        mapping(t -> (String) t[2], toList())))
+            return ((List<Object[]>) c.list()).stream()
+                    .collect(groupingBy(t -> String.format("%s:%s:%s", t[0], t[1], t[2]).toLowerCase(),
+                                        mapping(t -> (String) t[3], toList())))
                     .entrySet()
                     .stream()
                     .map(e -> new NRTProcedure(e.getKey(), null, null, null, null, asOutputs(e.getValue())))
@@ -261,7 +221,7 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
     }
 
     private Set<NRTProcedureOutput> asOutputs(Collection<String> outputs) {
-        return outputs.stream().map(o -> new NRTProcedureOutput(o, null)).collect(toSet());
+        return outputs.stream().map(o -> new NRTProcedureOutput(o, null, null)).collect(toSet());
     }
 
     public static class Series {

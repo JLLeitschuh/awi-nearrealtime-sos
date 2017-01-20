@@ -165,8 +165,7 @@ public class NRTDaoImpl implements NRTDao {
     private NRTProcedureOutput toProcedureOutput(JsonSensorOutput o) {
         NRTUnit unit = new NRTUnit(o.getUnitOfMeasurement().getLongName(),
                                    o.getUnitOfMeasurement().getCode());
-
-        return new NRTProcedureOutput(o.getName(), unit);
+        return new NRTProcedureOutput(o.getCode(), o.getName(), unit);
     }
 
 }

@@ -25,6 +25,7 @@ public class Platform implements Serializable {
     private int id;
     private String name;
     private String code;
+    private String type;
     private Set<Device> devices = new HashSet<>(0);
 
     public int getId() {
@@ -57,6 +58,14 @@ public class Platform implements Serializable {
 
     public void setDevices(Set<Device> devices) {
         this.devices = devices;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

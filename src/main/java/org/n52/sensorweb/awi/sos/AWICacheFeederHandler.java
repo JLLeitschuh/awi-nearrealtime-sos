@@ -25,8 +25,6 @@ import java.util.Optional;
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.n52.sensorweb.awi.NRTDao;
 import org.n52.sensorweb.awi.NRTEnvelope;
@@ -48,7 +46,6 @@ import org.n52.sos.ds.CacheFeederHandler;
  */
 public class AWICacheFeederHandler implements CacheFeederHandler {
 
-    private static final Logger log = LoggerFactory.getLogger(AWICacheFeederHandler.class);
     private static final int EPSG_4326 = 4326;
 
     private static final String OBSERVATION_TYPE = OmConstants.OBS_TYPE_MEASUREMENT;

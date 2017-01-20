@@ -24,13 +24,14 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.ws.rs.WebApplicationException;
@@ -58,25 +59,15 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
     private final static String ENTITY_LOGGER_PROPERTY = LoggingFilter.class.getName() + ".entityLogger";
     private final static String LOGGING_ID_PROPERTY = LoggingFilter.class.getName() + ".id";
     private final static String NOTIFICATION_PREFIX = "* ";
-    private final static MediaType TEXT_MEDIA_TYPE = new MediaType("text", "*");
-    private final static Set<MediaType> READABLE_APP_MEDIA_TYPES = new HashSet<MediaType>() {
-        private static final long serialVersionUID = 3109256773218160485L;
+    private final static Set<MediaType> READABLE_APP_MEDIA_TYPES = new HashSet<>(Arrays.asList(
+            new MediaType("text", "*"),
+            new MediaType("text", "xml"),
+            new MediaType("application", "xml")));
+    private final static Comparator<Entry<String, List<String>>> COMPARATOR
+            =  Comparator.comparing(Entry::getKey, String::compareToIgnoreCase);
 
-        {
-            add(TEXT_MEDIA_TYPE);
-            add(MediaType.APPLICATION_ATOM_XML_TYPE);
-            add(MediaType.APPLICATION_FORM_URLENCODED_TYPE);
-            add(MediaType.APPLICATION_JSON_TYPE);
-            add(MediaType.APPLICATION_SVG_XML_TYPE);
-            add(MediaType.APPLICATION_XHTML_XML_TYPE);
-            add(MediaType.APPLICATION_XML_TYPE);
-        }
-    };
-    private final static Comparator<Map.Entry<String, List<String>>> COMPARATOR
-            = (o1, o2) -> o1.getKey().compareToIgnoreCase(o2.getKey());
-
-    private final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
-    private final AtomicLong _id = new AtomicLong(0);
+    private static final Logger LOG = LoggerFactory.getLogger(LoggingFilter.class);
+    private final AtomicLong id = new AtomicLong(0);
     private final int maxEntitySize = 0;
 
     public LoggingFilter() {
@@ -84,32 +75,29 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
 
     @Override
     public void filter(ClientRequestContext context) throws IOException {
-        long id = _id.incrementAndGet();
-        context.setProperty(LOGGING_ID_PROPERTY, id);
-        StringBuilder b = new StringBuilder();
-        printRequestLine(b, "Sending client request", id, context.getMethod(), context.getUri());
-        printPrefixedHeaders(b, id, REQUEST_PREFIX, context.getStringHeaders());
+        long currentId = this.id.incrementAndGet();
+        context.setProperty(LOGGING_ID_PROPERTY, currentId);
+        StringBuilder builder = new StringBuilder();
+        printRequestLine(builder, "Sending client request", currentId, context.getMethod(), context.getUri());
+        printPrefixedHeaders(builder, currentId, REQUEST_PREFIX, context.getStringHeaders());
         if (context.hasEntity() && isReadable(context.getMediaType())) {
-            OutputStream stream = new LoggingStream(b, context.getEntityStream());
+            OutputStream stream = new LoggingStream(builder, context.getEntityStream());
             context.setEntityStream(stream);
             context.setProperty(ENTITY_LOGGER_PROPERTY, stream);
-            // not calling log(b) here - it will be called by the interceptor
         } else {
-            log(b);
+            log(builder);
         }
     }
 
     @Override
     public void filter(ClientRequestContext requestContext, ClientResponseContext responseContext) throws IOException {
         Object requestId = requestContext.getProperty(LOGGING_ID_PROPERTY);
-        long id = requestId != null ? (Long) requestId : _id.incrementAndGet();
+        long currentId = requestId != null ? (Long) requestId : this.id.incrementAndGet();
         StringBuilder b = new StringBuilder();
-        printResponseLine(b, "Client response received", id, responseContext.getStatus());
-        printPrefixedHeaders(b, id, RESPONSE_PREFIX, responseContext.getHeaders());
+        printResponseLine(b, "Client response received", currentId, responseContext.getStatus());
+        printPrefixedHeaders(b, currentId, RESPONSE_PREFIX, responseContext.getHeaders());
         if (responseContext.hasEntity() && isReadable(responseContext.getMediaType())) {
-            responseContext
-                    .setEntityStream(logInboundEntity(b, responseContext.getEntityStream(), getCharset(responseContext
-                                                      .getMediaType())));
+            responseContext.setEntityStream(logInboundEntity(b, responseContext.getEntityStream(), getCharset(responseContext.getMediaType())));
         }
         log(b);
     }
@@ -120,7 +108,7 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
      * @param b message to log
      */
     private void log(StringBuilder b) {
-        logger.info(b.toString());
+        LOG.info(b.toString());
     }
 
     private StringBuilder prefixId(StringBuilder b, long id) {
@@ -140,30 +128,20 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
     }
 
     private void printPrefixedHeaders(StringBuilder b, long id, String prefix, MultivaluedMap<String, String> headers) {
-        getSortedHeaders(headers.entrySet()).forEach(entry -> {
+        headers.entrySet().stream().sorted(COMPARATOR).forEach(entry -> {
             List<?> val = entry.getValue();
             String header = entry.getKey();
-            if (val.size() == 1) {
-                prefixId(b, id).append(prefix).append(header).append(": ").append(val.get(0)).append("\n");
-            } else {
-                StringBuilder sb = new StringBuilder();
-                boolean add = false;
-                for (Object s : val) {
-                    if (add) {
-                        sb.append(',');
-                    }
-                    add = true;
-                    sb.append(s);
+            prefixId(b, id).append(prefix).append(header).append(": ");
+            Iterator<?> iter = val.iterator();
+            if (iter.hasNext()) {
+                b.append(iter.next());
+                while (iter.hasNext()) {
+                    b.append(',');
+                    b.append(iter.next());
                 }
-                prefixId(b, id).append(prefix).append(header).append(": ").append(sb.toString()).append("\n");
             }
+            b.append("\n");
         });
-    }
-
-    private Set<Map.Entry<String, List<String>>> getSortedHeaders(Set<Map.Entry<String, List<String>>> headers) {
-        Set<Map.Entry<String, List<String>>> sortedHeaders = new TreeSet<>(COMPARATOR);
-        sortedHeaders.addAll(headers);
-        return sortedHeaders;
     }
 
     private InputStream logInboundEntity(StringBuilder b, InputStream stream, Charset charset) throws IOException {
@@ -187,21 +165,20 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
                                                                                         WebApplicationException {
         LoggingStream stream = (LoggingStream) writerInterceptorContext.getProperty(ENTITY_LOGGER_PROPERTY);
         writerInterceptorContext.proceed();
-        if (isReadable(writerInterceptorContext.getMediaType())) {
-            if (stream != null) {
-                log(stream.getStringBuilder(getCharset(writerInterceptorContext.getMediaType())));
-            }
+        if (stream != null && isReadable(writerInterceptorContext.getMediaType())) {
+            log(stream.getStringBuilder(getCharset(writerInterceptorContext.getMediaType())));
         }
     }
 
     private static Charset getCharset(MediaType mt) {
-        return Optional.ofNullable(mt).map(MediaType::getParameters).map(m -> m.get(MediaType.CHARSET_PARAMETER))
+        return Optional.ofNullable(mt).map(MediaType::getParameters)
+                .map(m -> m.get(MediaType.CHARSET_PARAMETER))
                 .map(Charset::forName).orElse(StandardCharsets.UTF_8);
     }
 
     private static boolean isReadable(MediaType mediaType) {
-        return mediaType != null && READABLE_APP_MEDIA_TYPES.stream().anyMatch((readableMediaType) -> (readableMediaType
-                .isCompatible(mediaType)));
+        return mediaType != null && READABLE_APP_MEDIA_TYPES.stream()
+                .anyMatch(readableMediaType -> readableMediaType.isCompatible(mediaType));
     }
 
     private class LoggingStream extends FilterOutputStream {

@@ -24,6 +24,10 @@
     <bean class="org.n52.iceland.util.http.HttpUtils"/>
     <bean id="icelandServlet" class="org.n52.iceland.service.Service" />
 
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+    </bean>
+
     <bean id="kvpBinding" class="org.n52.iceland.binding.kvp.KvpBinding"/>
     <bean id="poxBinding" class="org.n52.iceland.binding.pox.PoxBinding"/>
     <bean id="jsonBinding" class="org.n52.iceland.binding.json.JSONBinding"/>
@@ -34,14 +38,12 @@
     <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIDescribeSensorHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler"/>
-    <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler">
+        <constructor-arg ref="sessionFactory" />
+    </bean>
     <bean class="org.n52.sensorweb.awi.NRTDaoImpl"/>
     <bean class="org.n52.sensorweb.awi.data.NearRealTimeDaoImpl">
-        <constructor-arg>
-            <bean class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-                <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
-            </bean>
-        </constructor-arg>
+        <constructor-arg ref="sessionFactory" />
     </bean>
 
     <bean class="org.n52.sensorweb.awi.sensor.SensorApiClientImpl">

@@ -351,6 +351,18 @@
     "serviceProvider.name" : {
       "type" : "string",
       "value" : "52North"
+    },
+    "coding.characterEncoding" : {
+      "type" : "string",
+      "value" : "UTF-8"
+    },
+    "coding.srsNamePrefixURN" : {
+      "type" : "string",
+      "value" : "urn:ogc:def:crs:EPSG::"
+    },
+    "coding.srsNamePrefixURL" : {
+      "type" : "string",
+      "value" : "http://www.opengis.net/def/crs/EPSG/0/"
     }
   },
   "capabiltiesExtensions" : { },
