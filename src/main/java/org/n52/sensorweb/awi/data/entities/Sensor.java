@@ -19,6 +19,11 @@ package org.n52.sensorweb.awi.data.entities;
 import java.io.Serializable;
 
 public class Sensor implements Serializable {
+    public static final String ID = "id";
+    public static final String DEVICE = "device";
+    public static final String NAME = "name";
+    public static final String UNIT = "unit";
+    public static final String CODE = "code";
     private static final long serialVersionUID = 2881635032211259816L;
     private int id;
     private Device device;

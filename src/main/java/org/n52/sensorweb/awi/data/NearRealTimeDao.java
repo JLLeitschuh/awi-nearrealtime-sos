@@ -20,14 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.joda.time.DateTime;
-
 import org.n52.sensorweb.awi.NRTEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.shetland.util.MinMax;
 
 /**
  * TODO JavaDoc
@@ -56,8 +53,6 @@ public interface NearRealTimeDao {
     List<Sensor> getSensors();
 
     Optional<Sensor> getSeries(String urn);
-
-    Map<String, MinMax<DateTime>> getMinMax();
 
     Map<String, NRTEnvelope> getEnvelopes();
 }

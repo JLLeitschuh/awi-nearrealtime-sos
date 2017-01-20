@@ -6,9 +6,19 @@ import org.joda.time.DateTime;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
 public class DataView implements Serializable {
+
+    public static final String ID = "id";
+    public static final String CODE = "code";
+    public static final String TIME = "time";
+    public static final String VALUE = "value";
+    public static final String SENSOR = "sensor";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+
     private static final long serialVersionUID = 2023558780951333945L;
     private int id;
     private String code;
@@ -58,7 +68,6 @@ public class DataView implements Serializable {
         return getDevice().getPlatform();
     }
 
-
     public double getLongitude() {
         return longitude;
     }
@@ -81,5 +90,9 @@ public class DataView implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public boolean isMobile() {
+        return getSensor().getDevice().getPlatform().isMobile();
     }
 }

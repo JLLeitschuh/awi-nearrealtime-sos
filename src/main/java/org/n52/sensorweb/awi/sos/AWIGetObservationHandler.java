@@ -172,7 +172,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         }
 
         if (urns != null) {
-            conjunction.add(Restrictions.in("code", urns));
+            conjunction.add(Restrictions.in(DataView.CODE, urns));
         }
 
         conjunction.add(temporalFilters.stream()
@@ -194,10 +194,10 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
 
             Geometry geometry = filter.getGeometry();
             Envelope envelope = geometry.getEnvelopeInternal();
-            conjunction.add(Restrictions.and(Restrictions.ge("latitude", envelope.getMinY()),
-                                             Restrictions.le("latitude", envelope.getMaxY()),
-                                             Restrictions.ge("longitude", envelope.getMinX()),
-                                             Restrictions.le("longitude", envelope.getMaxX())));
+            conjunction.add(Restrictions.and(Restrictions.ge(DataView.LATITUDE, envelope.getMinY()),
+                                             Restrictions.le(DataView.LATITUDE, envelope.getMaxY()),
+                                             Restrictions.ge(DataView.LONGITUDE, envelope.getMinX()),
+                                             Restrictions.le(DataView.LONGITUDE, envelope.getMaxX())));
         }
 
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
@@ -226,7 +226,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
             !tf.getValueReference().equals(TemporalRestrictions.RESULT_TIME_VALUE_REFERENCE)) {
             throw new UnsupportedValueReferenceException(tf.getValueReference());
         }
-        return TemporalRestrictions.filter(tf.getOperator(), "time", tf.getTime());
+        return TemporalRestrictions.filter(tf.getOperator(), DataView.TIME, tf.getTime());
     }
 
     private OmObservation createObservation(DataView data) {

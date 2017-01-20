@@ -20,6 +20,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Device implements Serializable {
+    public static final String ID = "id";
+    public static final String PLATFORM = "platform";
+    public static final String NAME = "name";
+    public static final String CODE = "code";
+    public static final String SENSORS = "sensors";
+
     private static final long serialVersionUID = -5686273001528029648L;
     private int id;
     private Platform platform;

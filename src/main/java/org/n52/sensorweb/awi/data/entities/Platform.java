@@ -20,6 +20,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Platform implements Serializable {
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String CODE = "code";
+    public static final String TYPE = "type";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    public static final String DEVICES = "devices";
+
     private static final long serialVersionUID = 763090253133294552L;
     private int id;
     private String name;
