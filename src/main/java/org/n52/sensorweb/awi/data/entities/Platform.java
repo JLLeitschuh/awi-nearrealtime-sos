@@ -19,13 +19,14 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class Platform implements Serializable {
     private static final long serialVersionUID = 763090253133294552L;
     private int id;
     private String name;
     private String code;
     private String type;
+    private Double latitude;
+    private Double longitude;
     private Set<Device> devices = new HashSet<>(0);
 
     public int getId() {
@@ -66,6 +67,26 @@ public class Platform implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    boolean isMobile() {
+        return this.latitude != null && this.longitude != null;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
 }

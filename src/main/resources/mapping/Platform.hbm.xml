@@ -6,9 +6,12 @@
         <property column="platform" name="name" type="string"/>
         <property column="code" name="code" type="string"/>
         <property column="type" name="type" type="string"/>
+        <property column="longitude" name="longitude" type="double"/>
+        <property column="latitude" name="latitude" type="double"/>
         <set fetch="join" inverse="true" lazy="false" name="devices" table="device">
             <key column="platform_id"/>
             <one-to-many class="org.n52.sensorweb.awi.data.entities.Device"/>
         </set>
     </class>
 </hibernate-mapping>
+
