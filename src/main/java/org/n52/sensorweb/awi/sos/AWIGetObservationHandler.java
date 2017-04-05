@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -56,6 +57,7 @@ import org.n52.shetland.ogc.om.values.GeometryValue;
 import org.n52.shetland.ogc.om.values.QuantityValue;
 import org.n52.shetland.ogc.om.values.Value;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
+import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.sos.Sos2Constants;
 import org.n52.shetland.ogc.sos.SosConstants;
@@ -98,14 +100,12 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         String service = request.getService();
         String version = request.getVersion();
 
-        Set<String> properties = new HashSet<>(Optional.ofNullable(request.getObservedProperties()).orElseGet(Collections::emptyList));
-        Set<String> offerings = new HashSet<>(Optional.ofNullable(request.getOfferings()).orElseGet(Collections::emptyList));
-        Set<String> procedures = new HashSet<>(Optional.ofNullable(request.getProcedures()).orElseGet(Collections::emptyList));
-        Set<String> features = new HashSet<>(Optional.ofNullable(request.getFeatureIdentifiers()).orElseGet(Collections::emptyList));
-        Set<TemporalFilter> temporalFilters = new HashSet<>(Optional.ofNullable(request.getTemporalFilters()).orElseGet(Collections::emptyList));
+        Set<String> properties = asSet(request.getObservedProperties());
+        Set<String> offerings = asSet(request.getOfferings());
+        Set<String> procedures = asSet(request.getProcedures());
+        Set<String> features = asSet(request.getFeatureIdentifiers());
+        Set<TemporalFilter> temporalFilters = asSet(request.getTemporalFilters());
         Optional<SpatialFilter> spatialFilter = Optional.ofNullable(request.getSpatialFilter());
-
-
 
         if (properties.isEmpty() && offerings.isEmpty() &&
             procedures.isEmpty() && features.isEmpty() &&
@@ -132,9 +132,27 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         return response;
     }
 
+    @SuppressWarnings("unchecked")
+    private List<DataView> getData(Set<String> procedures, Set<String> features, Set<String> offerings,
+                                   Set<String> properties, Set<TemporalFilter> temporalFilters,
+                                   Optional<SpatialFilter> spatialFilter) throws OwsExceptionReport {
+
+        Criterion filters
+                = getFilterCriterion(procedures, features, offerings, properties, temporalFilters, spatialFilter);
+
+        Session session = sessionFactory.openSession();
+        try {
+            return session.createCriteria(DataView.class).add(filters).list();
+        } catch(HibernateException e) {
+            throw new NoApplicableCodeException().causedBy(e);
+        } finally {
+            session.close();
+        }
+    }
+
     private Junction getFilterCriterion(Set<String> procedures, Set<String> features, Set<String> offerings,
                                         Set<String> properties, Set<TemporalFilter> temporalFilters,
-                                        Optional<SpatialFilter> spatialFilter) throws OwsExceptionReport{
+                                        Optional<SpatialFilter> spatialFilter) throws OwsExceptionReport {
         CompositeException errors = new CompositeException();
 
         SosContentCache cache = getCache();
@@ -151,21 +169,21 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                 // create URNs from the supplied observable properties
                 urns = intersection.stream()
                         .flatMap(procedure -> cache.getObservablePropertiesForProcedure(procedure).stream()
-                                .map(property -> String.format("%s:%s", procedure, property)))
+                        .map(property -> String.format("%s:%s", procedure, property)))
                         .collect(toSet());
             } else {
                 // create URNs from all cached observable properties
                 urns = intersection.stream()
                         .flatMap(procedure -> properties.stream()
-                                .filter(property -> cache.hasObservablePropertyForProcedure(procedure, property))
-                                .map(property -> String.format("%s:%s", procedure, property)))
+                        .filter(property -> cache.hasObservablePropertyForProcedure(procedure, property))
+                        .map(property -> String.format("%s:%s", procedure, property)))
                         .collect(toSet());
             }
-        } else if (properties.isEmpty()) {
+        } else if (!properties.isEmpty()) {
             // create the URNs from all procedures matching the observable properties
             urns = properties.stream()
                     .flatMap(property -> cache.getProceduresForObservableProperty(property).stream()
-                            .map(procedure -> String.format("%s:%s", procedure, property)))
+                    .map(procedure -> String.format("%s:%s", procedure, property)))
                     .collect(toSet());
         } else {
             urns = null;
@@ -185,6 +203,9 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                 .values().stream()
                 .collect(toConjunction()));
 
+        errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
+                .at(Sos2Constants.GetObservationParams.temporalFilter).causedBy(e));
+
         if (spatialFilter.isPresent()) {
             SpatialFilter filter = spatialFilter.get();
 
@@ -200,25 +221,9 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                                              Restrictions.le(DataView.LONGITUDE, envelope.getMaxX())));
         }
 
-        errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
-                .at(Sos2Constants.GetObservationParams.temporalFilter).causedBy(e));
+
 
         return conjunction;
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<DataView> getData(Set<String> procedures, Set<String> features, Set<String> offerings,
-                                     Set<String> properties, Set<TemporalFilter> temporalFilters,
-                                     Optional<SpatialFilter> spatialFilter) throws OwsExceptionReport {
-
-        Criterion filters = getFilterCriterion(procedures, features, offerings, properties, temporalFilters, spatialFilter);
-
-        Session session = sessionFactory.openSession();
-        try {
-            return  session.createCriteria(DataView.class).add(filters).list();
-        } finally {
-            session.close();
-        }
     }
 
     private Criterion getTemporalFilterCriterion(TemporalFilter tf) throws OwsExceptionReport {
@@ -258,5 +263,9 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         observation.setValue(new SingleObservationValue<>(phenomenonTime, quantityValue));
         observation.addParameter(spatialFilteringParameter);
         return observation;
+    }
+
+    private static <T> Set<T> asSet(List<T> list) {
+        return new HashSet<>(Optional.ofNullable(list).orElseGet(Collections::emptyList));
     }
 }

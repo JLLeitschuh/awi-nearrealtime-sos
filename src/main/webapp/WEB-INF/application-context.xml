@@ -11,9 +11,7 @@
 
     <ctx:annotation-config />
 
-    <bean id="eventBus" class="org.n52.iceland.event.ServiceEventBus">
-        <property name="async" value="false" />
-    </bean>
+    <bean id="eventBus" class="org.n52.janmayen.event.EventBus" />
 
     <!--  settings related beans -->
     <bean id="settingsService" class="org.n52.faroe.SettingsServiceImpl" />

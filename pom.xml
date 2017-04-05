@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.n52</groupId>
         <artifactId>parent</artifactId>
-        <version>4</version>
+        <version>7</version>
     </parent>
 
     <groupId>org.n52.awi</groupId>
@@ -14,9 +14,14 @@
     <name>52&deg;North AWI NRT SOS</name>
     <description>52&deg;North AWI NRT SOS</description>
     <inceptionYear>2016</inceptionYear>
-
-    <!--
     <repositories>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>52n-snapshots</id>
             <name>52n snapshots</name>
@@ -26,6 +31,7 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
             </snapshots>
         </repository>
         <repository>
@@ -40,7 +46,6 @@
             </snapshots>
         </repository>
     </repositories>
-    -->
 
     <developers>
         <developer>
@@ -60,10 +65,14 @@
         <version.corsFilter>2.5</version.corsFilter>
         <version.guava>20.0</version.guava>
         <version.hibernate>4.3.11.Final</version.hibernate>
+        
         <version.iceland>2-SNAPSHOT</version.iceland>
         <version.svalbard>1-SNAPSHOT</version.svalbard>
+        <version.shetland>1-SNAPSHOT</version.shetland>
+        <version.sos>5.0.0-SNAPSHOT</version.sos>
+        
+        <version.janmayen>1.0.0</version.janmayen>
         <version.jackson>2.8.5</version.jackson>
-        <version.janmayen>1-SNAPSHOT</version.janmayen>
         <version.java>1.8</version.java>
         <version.javax.activation>1.1.1</version.javax.activation>
         <version.javax.inject>1</version.javax.inject>
@@ -75,11 +84,10 @@
         <version.logback>1.1.7</version.logback>
         <version.postgres>9.4.1212.jre7</version.postgres>
         <version.resteasy>3.0.18.Final</version.resteasy>
-        <version.shetland>1-SNAPSHOT</version.shetland>
         <version.slf4j>1.7.21</version.slf4j>
-        <version.sos>5.0.0-SNAPSHOT</version.sos>
         <version.spring>4.2.3.RELEASE</version.spring>
         <version.xml.apis>1.4.01</version.xml.apis>
+        
         <jetty.port.http>3000</jetty.port.http>
         <jetty.port.stop>3001</jetty.port.stop>
     </properties>
@@ -99,7 +107,7 @@
             <version>${version.iceland}</version>
             <scope>compile</scope>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.n52.janmayen</groupId>
             <artifactId>janmayen</artifactId>
             <version>${version.janmayen}</version>
@@ -314,7 +322,7 @@
         </dependency>
 
         <!--sos-->
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>hibernate-common</artifactId>
             <version>${version.sos}</version>
@@ -414,7 +422,7 @@
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>gda-operation</artifactId>
             <version>${version.sos}</version>
-            <scope>runtime</scope>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
@@ -516,6 +524,14 @@
                                 <requireJavaVersion>
                                     <version>[${version.java},)</version>
                                 </requireJavaVersion>
+                                <requireNoRepositories>
+                                    <allowSnapshotRepositories>true</allowSnapshotRepositories>
+                                    <allowedRepositories>
+                                        <id>sonatype-nexus-snapshots</id>
+                                        <id>52n-snapshots</id>
+                                        <id>52n-releases</id>
+                                    </allowedRepositories>
+                                </requireNoRepositories>
                             </rules>
                         </configuration>
                     </execution>

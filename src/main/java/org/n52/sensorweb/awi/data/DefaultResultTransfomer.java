@@ -26,7 +26,8 @@ import org.hibernate.transform.ResultTransformer;
  */
 @FunctionalInterface
 @SuppressWarnings("serial")
-public interface DefaultResultTransfomer extends ResultTransformer {
+public interface DefaultResultTransfomer<T> extends ResultTransformer {
+
     @Override
     @SuppressWarnings(value = "rawtypes")
     default List transformList(List collection) {
@@ -34,10 +35,10 @@ public interface DefaultResultTransfomer extends ResultTransformer {
     }
 
     @Override
-    default Object transformTuple(Object[] tuple, String[] aliases) {
+    default T transformTuple(Object[] tuple, String[] aliases) {
         return transform(tuple);
     }
 
-    Object transform(Object[] tuple);
+    T transform(Object[] tuple);
 
 }

@@ -42,7 +42,7 @@
     },
     "misc.httpResponseCodeUseInKvpAndPoxBinding" : {
       "type" : "boolean",
-      "value" : false
+      "value" : true
     },
     "misc.includeOriginalRequest" : {
       "type" : "boolean",
@@ -226,7 +226,7 @@
     },
     "service.serviceURL" : {
       "type" : "uri",
-      "value" : "http://localhost:8080/iceland/service"
+      "value" : "http://localhost:3000/service"
     },
     "misc.srsNamePrefixSosV1" : {
       "type" : "string",
@@ -238,7 +238,7 @@
     },
     "i18n.showAllLanguageValues" : {
       "type" : "boolean",
-      "value" : false
+      "value" : true
     },
     "profile.hydrology.maxReturnedTimeSeries" : {
       "type" : "integer",
@@ -282,19 +282,19 @@
     },
     "serviceProvider.email" : {
       "type" : "string",
-      "value" : "info@52north.org"
+      "value" : "c.autermann@52north.org"
     },
     "serviceProvider.role.codespace" : {
       "type" : "uri",
-      "value" : "TBA"
+      "value" : null
     },
     "serviceProvider.hoursOfService" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : null
     },
     "serviceProvider.role.value" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : null
     },
     "serviceProvider.file" : {
       "type" : "file",
@@ -302,23 +302,23 @@
     },
     "serviceProvider.site" : {
       "type" : "uri",
-      "value" : "http://52north.org/swe"
+      "value" : "https://www.awi.de/"
     },
     "serviceProvider.individualName" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : "Christian Autermann"
     },
     "serviceProvider.positionName" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : null
     },
     "serviceProvider.state" : {
       "type" : "string",
-      "value" : "North Rhine-Westphalia"
+      "value" : "Bremen"
     },
     "serviceProvider.city" : {
       "type" : "string",
-      "value" : "Münster"
+      "value" : "Bremerhaven"
     },
     "serviceProvider.country" : {
       "type" : "string",
@@ -326,11 +326,11 @@
     },
     "serviceProvider.postalCode" : {
       "type" : "string",
-      "value" : "48155"
+      "value" : "27570"
     },
     "serviceProvider.contactInstructions" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : null
     },
     "serviceProvider.onlineResource" : {
       "type" : "string",
@@ -338,19 +338,19 @@
     },
     "serviceProvider.phone" : {
       "type" : "string",
-      "value" : "+49(0)251/396 371-0"
+      "value" : "004947148310"
     },
     "serviceProvider.address" : {
       "type" : "string",
-      "value" : "Martin-Luther-King-Weg 24"
+      "value" : "Am Handelshafen 12"
     },
     "serviceProvider.facsimile" : {
       "type" : "string",
-      "value" : "TBA"
+      "value" : "004947148311149"
     },
     "serviceProvider.name" : {
       "type" : "string",
-      "value" : "52North"
+      "value" : "Alfred-Wegener-Institut Helmholtz-Zentrum für Polar- und Meeresforschung"
     },
     "coding.characterEncoding" : {
       "type" : "string",
@@ -363,6 +363,10 @@
     "coding.srsNamePrefixURL" : {
       "type" : "string",
       "value" : "http://www.opengis.net/def/crs/EPSG/0/"
+    },
+    "operation.gda.forceValueCount" : {
+      "type" : "boolean",
+      "value" : false
     }
   },
   "capabiltiesExtensions" : { },

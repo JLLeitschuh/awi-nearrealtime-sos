@@ -12,13 +12,8 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-4.1.xsd">
 
-    <bean class="org.n52.iceland.config.spring.LifecycleBeanPostProcessor">
-        <description>This calls Constructable#init and Destroyable#destroy for all beans.</description>
-    </bean>
-
-    <bean class="org.n52.iceland.config.spring.ConfiguringBeanPostProcessor">
-        <description>This calls SettingsManager#configure for all beans.</description>
-    </bean>
+    <bean class="org.n52.iceland.config.spring.LifecycleBeanPostProcessor" />
+    <bean class="org.n52.iceland.config.spring.ConfiguringBeanPostProcessor" />
 
     <!--<bean class="org.n52.iceland.coding.DocumentBuilderProvider"/>-->
     <bean class="org.n52.iceland.util.http.HttpUtils"/>
@@ -28,6 +23,7 @@
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
     </bean>
 
+    <!-- bindings -->
     <bean id="kvpBinding" class="org.n52.iceland.binding.kvp.KvpBinding"/>
     <bean id="poxBinding" class="org.n52.iceland.binding.pox.PoxBinding"/>
     <bean id="jsonBinding" class="org.n52.iceland.binding.json.JSONBinding"/>
@@ -35,23 +31,27 @@
 
     <bean id="exceptionLogger" class="org.n52.iceland.service.ExceptionLogger"/>
 
+    <!-- operation handlers -->
     <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIDescribeSensorHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler">
         <constructor-arg ref="sessionFactory" />
     </bean>
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetDataAvailabilityHandler">
+        <constructor-arg ref="sessionFactory" />
+    </bean>
+
     <bean class="org.n52.sensorweb.awi.NRTDaoImpl"/>
     <bean class="org.n52.sensorweb.awi.data.NearRealTimeDaoImpl">
         <constructor-arg ref="sessionFactory" />
     </bean>
 
     <bean class="org.n52.sensorweb.awi.sensor.SensorApiClientImpl">
-        <!--<constructor-arg value="https://handlesrv1.awi.de:8543/sensorManagement-web/rest/sensors" />-->
-        <constructor-arg value="https://sensor.awi.de/rest/sensors" />
+        <constructor-arg name="uri" value="https://sensor.awi.de/rest/sensors" />
     </bean>
 
-    <!-- dummy shit -->
+    <!-- dummy stuff -->
     <bean class="org.n52.sensorweb.awi.sos.AWIFeatureQueryHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.NoopDataConnectionProvider"/>
 
