@@ -39,7 +39,9 @@ import org.hibernate.criterion.Restrictions;
 
 import org.n52.janmayen.exception.CompositeException;
 import org.n52.janmayen.function.Predicates;
+import org.n52.sensorweb.awi.data.PropertyPath;
 import org.n52.sensorweb.awi.data.entities.DataView;
+import org.n52.sensorweb.awi.data.entities.Sensor;
 import org.n52.shetland.ogc.filter.FilterConstants.SpatialOperator;
 import org.n52.shetland.ogc.filter.SpatialFilter;
 import org.n52.shetland.ogc.filter.TemporalFilter;
@@ -142,7 +144,12 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
 
         Session session = sessionFactory.openSession();
         try {
-            return session.createCriteria(DataView.class).add(filters).list();
+            return session.createCriteria(DataView.class)
+                    .createAlias(DataView.SENSOR, DataView.SENSOR)
+                    .add(Restrictions.isNotNull(PropertyPath.of(DataView.SENSOR, Sensor.CODE)))
+                    .add(filters)
+                    .setReadOnly(true)
+                    .list();
         } catch(HibernateException e) {
             throw new NoApplicableCodeException().causedBy(e);
         } finally {
@@ -197,9 +204,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                 .collect(Collectors.groupingBy(
                         TemporalFilter::getValueReference,
                         mapping(errors.wrap(this::getTemporalFilterCriterion),
-                                filtering(Optional::isPresent,
-                                          mapping(Optional::get,
-                                                  toDisjunction())))))
+                                filtering(Optional::isPresent, mapping(Optional::get, toDisjunction())))))
                 .values().stream()
                 .collect(toConjunction()));
 

@@ -22,6 +22,7 @@ import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -143,7 +144,8 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
                     .list();
         }).stream().collect(toMap(
                 t -> String.format("%s:%s:%s", t[0], t[1], t[2]).toLowerCase(),
-                t -> createEnvelope(new MinMax<>((DateTime) t[3], (DateTime) t[4]),
+                t -> createEnvelope(new MinMax<>(new DateTime((Date) t[3]),
+                                                 new DateTime((Date) t[4])),
                                     new MinMax<>((double) t[5], (double) t[6]),
                                     new MinMax<>((double) t[7], (double) t[8]))));
     }

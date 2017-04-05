@@ -16,13 +16,12 @@
 package org.n52.sensorweb.awi.data.entities;
 
 import java.io.Serializable;
-
-import org.joda.time.DateTime;
+import java.util.Date;
 
 public class Data implements Serializable {
     private static final long serialVersionUID = -7231301877049917824L;
     private int id;
-    private DateTime date;
+    private Date date;
     private double value;
     private Sensor sensor;
     private Integer level;
@@ -35,11 +34,11 @@ public class Data implements Serializable {
         this.id = dataId;
     }
 
-    public DateTime getDate() {
+    public Date getDate() {
         return this.date;
     }
 
-    public void setDate(DateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

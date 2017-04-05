@@ -1,8 +1,7 @@
 package org.n52.sensorweb.awi.data.entities;
 
 import java.io.Serializable;
-
-import org.joda.time.DateTime;
+import java.util.Date;
 
 /**
  * TODO JavaDoc
@@ -22,7 +21,7 @@ public class DataView implements Serializable {
     private static final long serialVersionUID = 2023558780951333945L;
     private int id;
     private String code;
-    private DateTime time;
+    private Date time;
     private double value;
     private Sensor sensor;
     private double longitude;
@@ -36,11 +35,11 @@ public class DataView implements Serializable {
         this.id = id;
     }
 
-    public DateTime getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(DateTime time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

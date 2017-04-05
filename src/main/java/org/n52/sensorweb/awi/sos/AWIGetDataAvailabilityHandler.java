@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.joda.time.DateTime;
 
 import org.n52.janmayen.function.Predicates;
 import org.n52.sensorweb.awi.data.DefaultResultTransfomer;
@@ -111,8 +111,8 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
         String device = (String) tuple[1];
         String platform = (String) tuple[2];
         String platformType = (String) tuple[3];
-        DateTime minTime = (DateTime) tuple[4];
-        DateTime maxTime = (DateTime) tuple[5];
+        Date minTime = (Date) tuple[4];
+        Date maxTime = (Date) tuple[5];
         long count = (long) tuple[6];
 
         String procedure = String.format("%s:%s:%s", platformType, platform, device);
