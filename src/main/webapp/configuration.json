@@ -18,7 +18,7 @@
     },
     "misc.includeStackTraceInExceptionReport" : {
       "type" : "boolean",
-      "value" : false
+      "value" : true
     },
     "service.defaultEpsg" : {
       "type" : "integer",
