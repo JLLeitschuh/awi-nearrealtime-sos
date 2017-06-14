@@ -226,7 +226,7 @@
     },
     "service.serviceURL" : {
       "type" : "uri",
-      "value" : "http://localhost:3000/service"
+      "value" : "https://sos.awi.de/SOS"
     },
     "misc.srsNamePrefixSosV1" : {
       "type" : "string",

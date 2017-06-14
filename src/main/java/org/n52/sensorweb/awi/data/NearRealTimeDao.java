@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.n52.sensorweb.awi.NRTEnvelope;
+import org.n52.sensorweb.awi.SpaceTimeEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
@@ -54,5 +54,5 @@ public interface NearRealTimeDao {
 
     Optional<Sensor> getSeries(String urn);
 
-    Map<String, NRTEnvelope> getEnvelopes();
+    Map<String, SpaceTimeEnvelope> getEnvelopes();
 }

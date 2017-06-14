@@ -26,40 +26,33 @@ import com.vividsolutions.jts.geom.Envelope;
  *
  * @author Christian Autermann
  */
-public class NRTEnvelope {
+public class SpaceTimeEnvelope {
 
-    private final MinMax<DateTime> phenomenonTime;
-    private final MinMax<DateTime> resultTime;
+    private final MinMax<DateTime> time;
     private final Envelope envelope;
 
-    public NRTEnvelope() {
-        this(new MinMax<>(), new MinMax<>(), new Envelope());
+    public SpaceTimeEnvelope() {
+        this(new MinMax<>(), new Envelope());
     }
 
-    public NRTEnvelope(MinMax<DateTime> phenomenonTime,
-                       MinMax<DateTime> resultTime, Envelope envelope) {
-        this.phenomenonTime = phenomenonTime;
-        this.resultTime = resultTime;
+    public SpaceTimeEnvelope(MinMax<DateTime> time,
+                             Envelope envelope) {
+        this.time = time;
         this.envelope = envelope;
     }
 
-    public MinMax<DateTime> getPhenomenonTime() {
-        return phenomenonTime;
+    public MinMax<DateTime> getTime() {
+        return this.time;
     }
 
-    public MinMax<DateTime> getResultTime() {
-        return resultTime;
-    }
-
-    public Envelope getEnvelope() {
+    public Envelope getSpace() {
         return envelope;
     }
 
-    public NRTEnvelope extend(NRTEnvelope envelope) {
-        this.phenomenonTime.extend(envelope.getPhenomenonTime(), DateTime::compareTo);
-        this.resultTime.extend(envelope.getResultTime(), DateTime::compareTo);
-        if (envelope.getEnvelope() != null) {
-            this.envelope.expandToInclude(envelope.getEnvelope());
+    public SpaceTimeEnvelope extend(SpaceTimeEnvelope envelope) {
+        this.time.extend(envelope.getTime(), DateTime::compareTo);
+        if (envelope.getSpace() != null) {
+            this.envelope.expandToInclude(envelope.getSpace());
         }
         return this;
     }

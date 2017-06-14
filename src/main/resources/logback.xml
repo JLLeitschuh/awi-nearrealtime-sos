@@ -1,19 +1,39 @@
 <configuration scan="true" scanPeriod="30 seconds">
 
-	<!-- refer to http://logback.qos.ch/manual/appenders.html -->
+    <property name="path" value="${catalina.base}/logs/sos" />
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<logger name="org.n52" level="TRACE" />
-	<logger name="org.springframework" level="DEBUG" />
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${path}.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${path}/%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date %-5level [%thread] [%file:%line] %msg%n</pattern>
+		</encoder>
+	</appender>
+
+    <logger name="org.n52" level="TRACE" />
+	<logger name="org.n52.sensorweb.awi.sensor.LoggingFilter" level="INFO"/>
+
+	<logger name="org.springframework" level="ERROR" />
     <logger name="org.apache.http" level="ERROR"/>
-    <logger name="org.n52.sensorweb.awi.sensor.LoggingFilter" level="WARN"/>
+
+
     <logger name="org.hibernate.hql" level="TRACE" />
+
 	<root level="INFO">
-		<appender-ref ref="STDOUT" />
+		<appender-ref ref="CONSOLE" />
 	</root>
 </configuration>

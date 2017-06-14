@@ -15,20 +15,21 @@
  */
 package org.n52.sensorweb.awi.sos;
 
-
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 
+import org.n52.janmayen.function.Consumers;
 import org.n52.sensorweb.awi.NRTDao;
-import org.n52.sensorweb.awi.NRTEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
+import org.n52.sensorweb.awi.SpaceTimeEnvelope;
+import org.n52.sensorweb.awi.geometry.ExpeditionDao;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.features.SfConstants;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
@@ -52,26 +53,24 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
     private static final String FEATURE_TYPE = SfConstants.SAMPLING_FEAT_TYPE_SF_SPATIAL_SAMPLING_FEATURE;
     private static final String PROCEDURE_DESCRIPTION_TYPE = SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL;
     private final NRTDao dao;
+    private final ExpeditionDao expeditionDao;
 
     @Inject
-    public AWICacheFeederHandler(NRTDao dao) {
+    public AWICacheFeederHandler(NRTDao dao, ExpeditionDao expeditionDao) {
         this.dao = dao;
+        this.expeditionDao = expeditionDao;
     }
 
     @Override
-    public void updateCacheOfferings(SosWritableContentCache cache, Collection<String> offerings) throws OwsExceptionReport {
+    public void updateCacheOfferings(SosWritableContentCache cache, Collection<String> offerings) throws
+            OwsExceptionReport {
         updateCache(cache);
-    }
-
-    public Map<String, NRTEnvelope> getEnvelopes() {
-        Map<String, NRTEnvelope> envelopes = this.dao.getEnvelopes();
-        return envelopes;
     }
 
     @Override
     public void updateCache(SosWritableContentCache cache) throws OwsExceptionReport {
 
-        Map<String, NRTEnvelope> envelopes = getEnvelopes();
+        Map<String, SpaceTimeEnvelope> envelopes = this.dao.getEnvelopes();
         // we only support EPSG:4326
         cache.setDefaultEPSGCode(EPSG_4326);
         cache.addEpsgCode(EPSG_4326);
@@ -90,18 +89,11 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         cache.setLastUpdateTime(DateTime.now());
     }
 
-    private String getFeatureOfInterest(NRTProcedure procedure) {
-        if (procedure.getParent().isPresent()) {
-            return getFeatureOfInterest(procedure.getParent().get());
-        } else {
-            return procedure.getId();
-        }
-    }
-
-    private void addProcedure(SosWritableContentCache cache, NRTProcedure procedure, Map<String, NRTEnvelope> envelopes) {
+    private void addProcedure(SosWritableContentCache cache, NRTProcedure procedure,
+                              Map<String, SpaceTimeEnvelope> envelopes) {
         String procedureId = procedure.getId();
         String offeringId = procedureId;
-        String featureId = getFeatureOfInterest(procedure);
+        Set<String> featureIds = getFeaturesOfInterest(procedure);
 
         cache.addProcedure(procedureId);
         cache.addTypeInstanceProcedure(TypeInstance.INSTANCE, procedureId);
@@ -129,12 +121,12 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         cache.addFeatureOfInterestTypesForOffering(offeringId, FEATURE_TYPE);
 
         // feature of interest
-        cache.addFeatureOfInterest(featureId);
+        cache.addFeaturesOfInterest(featureIds);
 
         // feature <-> offering
-        cache.addFeatureOfInterestForOffering(offeringId, featureId);
-        cache.addProcedureForFeatureOfInterest(featureId, procedureId);
-
+        featureIds.stream()
+                .forEach(Consumers.curryFirst(cache::addFeatureOfInterestForOffering, offeringId)
+                        .andThen(Consumers.currySecond(cache::addProcedureForFeatureOfInterest, procedureId)));
 
         procedure.getOutputs().forEach(output -> {
             String observableProperty = output.getName();
@@ -148,24 +140,24 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
 
         getEnvelope(envelopes, procedureId).ifPresent(e -> {
             // phenomenon time <-> offering
-            cache.setMinPhenomenonTimeForOffering(offeringId, e.getPhenomenonTime().getMinimum());
-            cache.setMaxPhenomenonTimeForOffering(offeringId, e.getPhenomenonTime().getMaximum());
+            cache.setMinPhenomenonTimeForOffering(offeringId, e.getTime().getMinimum());
+            cache.setMaxPhenomenonTimeForOffering(offeringId, e.getTime().getMaximum());
             // phenomenon time <-> procedure
-            cache.setMinPhenomenonTimeForProcedure(procedureId, e.getPhenomenonTime().getMinimum());
-            cache.setMaxPhenomenonTimeForProcedure(procedureId, e.getPhenomenonTime().getMaximum());
+            cache.setMinPhenomenonTimeForProcedure(procedureId, e.getTime().getMinimum());
+            cache.setMaxPhenomenonTimeForProcedure(procedureId, e.getTime().getMaximum());
             // result time <-> offering
-            cache.setMinResultTimeForOffering(offeringId, e.getResultTime().getMinimum());
-            cache.setMaxResultTimeForOffering(offeringId, e.getResultTime().getMaximum());
+            cache.setMinResultTimeForOffering(offeringId, e.getTime().getMinimum());
+            cache.setMaxResultTimeForOffering(offeringId, e.getTime().getMaximum());
             // envelope <-> offering
-            cache.setEnvelopeForOffering(offeringId, new ReferencedEnvelope(e.getEnvelope(), EPSG_4326));
+            cache.setEnvelopeForOffering(offeringId, new ReferencedEnvelope(e.getSpace(), EPSG_4326));
         });
 
         // add the child procedures
-        procedure.getChildren().forEach(child ->  addProcedure(cache, child, envelopes));
+        procedure.getChildren().forEach(child -> addProcedure(cache, child, envelopes));
     }
 
-    private Optional<NRTEnvelope> getEnvelope(Map<String, NRTEnvelope> envelopes, String procedureId) {
-        NRTEnvelope envelope = envelopes.get(procedureId);
+    private Optional<SpaceTimeEnvelope> getEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedureId) {
+        SpaceTimeEnvelope envelope = envelopes.get(procedureId);
 
         if (envelope == null) {
             int idx = procedureId.indexOf(':');
@@ -175,6 +167,16 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         }
 
         return Optional.ofNullable(envelope);
+    }
+
+    private Set<String> getFeaturesOfInterest(NRTProcedure procedure) {
+        String platform = procedure.getPlatform().getId();
+        Set<String> featureIds = this.expeditionDao.getFeatureIds(platform);
+        if (featureIds.isEmpty()) {
+            return Collections.singleton(platform);
+        } else {
+            return featureIds;
+        }
     }
 
 }

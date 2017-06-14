@@ -19,23 +19,23 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 public class Platform implements Serializable {
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String CODE = "code";
-    public static final String TYPE = "type";
-    public static final String LATITUDE = "latitude";
-    public static final String LONGITUDE = "longitude";
+    public static final String GEOMETRY = "geometry";
     public static final String DEVICES = "devices";
+    public static final String EXPEDITION = "expedition";
 
     private static final long serialVersionUID = 763090253133294552L;
     private int id;
     private String name;
     private String code;
-    private String type;
-    private Double latitude;
-    private Double longitude;
+    private Geometry geometry;
     private Set<Device> devices = new HashSet<>(0);
+    private Set<Expedition> expeditions = new HashSet<>(0);
 
     public int getId() {
         return this.id;
@@ -69,32 +69,28 @@ public class Platform implements Serializable {
         this.devices = devices;
     }
 
-    public String getType() {
-        return type;
+    public boolean isMobile() {
+        return this.geometry == null;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public boolean isStationary() {
+        return this.geometry != null;
     }
 
-    boolean isMobile() {
-        return this.latitude != null && this.longitude != null;
+    public Geometry getGeometry() {
+        return geometry;
     }
 
-    public Double getLatitude() {
-        return latitude;
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public Set<Expedition> getExpeditions() {
+        return expeditions;
     }
 
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public void setExpeditions(Set<Expedition> expeditions) {
+        this.expeditions = expeditions;
     }
 
 }

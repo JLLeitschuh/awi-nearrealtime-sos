@@ -31,6 +31,7 @@ public class Device implements Serializable {
     private Platform platform;
     private String name;
     private String code;
+    private String urn;
     private Set<Sensor> sensors = new HashSet<>(0);
 
     public int getId() {

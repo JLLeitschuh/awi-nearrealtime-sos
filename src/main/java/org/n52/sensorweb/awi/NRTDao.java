@@ -28,7 +28,7 @@ public interface NRTDao {
 
     Collection<NRTProcedure> getProcedures();
 
-    Map<String, NRTEnvelope> getEnvelopes();
+    Map<String, SpaceTimeEnvelope> getEnvelopes();
 
     Optional<String> getDescription(String id);
 

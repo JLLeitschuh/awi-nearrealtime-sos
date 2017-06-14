@@ -118,7 +118,7 @@ public class NRTDaoImpl implements NRTDao {
     }
 
     @Override
-    public Map<String, NRTEnvelope> getEnvelopes() {
+    public Map<String, SpaceTimeEnvelope> getEnvelopes() {
 //        Map<String, MinMax<DateTime>> minMax = this.nearRealTimeDao.getMinMax();
 //        return minMax.entrySet().stream()
 //                .collect(toMap(Entry::getKey, e -> new NRTEnvelope(e.getValue(), e.getValue(), null)));
@@ -128,6 +128,12 @@ public class NRTDaoImpl implements NRTDao {
     @Override
     public Optional<String> getDescription(String id) {
         return this.sensorApiClient.getSensorML(id);
+    }
+
+    private NRTProcedureOutput toProcedureOutput(JsonSensorOutput o) {
+        NRTUnit unit = new NRTUnit(o.getUnitOfMeasurement().getLongName(),
+                o.getUnitOfMeasurement().getCode());
+        return new NRTProcedureOutput(o.getCode(), o.getName(), unit);
     }
 
     private static SessionFactory createSessionFactory() {
@@ -162,10 +168,5 @@ public class NRTDaoImpl implements NRTDao {
         }
     }
 
-    private NRTProcedureOutput toProcedureOutput(JsonSensorOutput o) {
-        NRTUnit unit = new NRTUnit(o.getUnitOfMeasurement().getLongName(),
-                                   o.getUnitOfMeasurement().getCode());
-        return new NRTProcedureOutput(o.getCode(), o.getName(), unit);
-    }
 
 }

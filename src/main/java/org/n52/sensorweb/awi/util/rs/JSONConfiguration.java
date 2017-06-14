@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi.sensor;
+package org.n52.sensorweb.awi.util.rs;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -36,7 +36,7 @@ public class JSONConfiguration implements ContextResolver<ObjectMapper> {
 
     private final ObjectMapper mapper;
 
-    public JSONConfiguration() {
+    public JSONConfiguration(String dateFormat) {
         this.mapper = new ObjectMapper();
         this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -44,11 +44,15 @@ public class JSONConfiguration implements ContextResolver<ObjectMapper> {
         this.mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         this.mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         this.mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-        this.mapper.setDateFormat(getDateFormat());
+        this.mapper.setDateFormat(getDateFormat(dateFormat));
     }
 
-    private SimpleDateFormat getDateFormat() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+    public JSONConfiguration() {
+        this("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+    }
+
+    private SimpleDateFormat getDateFormat(String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat;
     }

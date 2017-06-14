@@ -31,7 +31,6 @@ import org.n52.shetland.ogc.sos.SosProcedureDescriptionUnknownType;
 import org.n52.shetland.ogc.sos.request.DescribeSensorRequest;
 import org.n52.shetland.ogc.sos.response.DescribeSensorResponse;
 import org.n52.sos.ds.AbstractDescribeSensorHandler;
-import org.n52.svalbard.decode.DecoderRepository;
 
 /**
  * TODO JavaDoc
@@ -41,7 +40,6 @@ import org.n52.svalbard.decode.DecoderRepository;
 public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
 
     private NRTDao dao;
-    private DecoderRepository decoderRepository;
 
     public AWIDescribeSensorHandler() {
         super(SosConstants.SOS);
@@ -50,11 +48,6 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
     @Inject
     public void setDao(NRTDao dao) {
         this.dao = dao;
-    }
-
-    @Inject
-    public void setDecoderRepository(DecoderRepository decoderRepository) {
-        this.decoderRepository = decoderRepository;
     }
 
     @Override

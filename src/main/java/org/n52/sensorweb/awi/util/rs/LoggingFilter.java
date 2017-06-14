@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi.sensor;
+package org.n52.sensorweb.awi.util.rs;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

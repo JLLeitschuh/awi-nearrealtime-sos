@@ -27,7 +27,7 @@ public class NoopDataConnectionProvider implements DataConnectionProvider {
 
     @Override
     public Object getConnection() throws ConnectionProviderException {
-        return this;
+        throw new ConnectionProviderException();
     }
 
     @Override

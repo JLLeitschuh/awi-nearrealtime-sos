@@ -30,9 +30,10 @@ import org.n52.sos.ds.FeatureQueryHandlerQueryObject;
 
 /**
  * TODO JavaDoc
+ *
  * @author Christian Autermann
  */
-public class AWIFeatureQueryHandler implements FeatureQueryHandler{
+public class AWIFeatureQueryHandler implements FeatureQueryHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AWIFeatureQueryHandler.class);
     private static final int EPSG_4326 = 4326;
@@ -50,14 +51,15 @@ public class AWIFeatureQueryHandler implements FeatureQueryHandler{
     }
 
     @Override
-    public Map<String, AbstractFeature> getFeatures(FeatureQueryHandlerQueryObject queryObject) throws
-                                                                                                       OwsExceptionReport {
+    public Map<String, AbstractFeature> getFeatures(FeatureQueryHandlerQueryObject queryObject)
+            throws OwsExceptionReport {
         /* TODO implement org.n52.sensorweb.awi.AWIFeatureQueryHandler.getFeatures() */
         throw new UnsupportedOperationException("org.n52.sensorweb.awi.AWIFeatureQueryHandler.getFeatures() not yet implemented");
     }
 
     @Override
-    public ReferencedEnvelope getEnvelopeForFeatureIDs(FeatureQueryHandlerQueryObject queryObject) throws OwsExceptionReport {
+    public ReferencedEnvelope getEnvelopeForFeatureIDs(FeatureQueryHandlerQueryObject queryObject)
+            throws OwsExceptionReport {
         /* TODO implement org.n52.sensorweb.awi.AWIFeatureQueryHandler.getEnvelopeForFeatureIDs() */
         throw new UnsupportedOperationException("org.n52.sensorweb.awi.AWIFeatureQueryHandler.getEnvelopeForFeatureIDs() not yet implemented");
     }

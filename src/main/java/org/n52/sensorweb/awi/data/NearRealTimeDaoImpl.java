@@ -35,19 +35,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.spatial.criterion.SpatialProjections;
 import org.hibernate.sql.JoinType;
 import org.joda.time.DateTime;
 
-import org.n52.sensorweb.awi.NRTEnvelope;
 import org.n52.sensorweb.awi.NRTProcedure;
 import org.n52.sensorweb.awi.NRTProcedureOutput;
-import org.n52.sensorweb.awi.data.entities.DataView;
+import org.n52.sensorweb.awi.SpaceTimeEnvelope;
+import org.n52.sensorweb.awi.data.entities.Data;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
 import org.n52.shetland.util.MinMax;
 
-import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * TODO JavaDoc
@@ -120,34 +121,25 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, NRTEnvelope> getEnvelopes() {
+    public Map<String, SpaceTimeEnvelope> getEnvelopes() {
         return query(s -> {
-            Criteria c = s.createCriteria(DataView.class, DATA);
-            c.createAlias(PropertyPath.of(DATA, DataView.SENSOR), SENSOR);
+
+            Criteria c = s.createCriteria(Data.class, DATA);
+            c.createAlias(PropertyPath.of(DATA, Data.SENSOR), SENSOR);
             c.createAlias(PropertyPath.of(SENSOR, Sensor.DEVICE), DEVICE);
             c.createAlias(PropertyPath.of(DEVICE, Device.PLATFORM), PLATFORM);
             return (List<Object[]>) c.setProjection(Projections.projectionList()
-                    .add(Projections.groupProperty(PropertyPath.of(PLATFORM, Platform.TYPE)))
-                    .add(Projections.groupProperty(PropertyPath.of(PLATFORM, Platform.CODE)))
-                    .add(Projections.groupProperty(PropertyPath.of(DEVICE, Device.CODE)))
-                    .add(Projections.min(PropertyPath.of(DATA, DataView.TIME)))
-                    .add(Projections.max(PropertyPath.of(DATA, DataView.TIME)))
-                    .add(Projections.min(PropertyPath.of(DATA, DataView.LONGITUDE)))
-                    .add(Projections.max(PropertyPath.of(DATA, DataView.LONGITUDE)))
-                    .add(Projections.min(PropertyPath.of(DATA, DataView.LATITUDE)))
-                    .add(Projections.max(PropertyPath.of(DATA, DataView.LATITUDE))))
-                    .add(Restrictions.isNotNull(PropertyPath.of(PLATFORM, Platform.CODE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(DEVICE, Device.CODE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(DATA, DataView.LATITUDE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(DATA, DataView.LONGITUDE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(DATA, DataView.TIME)))
+                    .add(Projections.groupProperty(PropertyPath.of(DATA, Data.CODE)))
+                    .add(Projections.min(PropertyPath.of(DATA, Data.TIME)))
+                    .add(Projections.max(PropertyPath.of(DATA, Data.TIME)))
+                    .add(SpatialProjections.extent(PropertyPath.of(DATA, Data.GEOMETRY))))
+                    .add(Restrictions.isNotNull(PropertyPath.of(DATA, Data.GEOMETRY)))
                     .list();
         }).stream().collect(toMap(
-                t -> String.format("%s:%s:%s", t[0], t[1], t[2]).toLowerCase(),
-                t -> createEnvelope(new MinMax<>(new DateTime((Date) t[3]),
-                                                 new DateTime((Date) t[4])),
-                                    new MinMax<>((double) t[5], (double) t[6]),
-                                    new MinMax<>((double) t[7], (double) t[8]))));
+                t -> ((String) t[0]).toLowerCase(),
+                t -> createEnvelope(new MinMax<>(new DateTime((Date) t[1]),
+                                                 new DateTime((Date) t[2])),
+                                    (Geometry) t[3])));
     }
 
     @Override
@@ -183,16 +175,12 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
                     .createAlias(PropertyPath.of(SENSOR, Sensor.DEVICE), DEVICE)
                     .createAlias(PropertyPath.of(Sensor.DEVICE, Device.PLATFORM), PLATFORM)
                     .setProjection(Projections.projectionList()
-                            .add(Projections.property(PropertyPath.of(PLATFORM, Platform.TYPE)))
                             .add(Projections.property(PropertyPath.of(PLATFORM, Platform.CODE)))
                             .add(Projections.property(PropertyPath.of(DEVICE, Device.CODE)))
-                            .add(Projections.property(PropertyPath.of(SENSOR, Sensor.CODE))))
-                    .add(Restrictions.isNotNull(PropertyPath.of(PLATFORM, Platform.CODE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(DEVICE, Device.CODE)))
-                    .add(Restrictions.isNotNull(PropertyPath.of(SENSOR, Sensor.CODE)));
+                            .add(Projections.property(PropertyPath.of(SENSOR, Sensor.CODE))));
             return ((List<Object[]>) c.list()).stream()
-                    .collect(groupingBy(t -> String.format("%s:%s:%s", t[0], t[1], t[2]).toLowerCase(),
-                                        mapping(t -> (String) t[3], toList())))
+                    .collect(groupingBy(t -> String.format("%s:%s", t[0], t[1]).toLowerCase(),
+                                        mapping(t -> (String) t[2], toList())))
                     .entrySet()
                     .stream()
                     .map(e -> new NRTProcedure(e.getKey(), null, null, null, null, asOutputs(e.getValue())))
@@ -204,12 +192,8 @@ public class NearRealTimeDaoImpl extends AbstractSessionDao implements NearRealT
         return outputs.stream().map(o -> new NRTProcedureOutput(o, null, null)).collect(toSet());
     }
 
-    private NRTEnvelope createEnvelope(MinMax<DateTime> time, MinMax<Double> longitude, MinMax<Double> latitude) {
-        Envelope envelope = new Envelope(longitude.getMinimum(),
-                                         longitude.getMaximum(),
-                                         latitude.getMinimum(),
-                                         latitude.getMaximum());
-        return new NRTEnvelope(time, time, envelope);
+    private SpaceTimeEnvelope createEnvelope(MinMax<DateTime> time, Geometry geom) {
+        return new SpaceTimeEnvelope(time, geom.getEnvelopeInternal());
     }
 
 }

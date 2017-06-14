@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi.sensor;
+package org.n52.sensorweb.awi.util.rs;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -33,7 +33,7 @@ public class UserAgentFilter implements ClientRequestFilter {
 
     private final String userAgent;
 
-    UserAgentFilter(String userAgent) {
+    public UserAgentFilter(String userAgent) {
         this.userAgent = Objects.requireNonNull(userAgent);
     }
 

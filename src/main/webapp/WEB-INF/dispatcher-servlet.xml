@@ -32,9 +32,14 @@
     <bean id="exceptionLogger" class="org.n52.iceland.service.ExceptionLogger"/>
 
     <!-- operation handlers -->
-    <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler">
+        <constructor-arg ref="nrtDao" />
+        <constructor-arg ref="sessionFactory" />
+    </bean>
     <bean class="org.n52.sensorweb.awi.sos.AWIDescribeSensorHandler"/>
-    <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler">
+        <constructor-arg ref="sessionFactory" />
+    </bean>
     <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler">
         <constructor-arg ref="sessionFactory" />
     </bean>
@@ -42,7 +47,7 @@
         <constructor-arg ref="sessionFactory" />
     </bean>
 
-    <bean class="org.n52.sensorweb.awi.NRTDaoImpl"/>
+    <bean id="nrtDao" class="org.n52.sensorweb.awi.NRTDaoImpl"/>
     <bean class="org.n52.sensorweb.awi.data.NearRealTimeDaoImpl">
         <constructor-arg ref="sessionFactory" />
     </bean>

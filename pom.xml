@@ -64,14 +64,18 @@
         <version.commons.io>2.4</version.commons.io>
         <version.corsFilter>2.5</version.corsFilter>
         <version.guava>20.0</version.guava>
+
         <version.hibernate>4.3.11.Final</version.hibernate>
+        <version.hibernate.spatial>4.3-52N</version.hibernate.spatial>
+        <version.postgres>42.0.0</version.postgres>
+        <version.postgis>2.2.1</version.postgis>
         
         <version.iceland>2-SNAPSHOT</version.iceland>
         <version.svalbard>1-SNAPSHOT</version.svalbard>
         <version.shetland>1-SNAPSHOT</version.shetland>
         <version.sos>5.0.0-SNAPSHOT</version.sos>
         
-        <version.janmayen>1.0.0</version.janmayen>
+        <version.janmayen>1.1.0</version.janmayen>
         <version.jackson>2.8.5</version.jackson>
         <version.java>1.8</version.java>
         <version.javax.activation>1.1.1</version.javax.activation>
@@ -82,7 +86,6 @@
         <version.joda>2.9.4</version.joda>
         <version.jts>1.13</version.jts>
         <version.logback>1.1.7</version.logback>
-        <version.postgres>9.4.1212.jre7</version.postgres>
         <version.resteasy>3.0.18.Final</version.resteasy>
         <version.slf4j>1.7.21</version.slf4j>
         <version.spring>4.2.3.RELEASE</version.spring>
@@ -308,6 +311,36 @@
             <version>${version.postgres}</version>
             <scope>runtime</scope>
         </dependency>
+        
+
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>${version.hibernate.spatial}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.postgis</groupId>
+                    <artifactId>postgis-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.postgis</groupId>
+            <artifactId>postgis-jdbc</artifactId>
+            <version>${version.postgis}</version>
+            <scope>runtime</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
@@ -408,6 +441,12 @@
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
+            <artifactId>enhanced-v20</artifactId>
+            <version>${version.sos}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>binding-exi</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
@@ -492,10 +531,21 @@
             <version>${version.javax.servlet}</version>
             <scope>provided</scope>
         </dependency>
+       
     </dependencies>
 
     <build>
+        <finalName>de.awi.sos.ui</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <configuration>
+                    <usedDependencies>
+                        <usedDependency>org.n52.svalbard:svalbard</usedDependency>
+                    </usedDependencies>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

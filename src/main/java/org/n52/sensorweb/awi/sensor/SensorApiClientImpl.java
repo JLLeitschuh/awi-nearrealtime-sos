@@ -28,6 +28,9 @@ import org.jboss.resteasy.client.jaxrs.cache.LightweightBrowserCache;
 import org.n52.sensorweb.awi.sensor.json.JsonDevice;
 import org.n52.sensorweb.awi.sensor.json.JsonSensorOutput;
 import org.n52.sensorweb.awi.sensor.json.JsonType;
+import org.n52.sensorweb.awi.util.rs.JSONConfiguration;
+import org.n52.sensorweb.awi.util.rs.LoggingFilter;
+import org.n52.sensorweb.awi.util.rs.UserAgentFilter;
 
 
 /**

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class mutable="false" name="org.n52.sensorweb.awi.data.entities.Expedition" optimistic-lock="version" schema="public" table="v_expedition"
+           where="begin_date &lt;= end_date">
+        <id column="expedition" name="id" type="string"/>
+        <many-to-one class="org.n52.sensorweb.awi.data.entities.Platform" column="platform_id" fetch="join" lazy="false" name="platform" />
+        <property column="begin_date" name="begin" type="date"/>
+        <property column="end_date" name="end" type="date"/>
+        <property column="geom" name="geometry" type="org.hibernate.spatial.GeometryType"/>
+    </class>
+</hibernate-mapping>
