@@ -19,18 +19,18 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.joda.time.DateTime;
 
+import org.n52.sensorweb.awi.data.FeatureCache;
 import org.n52.sensorweb.awi.data.entities.Data;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.sensorweb.awi.geometry.ExpeditionDao;
-import org.n52.shetland.ogc.OGCConstants;
 import org.n52.shetland.ogc.gml.CodeWithAuthority;
 import org.n52.shetland.ogc.gml.ReferenceType;
 import org.n52.shetland.ogc.gml.time.TimeInstant;
@@ -62,12 +62,13 @@ import org.n52.sos.ds.AbstractGetObservationHandler;
  */
 public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     private final SessionFactory sessionFactory;
-    private final ExpeditionDao expeditionDao;
+    private final FeatureCache featureCache;
 
-    public AWIGetObservationHandler(ExpeditionDao expeditionDao, SessionFactory sessionFactory) {
+    @Inject
+    public AWIGetObservationHandler(FeatureCache expeditionDao, SessionFactory sessionFactory) {
         super(SosConstants.SOS);
         this.sessionFactory = sessionFactory;
-        this.expeditionDao = expeditionDao;
+        this.featureCache = expeditionDao;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                 .setTemporalFilters(request.getTemporalFilters())
                 .build();
 
-        if (filter.isEmpty()) {
+        if (!filter.hasFilters()) {
             throw new ResponseExceedsSizeLimitException();
         }
         List<OmObservation> observations;
@@ -113,15 +114,16 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
 
     @SuppressWarnings("unchecked")
     private List<OmObservation> getData(Session session, ObservationFilter filter) throws OwsExceptionReport {
-        QueryContext ctx
-                = new QueryContext(CriteriaSpecification.ROOT_ALIAS, "sensor", "expedition", "platform", "device");
+        QueryContext ctx = QueryContext.forData();
         List<Data> list = session.createCriteria(Data.class)
+                .setComment("Getting observations")
                 .createAlias(Data.SENSOR, ctx.getSensor())
                 .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
                 .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
-                .createAlias(ctx.getPlatformPath(Platform.EXPEDITION), ctx.getExpedition())
                 .add(filter.getFilterCriterion(getCache(), ctx))
-                .setReadOnly(true).list();
+                .add(ObservationFilter.getCommonCriteria(ctx))
+                .setReadOnly(true)
+                .list();
         return list.stream().map(this::createObservation).collect(toList());
     }
 
@@ -132,26 +134,28 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         String procedure = String.format("%s:%s", platform.getCode(), device.getCode());
         DateTime dateTime = new DateTime(data.getTime());
         TimeInstant phenomenonTime = new TimeInstant(dateTime);
+        TimeInstant resultTime = phenomenonTime;
         OmObservation observation = new OmObservation();
-        String feature;
+        observation.setResultTime(resultTime);
+        String feature = this.featureCache.getFeatureId(platform.getCode(), dateTime);
+
+
         if (platform.isMobile()) {
-            feature = this.expeditionDao.getFeatureId(platform.getCode(), dateTime)
-                    .orElse(OGCConstants.UNKNOWN);
-            observation.addParameter(new NamedValue<>(
-                    new ReferenceType(Sos2Constants.HREF_PARAMETER_SPATIAL_FILTERING_PROFILE),
-                    new GeometryValue(data.getGeometry())));
-        } else {
-            feature = platform.getCode();
+            GeometryValue parameterValue = new GeometryValue(data.getGeometry());
+            ReferenceType parameterName = new ReferenceType(Sos2Constants.HREF_PARAMETER_SPATIAL_FILTERING_PROFILE);
+            observation.addParameter(new NamedValue<>(parameterName, parameterValue));
         }
-        observation.setObservationConstellation(new OmObservationConstellation(
-                new SosProcedureDescriptionUnknownType(procedure),
-                new OmObservableProperty(sensor.getCode(), sensor.getName(),
-                                         sensor.getUnit(), SweConstants.VT_QUANTITY),
-                new SamplingFeature(new CodeWithAuthority(feature)),
-                OmConstants.OBS_TYPE_MEASUREMENT));
-        observation.setResultTime(phenomenonTime);
-        observation.setValue(new SingleObservationValue<>(phenomenonTime, new QuantityValue(data.getValue(), sensor
-                                                                                            .getUnit())));
+
+        SosProcedureDescriptionUnknownType procedureDescription = new SosProcedureDescriptionUnknownType(procedure);
+        OmObservableProperty observableProperty = new OmObservableProperty(
+                sensor.getCode(), sensor.getName(), sensor.getUnit(), SweConstants.VT_QUANTITY);
+        SamplingFeature samplingFeature = new SamplingFeature(new CodeWithAuthority(feature));
+        OmObservationConstellation observationConstellation = new OmObservationConstellation(
+                procedureDescription, observableProperty, samplingFeature, OmConstants.OBS_TYPE_MEASUREMENT);
+        observation.setObservationConstellation(observationConstellation);
+        QuantityValue value = new QuantityValue(data.getValue(), sensor.getUnit());
+        SingleObservationValue<Double> observationValue = new SingleObservationValue<>(phenomenonTime, value);
+        observation.setValue(observationValue);
         return observation;
     }
 

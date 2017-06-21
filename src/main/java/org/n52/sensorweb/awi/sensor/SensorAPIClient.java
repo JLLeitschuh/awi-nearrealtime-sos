@@ -27,23 +27,39 @@ import org.n52.sensorweb.awi.sensor.json.JsonType;
  *
  * @author Christian Autermann
  */
-public interface SensorApiClient {
+public interface SensorAPIClient {
     List<JsonDevice> getChildren(JsonDevice device);
+
     List<JsonDevice> getChildren(int id);
+
     Optional<JsonDevice> getDevice(int id);
+
     Optional<JsonDevice> getDevice(String urn);
+
     List<JsonType> getDeviceCategories();
+
     List<JsonDevice> getDevices();
+
     Optional<JsonDevice> getPlatform(int id);
+
     List<JsonType> getPlatformTypes();
+
     List<JsonDevice> getPlatforms();
+
     Optional<JsonDevice> getRoot(int id);
+
     JsonDevice getRoot(JsonDevice device);
+
     Optional<String> getSensorML(JsonDevice device);
+
     Optional<String> getSensorML(int id);
+
     Optional<String> getSensorML(String urn);
+
     List<JsonSensorOutput> getSensorOutputs(JsonDevice device);
+
     List<JsonSensorOutput> getSensorOutputs(int device);
+
     void close();
 
 }

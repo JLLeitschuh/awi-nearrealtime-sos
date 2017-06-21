@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class IntervalTree<K, V> {
+public class IntervalTree<K, V> implements IntervalMap<K, V> {
 
     private IntervalNode root;
     private final Comparator<? super K> comparator;
@@ -178,26 +178,20 @@ public class IntervalTree<K, V> {
         return node.getParent();
     }
 
-    public Set<V> searchInterval(Interval interval) {
+    private Set<V> searchInterval(Interval interval) {
         List<IntervalNode> found = new LinkedList<>();
         search(interval, root, found);
         return found.stream().map(IntervalNode::getValue).collect(toSet());
     }
 
+    @Override
     public Set<V> search(K lower, K upper) {
         return searchInterval(new Interval(lower, upper));
     }
 
-    public Set<V> search(K key) {
-        return search(key, key);
-    }
-
+    @Override
     public Optional<V> get(K lower, K upper) {
         return searchNearest(new Interval(lower, upper)).map(IntervalNode::getValue);
-    }
-
-    public Optional<V> get(K key) {
-        return get(key, key);
     }
 
     private void search(Interval key, IntervalNode node, List<IntervalNode> storage) {

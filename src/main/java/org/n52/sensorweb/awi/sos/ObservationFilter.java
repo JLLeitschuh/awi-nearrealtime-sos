@@ -1,5 +1,6 @@
 package org.n52.sensorweb.awi.sos;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 import static org.n52.janmayen.function.Functions.curryFirst;
@@ -7,10 +8,10 @@ import static org.n52.janmayen.stream.MoreCollectors.filtering;
 import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toConjunction;
 import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toDisjunction;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -18,15 +19,15 @@ import java.util.regex.Pattern;
 
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 
 import org.n52.janmayen.exception.CompositeException;
-import org.n52.janmayen.function.ThrowingFunction;
 import org.n52.sensorweb.awi.data.entities.Data;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.data.entities.Platform;
+import org.n52.sensorweb.awi.data.entities.Sensor;
 import org.n52.shetland.ogc.filter.SpatialFilter;
 import org.n52.shetland.ogc.filter.TemporalFilter;
 import org.n52.shetland.ogc.ows.exception.CompositeOwsException;
@@ -55,12 +56,12 @@ public class ObservationFilter {
     private ObservationFilter(Set<String> procedures, Set<String> features, Set<String> offerings,
                               Set<String> properties, Set<TemporalFilter> temporalFilters,
                               Set<SpatialFilter> spatialFilters) {
-        this.procedures = Objects.requireNonNull(procedures);
-        this.features = Objects.requireNonNull(features);
-        this.offerings = Objects.requireNonNull(offerings);
-        this.properties = Objects.requireNonNull(properties);
-        this.temporalFilters = Objects.requireNonNull(temporalFilters);
-        this.spatialFilters = Objects.requireNonNull(spatialFilters);
+        this.procedures = requireNonNull(procedures);
+        this.features = requireNonNull(features);
+        this.offerings = requireNonNull(offerings);
+        this.properties = requireNonNull(properties);
+        this.temporalFilters = requireNonNull(temporalFilters);
+        this.spatialFilters = requireNonNull(spatialFilters);
     }
 
     public Set<String> getProcedures() {
@@ -87,148 +88,178 @@ public class ObservationFilter {
         return Collections.unmodifiableSet(this.spatialFilters);
     }
 
-    public boolean isEmpty() {
-        return this.properties.isEmpty() && this.offerings.isEmpty() && this.procedures.isEmpty() &&
-               this.features.isEmpty() && this.temporalFilters.isEmpty() && this.spatialFilters.isEmpty();
+    public boolean hasFilters() {
+        return !this.properties.isEmpty() ||
+               !this.offerings.isEmpty() ||
+               !this.procedures.isEmpty() ||
+               !this.features.isEmpty() ||
+               !this.temporalFilters.isEmpty() ||
+               !this.spatialFilters.isEmpty();
     }
 
-    private Criterion getTemporalFilterCriterion(String property, TemporalFilter tf) throws OwsExceptionReport {
+    private Criterion getTemporalFilterCriterion(QueryContext ctx, TemporalFilter tf) throws OwsExceptionReport {
         if (!tf.getValueReference().equals(TemporalRestrictions.PHENOMENON_TIME_VALUE_REFERENCE) &&
             !tf.getValueReference().equals(TemporalRestrictions.RESULT_TIME_VALUE_REFERENCE)) {
             throw new UnsupportedValueReferenceException(tf.getValueReference());
         }
-        return TemporalRestrictions.filter(tf.getOperator(), property, tf.getTime());
+        return TemporalRestrictions.filter(tf.getOperator(), ctx.getDataPath(Data.TIME), tf.getTime());
     }
 
-    public Criterion createTemporalFilterCriterion(QueryContext ctx) throws OwsExceptionReport {
+    public Optional<? extends Criterion> createTemporalFilterCriterion(QueryContext ctx) throws OwsExceptionReport {
         CompositeException errors = new CompositeException();
-        String property = ctx.getDataPath(Data.TIME);
-        Criterion criterion = getTemporalFilters().stream()
+        Conjunction criterion = getTemporalFilters().stream()
                 .collect(groupingBy(TemporalFilter::getValueReference,
-                                    mapping(curryFirst(errors.wrap(this::getTemporalFilterCriterion), property),
+                                    mapping(curryFirst(errors.wrap(this::getTemporalFilterCriterion), ctx),
                                             filtering(Optional::isPresent, mapping(Optional::get, toDisjunction())))))
                 .values().stream().collect(toConjunction());
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
                 .at(Sos2Constants.GetObservationParams.temporalFilter).causedBy(e));
-        return criterion;
+        return Optional.of(criterion).filter(ObservationFilter::hasConditions);
     }
 
-    public Criterion getProcedureCriterion(QueryContext ctx) {
+    public Optional<? extends Criterion> getProcedureCriterion(QueryContext ctx) {
         return getProcedureCriterion(this.procedures, ctx);
     }
 
-    public Criterion getOfferingCriterion(QueryContext ctx) {
+    public Optional<? extends Criterion> getOfferingCriterion(QueryContext ctx) {
         return getProcedureCriterion(this.offerings, ctx);
     }
 
-    public Criterion getFeatureCriterion(QueryContext ctx) {
-        String dataTime = ctx.getDataPath(Data.TIME);
-        String expeditionName = ctx.getExpeditionPath(Expedition.NAME);
-        String expeditionBegin = ctx.getExpeditionPath(Expedition.BEGIN);
-        String expeditionEnd = ctx.getExpeditionPath(Expedition.END);
-        String platformCode = ctx.getPlatformPath(Platform.CODE);
-        String platformGeometry = ctx.getPlatformPath(Platform.GEOMETRY);
-        return this.features.stream().map(x
-                -> Restrictions.or(
-                        // mobile
-                        Restrictions.and(Restrictions.eq(expeditionName, x),
-                                         Restrictions.geProperty(dataTime, expeditionBegin),
-                                         Restrictions.leProperty(dataTime, expeditionEnd)),
-                        // stationary
-                        Restrictions.and(Restrictions.isNull(ctx.getExpedition()),
-                                         Restrictions.isNotNull(platformGeometry),
-                                         Restrictions.eq(platformCode, x)))
-        ).collect(toDisjunction());
+    public Optional<? extends Criterion> getFeatureCriterion(QueryContext ctx) {
+        return Optional.of(getFeatures().stream()
+                .map(x -> getFeatureCriterion(ctx, x))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toDisjunction()))
+                .filter(ObservationFilter::hasConditions);
     }
 
-    public Criterion isMobile(QueryContext ctx) {
-        String dataTime = ctx.getDataPath(Data.TIME);
-        String expeditionBegin = ctx.getExpeditionPath(Expedition.BEGIN);
-        String expeditionEnd = ctx.getExpeditionPath(Expedition.END);
-        return Restrictions.and(Restrictions.isNotNull(ctx.getExpedition()),
-                                Restrictions.geProperty(dataTime, expeditionBegin),
-                                Restrictions.leProperty(dataTime, expeditionEnd));
-    }
-
-    public Criterion isStationary(QueryContext ctx) {
-        String platformGeometry = ctx.getPlatformPath(Platform.GEOMETRY);
-        return Restrictions.and(Restrictions.isNull(ctx.getExpedition()),
-                                Restrictions.isNotNull(platformGeometry));
-    }
-
-    public Criterion getObservedPropertiesCriterion(SosContentCache cache, QueryContext ctx) {
-        if (this.properties.isEmpty()) {
-            return Restrictions.conjunction();
-        }
-        String sensorCode = ctx.getSensorPath(Platform.CODE);
-        return this.properties.stream().map(x
-                -> Restrictions.and(Restrictions.eq(sensorCode, x),
-                                    getProcedureCriterion(cache.getProceduresForObservableProperty(x), ctx))
-        ).collect(toDisjunction());
-
-    }
-
-    private Criterion getProcedureCriterion(Set<String> urns, QueryContext ctx) {
-        if (urns.isEmpty()) {
-            return Restrictions.conjunction();
-        } else {
-            String deviceCode = ctx.getDevicePath(Device.CODE);
-            String platformCode = ctx.getPlatformPath(Platform.CODE);
-            Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::(.+))?$");
-            return urns.stream().map(pattern::matcher).filter(Matcher::matches).map(x -> {
-                String platform = x.group(1);
-                String device = x.group(2);
-                if (device == null) {
-                    return Restrictions.eq(platformCode, platform);
-                } else {
-                    return Restrictions.and(Restrictions.eq(platformCode, platform),
-                                            Restrictions.eq(deviceCode, device));
-                }
-            }).collect(toDisjunction());
-        }
+    public Optional<? extends Criterion> getObservedPropertiesCriterion(SosContentCache cache, QueryContext ctx) {
+        return Optional.of(getProperties().stream()
+                .map(property -> getObservedPropertyCriterion(cache, ctx, property))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toDisjunction()))
+                .filter(ObservationFilter::hasConditions);
     }
 
     public Criterion getFilterCriterion(SosContentCache cache, QueryContext ctx) throws OwsExceptionReport {
-        Disjunction criteria = Restrictions.disjunction();
-        criteria.add(getFeatureCriterion(ctx));
-        criteria.add(getObservedPropertiesCriterion(cache, ctx));
-        criteria.add(getOfferingCriterion(ctx));
-        criteria.add(getProcedureCriterion(ctx));
         CompositeOwsException errors = new CompositeOwsException();
+        Conjunction conjunction = Restrictions.conjunction();
+
+        getFeatureCriterion(ctx).ifPresent(conjunction::add);
+        getObservedPropertiesCriterion(cache, ctx).ifPresent(conjunction::add);
+        getOfferingCriterion(ctx).ifPresent(conjunction::add);
+        getProcedureCriterion(ctx).ifPresent(conjunction::add);
+
         try {
-            criteria.add(createTemporalFilterCriterion(ctx));
+            createTemporalFilterCriterion(ctx).ifPresent(conjunction::add);
         } catch (OwsExceptionReport e) {
             errors.add(e);
         }
         try {
-            criteria.add(createSpatialFilterCriterion(ctx));
+            createSpatialFilterCriterion(ctx).ifPresent(conjunction::add);
         } catch (OwsExceptionReport e) {
             errors.add(e);
         }
         errors.throwIfNotEmpty();
-        return criteria;
+        return conjunction;
     }
 
-    public Criterion createSpatialFilterCriterion(QueryContext ctx) throws OwsExceptionReport {
+    public Optional<? extends Criterion> createSpatialFilterCriterion(QueryContext ctx) throws OwsExceptionReport {
         CompositeException errors = new CompositeException();
-        String platformGeometry = ctx.getPlatformPath(Platform.GEOMETRY);
-        String dataGeometry = ctx.getDataPath(Data.GEOMETRY);
-        Conjunction criterion = getSpatialFilters().stream().map(errors
-                .wrap((ThrowingFunction<SpatialFilter, Criterion, OwsExceptionReport>) x
-                        -> Restrictions.or(
-                        Restrictions.and(Restrictions.isNull(platformGeometry),
-                                         SpatialRestrictions.filter(dataGeometry, x)),
-                        Restrictions.and(Restrictions.isNotNull(platformGeometry),
-                                         SpatialRestrictions.filter(platformGeometry, x)))
-                )).filter(Optional::isPresent).map(Optional::get).collect(toConjunction());
+        Conjunction criterion = getSpatialFilters().stream()
+                .map(errors.<SpatialFilter, Criterion, OwsExceptionReport>wrap(x -> getSpatialFilterCriterion(ctx, x)))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toConjunction());
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
                 .at(Sos2Constants.GetObservationParams.spatialFilter).causedBy(e));
-        return criterion;
+        return Optional.of(criterion).filter(ObservationFilter::hasConditions);
 
+    }
+
+    private Criterion getSpatialFilterCriterion(QueryContext ctx, SpatialFilter x) throws OwsExceptionReport {
+        return Restrictions.or(Restrictions.and(Restrictions.isNull(ctx.getPlatformPath(Platform.GEOMETRY)),
+                                                SpatialRestrictions.filter(ctx.getDataPath(Data.GEOMETRY), x)),
+                               Restrictions.and(Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)),
+                                                SpatialRestrictions.filter(ctx.getPlatformPath(Platform.GEOMETRY), x)));
+    }
+
+    private static Optional<? extends Criterion> getFeatureCriterion(QueryContext ctx, String x) {
+        return Optional.of(Restrictions.or(
+                Restrictions.and(
+                        Restrictions.eq(ctx.getExpeditionsPath(Expedition.NAME), x),
+                        Restrictions.geProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.BEGIN)),
+                        Restrictions.leProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.END))),
+                Restrictions.and(
+                        Restrictions.isEmpty(ctx.getPlatformPath(Platform.EXPEDITIONS)),
+                        Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)),
+                        Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x))));
+    }
+
+    private static Optional<? extends Criterion> getObservedPropertyCriterion(SosContentCache cache, QueryContext ctx,
+                                                                              String property) {
+        return and(Optional.of(Restrictions.eq(ctx.getSensorPath(Platform.CODE), property)),
+                   getProcedureCriterion(cache.getProceduresForObservableProperty(property), ctx));
+    }
+
+    private static Optional<? extends Criterion> getProcedureCriterion(Set<String> urns, QueryContext ctx) {
+        Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::(.+))?$");
+        return Optional.of(urns.stream()
+                .map(pattern::matcher)
+                .filter(Matcher::matches)
+                .map(x -> and(Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                              Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx
+                              .getDevicePath(Device.CODE), device))))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toDisjunction()))
+                .filter(ObservationFilter::hasConditions);
+    }
+
+    public static Conjunction getCommonCriteria(QueryContext ctx) {
+        return Restrictions.and(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)),
+                                Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)),
+                                Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)),
+                                Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true));
+    }
+
+    public static Criterion isMobile(QueryContext ctx) {
+//        String dataTime = ctx.getDataPath(Data.TIME);
+//        String expeditionBegin = ctx.getExpeditionsPath(Expedition.BEGIN);
+//        String expeditionEnd = ctx.getExpeditionsPath(Expedition.END);
+//        String platformExpeditions = ctx.getPlatformPath(Platform.EXPEDITIONS);
+        String platformGeometry = ctx.getPlatformPath(Platform.GEOMETRY);
+        return Restrictions.and(Restrictions.isNull(platformGeometry));
+        //Restrictions.isNotEmpty(platformExpeditions),
+        //Restrictions.geProperty(dataTime, expeditionBegin),
+        //Restrictions.leProperty(dataTime, expeditionEnd));
+    }
+
+    public static Criterion isStationary(QueryContext ctx) {
+        return Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY));
+        //return Restrictions.and(
+        //Restrictions.isEmpty(ctx.getPlatformPath(Platform.EXPEDITIONS)),
+        //              );
     }
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    private static Optional<? extends Criterion> and(Optional<? extends Criterion>... criteria) {
+        Conjunction conjunction = Arrays.stream(criteria)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toConjunction());
+        return Optional.of(conjunction).filter(ObservationFilter::hasConditions);
+    }
+
+    private static boolean hasConditions(Junction j) {
+        return j.conditions().iterator().hasNext();
     }
 
     public static class Builder {
@@ -268,7 +299,8 @@ public class ObservationFilter {
         }
 
         public Builder setSpatialFilter(SpatialFilter spatialFilter) {
-            this.spatialFilter = Optional.ofNullable(spatialFilter).map(Collections::singleton)
+            this.spatialFilter = Optional.ofNullable(spatialFilter)
+                    .map(Collections::singleton)
                     .orElseGet(Collections::emptySet);
             return this;
         }

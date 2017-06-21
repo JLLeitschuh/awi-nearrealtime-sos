@@ -16,7 +16,6 @@
 package org.n52.sensorweb.awi.sensor;
 
 import java.net.URI;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +27,9 @@ import org.jboss.resteasy.client.jaxrs.cache.LightweightBrowserCache;
 import org.n52.sensorweb.awi.sensor.json.JsonDevice;
 import org.n52.sensorweb.awi.sensor.json.JsonSensorOutput;
 import org.n52.sensorweb.awi.sensor.json.JsonType;
-import org.n52.sensorweb.awi.util.rs.JSONConfiguration;
-import org.n52.sensorweb.awi.util.rs.LoggingFilter;
-import org.n52.sensorweb.awi.util.rs.UserAgentFilter;
+import org.n52.sensorweb.awi.util.web.JSONConfiguration;
+import org.n52.sensorweb.awi.util.web.LoggingFilter;
+import org.n52.sensorweb.awi.util.web.UserAgentFilter;
 
 
 /**
@@ -38,11 +37,11 @@ import org.n52.sensorweb.awi.util.rs.UserAgentFilter;
  *
  * @author Christian Autermann
  */
-public class SensorApiClientImpl implements SensorApiClient {
+public class SensorAPIClientImpl implements SensorAPIClient {
     private final SensorAPI api;
     private final ResteasyClient client;
 
-    public SensorApiClientImpl(URI uri) {
+    public SensorAPIClientImpl(URI uri) {
         LightweightBrowserCache cache = new LightweightBrowserCache();
         cache.setMaxBytes(1024 * 1024 * 50);
         BrowserCacheFeature cacheFeature = new BrowserCacheFeature();
@@ -134,20 +133,6 @@ public class SensorApiClientImpl implements SensorApiClient {
     @Override
     public List<JsonType> getPlatformTypes() {
         return this.api.platforms().types();
-    }
-
-    private void printDevice(JsonDevice device) {
-        printDevice(device, 0);
-    }
-
-    private void printDevice(JsonDevice device, int depth) {
-        /*for (int i = 0; i < depth; ++i) {
-            System.out.print("\t");
-        }
-         */
-        System.out.printf("%s\n", device.getUrn());
-        getChildren(device.getId()).stream().sorted(Comparator.comparing(JsonDevice::getShortName)).forEach(d -> this
-                .printDevice(d, depth + 1));
     }
 
     @Override

@@ -1,8 +1,9 @@
-package org.n52.sensorweb.awi.data;
+package org.n52.sensorweb.awi.util.hibernate;
+
+import static java.util.stream.Collectors.joining;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -16,7 +17,8 @@ public final class PropertyPath {
 
     public static String of(String first, String... path) {
         return Stream.concat(Stream.of(first), Arrays.stream(path))
-                .filter(Objects::nonNull).collect(Collectors.joining("."));
+                .filter(Objects::nonNull)
+                .collect(joining("."));
     }
 
 }

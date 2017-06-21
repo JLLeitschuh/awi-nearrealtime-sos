@@ -15,10 +15,9 @@
  */
 package org.n52.sensorweb.awi.sos;
 
-
 import javax.inject.Inject;
 
-import org.n52.sensorweb.awi.NRTDao;
+import org.n52.sensorweb.awi.sensor.SensorAPIClient;
 import org.n52.shetland.ogc.gml.time.Time;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
@@ -26,7 +25,6 @@ import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.sensorML.SensorML20Constants;
 import org.n52.shetland.ogc.sos.Sos2Constants.DescribeSensorParams;
 import org.n52.shetland.ogc.sos.SosConstants;
-import org.n52.shetland.ogc.sos.SosProcedureDescription;
 import org.n52.shetland.ogc.sos.SosProcedureDescriptionUnknownType;
 import org.n52.shetland.ogc.sos.request.DescribeSensorRequest;
 import org.n52.shetland.ogc.sos.response.DescribeSensorResponse;
@@ -39,21 +37,17 @@ import org.n52.sos.ds.AbstractDescribeSensorHandler;
  */
 public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
 
-    private NRTDao dao;
-
-    public AWIDescribeSensorHandler() {
-        super(SosConstants.SOS);
-    }
+    private final SensorAPIClient sensorApiClient;
 
     @Inject
-    public void setDao(NRTDao dao) {
-        this.dao = dao;
+    public AWIDescribeSensorHandler(SensorAPIClient sensorApiClient) {
+        super(SosConstants.SOS);
+        this.sensorApiClient = sensorApiClient;
     }
 
     @Override
     public DescribeSensorResponse getSensorDescription(
             DescribeSensorRequest request) throws OwsExceptionReport {
-
         String service = request.getService();
         String version = request.getVersion();
         String procedure = request.getProcedure();
@@ -68,45 +62,16 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
             throw new InvalidParameterValueException(DescribeSensorParams.validTime, validTime.toString());
         }
 
-        SosProcedureDescription<?> description = getSensorDescription(procedure);
+        String sensorDescription = this.sensorApiClient.getSensorML(procedure)
+                .orElseThrow(() -> new NoApplicableCodeException()
+                .withMessage("Could not retrieve sensor description"));
+
         DescribeSensorResponse response = new DescribeSensorResponse();
         response.setService(service);
         response.setVersion(version);
-        response.setOutputFormat(description.getDescriptionFormat());
-        response.addSensorDescription(description);
+        response.setOutputFormat(SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL);
+        response.addSensorDescription(new SosProcedureDescriptionUnknownType(
+                procedure, SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL, sensorDescription));
         return response;
     }
-
-    private SosProcedureDescription<?> getSensorDescription(String identifier)
-            throws OwsExceptionReport {
-        return decodeDescription(identifier, retrieveDescription(identifier));
-    }
-
-    private SosProcedureDescription<?> decodeDescription(String identifier, String description)
-            throws OwsExceptionReport {
-//        try {
-//            XmlObject xml = XmlObject.Factory.parse(description);
-//            String ns = XmlHelper.getNamespace(xml);
-//            XmlNamespaceDecoderKey key = new XmlNamespaceDecoderKey(ns, xml
-//                                                                    .getClass());
-//            Decoder<AbstractSensorML, XmlObject> decoder
-//                    = this.decoderRepository.getDecoder(key);
-//            if (decoder == null) {
-//                throw new NoDecoderForKeyException(key);
-//            }
-//            return decoder.decode(xml);
-        return new SosProcedureDescriptionUnknownType(
-                identifier, SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL, description);
-//        } catch (XmlException | DecodingException ex) {
-//            throw new NoApplicableCodeException().causedBy(ex);
-//        }
-    }
-
-    private String retrieveDescription(String identifier) throws
-            OwsExceptionReport {
-        return this.dao.getDescription(identifier)
-                .orElseThrow(() -> new NoApplicableCodeException()
-                .withMessage("Could not retrieve sensor description"));
-    }
-
 }

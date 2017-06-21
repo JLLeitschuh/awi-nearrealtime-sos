@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi.util.rs;
+package org.n52.sensorweb.awi.util.web;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;

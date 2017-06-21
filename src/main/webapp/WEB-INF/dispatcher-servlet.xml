@@ -14,52 +14,43 @@
 
     <bean class="org.n52.iceland.config.spring.LifecycleBeanPostProcessor" />
     <bean class="org.n52.iceland.config.spring.ConfiguringBeanPostProcessor" />
-
-    <!--<bean class="org.n52.iceland.coding.DocumentBuilderProvider"/>-->
     <bean class="org.n52.iceland.util.http.HttpUtils"/>
-    <bean id="icelandServlet" class="org.n52.iceland.service.Service" />
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
     </bean>
 
     <!-- bindings -->
-    <bean id="kvpBinding" class="org.n52.iceland.binding.kvp.KvpBinding"/>
-    <bean id="poxBinding" class="org.n52.iceland.binding.pox.PoxBinding"/>
-    <bean id="jsonBinding" class="org.n52.iceland.binding.json.JSONBinding"/>
-    <bean id="soapBinding" class="org.n52.iceland.binding.soap.SoapBinding"/>
+    <bean class="org.n52.iceland.binding.kvp.KvpBinding"/>
+    <bean class="org.n52.iceland.binding.pox.PoxBinding"/>
+    <bean class="org.n52.iceland.binding.json.JSONBinding"/>
+    <bean class="org.n52.iceland.binding.soap.SoapBinding"/>
 
     <bean id="exceptionLogger" class="org.n52.iceland.service.ExceptionLogger"/>
 
-    <!-- operation handlers -->
-    <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler">
-        <constructor-arg ref="nrtDao" />
+    <bean id="featureCache" class="org.n52.sensorweb.awi.data.FeatureCacheImpl">
         <constructor-arg ref="sessionFactory" />
-    </bean>
-    <bean class="org.n52.sensorweb.awi.sos.AWIDescribeSensorHandler"/>
-    <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler">
-        <constructor-arg ref="sessionFactory" />
-    </bean>
-    <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler">
-        <constructor-arg ref="sessionFactory" />
-    </bean>
-    <bean class="org.n52.sensorweb.awi.sos.AWIGetDataAvailabilityHandler">
-        <constructor-arg ref="sessionFactory" />
+        <constructor-arg name="updateInterval" value="-1" />
     </bean>
 
-    <bean id="nrtDao" class="org.n52.sensorweb.awi.NRTDaoImpl"/>
-    <bean class="org.n52.sensorweb.awi.data.NearRealTimeDaoImpl">
-        <constructor-arg ref="sessionFactory" />
-    </bean>
-
-    <bean class="org.n52.sensorweb.awi.sensor.SensorApiClientImpl">
+    <bean class="org.n52.sensorweb.awi.sensor.SensorAPIClientImpl">
         <constructor-arg name="uri" value="https://sensor.awi.de/rest/sensors" />
     </bean>
+
+
+    <bean class="org.n52.sensorweb.awi.sos.AWICacheFeederHandler" />
+    <!-- operation handlers -->
+    <bean class="org.n52.sensorweb.awi.sos.AWIDescribeSensorHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler" />
+    <bean class="org.n52.sensorweb.awi.sos.AWIGetDataAvailabilityHandler" />
+
 
     <!-- dummy stuff -->
     <bean class="org.n52.sensorweb.awi.sos.AWIFeatureQueryHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.NoopDataConnectionProvider"/>
 
+    <!-- import SOS configurations -->
     <import resource="classpath*:common-context.xml" />
     <import resource="classpath*:configured-context.xml" />
     <import resource="classpath*:contexts/common.xml" />

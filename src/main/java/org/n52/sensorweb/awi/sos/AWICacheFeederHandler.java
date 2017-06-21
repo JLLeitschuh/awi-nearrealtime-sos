@@ -15,50 +15,91 @@
  */
 package org.n52.sensorweb.awi.sos;
 
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.mapping;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
+
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.spatial.criterion.SpatialProjections;
 import org.joda.time.DateTime;
 
+import org.n52.janmayen.Optionals;
 import org.n52.janmayen.function.Consumers;
-import org.n52.sensorweb.awi.NRTDao;
-import org.n52.sensorweb.awi.NRTProcedure;
-import org.n52.sensorweb.awi.SpaceTimeEnvelope;
-import org.n52.sensorweb.awi.geometry.ExpeditionDao;
+import org.n52.janmayen.function.Functions;
+import org.n52.janmayen.function.Predicates;
+import org.n52.sensorweb.awi.data.FeatureCache;
+import org.n52.sensorweb.awi.data.entities.Data;
+import org.n52.sensorweb.awi.data.entities.Device;
+import org.n52.sensorweb.awi.data.entities.Expedition;
+import org.n52.sensorweb.awi.data.entities.Platform;
+import org.n52.sensorweb.awi.data.entities.Sensor;
+import org.n52.sensorweb.awi.sensor.SensorAPIClient;
+import org.n52.sensorweb.awi.sensor.json.JsonDevice;
+import org.n52.sensorweb.awi.sensor.json.JsonSensorOutput;
+import org.n52.sensorweb.awi.util.SpaceTimeEnvelope;
+import org.n52.sensorweb.awi.util.hibernate.AbstractSessionDao;
+import org.n52.sensorweb.awi.util.hibernate.DefaultResultTransfomer;
+import org.n52.sensorweb.awi.util.hibernate.PropertyPath;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.features.SfConstants;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.ogc.sensorML.SensorML20Constants;
+import org.n52.shetland.util.MinMax;
 import org.n52.shetland.util.ReferencedEnvelope;
 import org.n52.sos.cache.SosContentCache.ComponentAggregation;
 import org.n52.sos.cache.SosContentCache.TypeInstance;
 import org.n52.sos.cache.SosWritableContentCache;
 import org.n52.sos.ds.CacheFeederHandler;
 
+import com.google.common.base.Strings;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
+
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class AWICacheFeederHandler implements CacheFeederHandler {
+public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFeederHandler {
 
     private static final int EPSG_4326 = 4326;
-
     private static final String OBSERVATION_TYPE = OmConstants.OBS_TYPE_MEASUREMENT;
     private static final String FEATURE_TYPE = SfConstants.SAMPLING_FEAT_TYPE_SF_SPATIAL_SAMPLING_FEATURE;
     private static final String PROCEDURE_DESCRIPTION_TYPE = SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL;
-    private final NRTDao dao;
-    private final ExpeditionDao expeditionDao;
+    private static final String FEATURE_ROLE = SfConstants.SAMPLING_FEAT_TYPE_SF_SPATIAL_SAMPLING_FEATURE;
+
+    private final FeatureCache expeditionDao;
+    private final SensorAPIClient sensorApiClient;
 
     @Inject
-    public AWICacheFeederHandler(NRTDao dao, ExpeditionDao expeditionDao) {
-        this.dao = dao;
+    public AWICacheFeederHandler(SessionFactory sessionFactory,
+                                 FeatureCache expeditionDao,
+                                 SensorAPIClient sensorAPIClient) {
+        super(sessionFactory);
         this.expeditionDao = expeditionDao;
+        this.sensorApiClient = sensorAPIClient;
     }
 
     @Override
@@ -70,7 +111,7 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
     @Override
     public void updateCache(SosWritableContentCache cache) throws OwsExceptionReport {
 
-        Map<String, SpaceTimeEnvelope> envelopes = this.dao.getEnvelopes();
+        Map<String, SpaceTimeEnvelope> envelopes = getEnvelopes();
         // we only support EPSG:4326
         cache.setDefaultEPSGCode(EPSG_4326);
         cache.addEpsgCode(EPSG_4326);
@@ -78,7 +119,7 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         // only support SensorML 2.0
         cache.setRequestableProcedureDescriptionFormat(Collections.singleton(PROCEDURE_DESCRIPTION_TYPE));
 
-        this.dao.getProcedures().forEach(procedure -> addProcedure(cache, procedure, envelopes));
+        getProcedures().forEach(procedure -> addProcedure(cache, procedure, envelopes));
 
         // recalculate the global bounding boxes
         cache.recalculateGlobalEnvelope();
@@ -89,7 +130,8 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         cache.setLastUpdateTime(DateTime.now());
     }
 
-    private void addProcedure(SosWritableContentCache cache, NRTProcedure procedure,
+    private void addProcedure(SosWritableContentCache cache,
+                              NRTProcedure procedure,
                               Map<String, SpaceTimeEnvelope> envelopes) {
         String procedureId = procedure.getId();
         String offeringId = procedureId;
@@ -126,7 +168,10 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         // feature <-> offering
         featureIds.stream()
                 .forEach(Consumers.curryFirst(cache::addFeatureOfInterestForOffering, offeringId)
-                        .andThen(Consumers.currySecond(cache::addProcedureForFeatureOfInterest, procedureId)));
+                        .andThen(Consumers.curryFirst(cache::addRelatedFeatureForOffering, offeringId))
+                        .andThen(Consumers.currySecond(cache::addProcedureForFeatureOfInterest, procedureId))
+                        .andThen(Consumers.currySecond(cache::setRolesForRelatedFeature, Collections
+                                                       .singleton(FEATURE_ROLE))));
 
         procedure.getOutputs().forEach(output -> {
             String observableProperty = output.getName();
@@ -157,16 +202,33 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
     }
 
     private Optional<SpaceTimeEnvelope> getEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedureId) {
-        SpaceTimeEnvelope envelope = envelopes.get(procedureId);
+        return Optionals.or(
+                () -> Optional.ofNullable(envelopes.get(procedureId)),
+                () -> getChildEnvelope(envelopes, procedureId),
+                () -> getParentEnvelope(envelopes, procedureId));
+    }
 
-        if (envelope == null) {
-            int idx = procedureId.indexOf(':');
-            if (idx > 0 && idx < procedureId.length() - 1) {
-                envelope = envelopes.get(procedureId.substring(idx + 1));
-            }
+    private Optional<SpaceTimeEnvelope> getChildEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedure) {
+        return Optional.of(envelopes.entrySet().stream()
+                .filter(e -> e.getKey().startsWith(procedure))
+                .map(Entry::getValue)
+                .collect(Functions.curry(SpaceTimeEnvelope::new, procedure),
+                         SpaceTimeEnvelope::extend,
+                         SpaceTimeEnvelope::extend))
+                .filter(Predicates.not(SpaceTimeEnvelope::isEmpty));
+    }
+
+    private Optional<SpaceTimeEnvelope> getParentEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedure) {
+        return getParentProcedure(procedure).flatMap(parent -> getEnvelope(envelopes, parent));
+    }
+
+    private Optional<String> getParentProcedure(String procedure) {
+        int idx = procedure.lastIndexOf(':');
+        if (idx > 0 && idx < procedure.length() - 1) {
+            return Optional.of(procedure.substring(0, idx));
+        } else {
+            return Optional.empty();
         }
-
-        return Optional.ofNullable(envelope);
     }
 
     private Set<String> getFeaturesOfInterest(NRTProcedure procedure) {
@@ -179,4 +241,251 @@ public class AWICacheFeederHandler implements CacheFeederHandler {
         }
     }
 
+    public Map<String, SpaceTimeEnvelope> getEnvelopes() {
+        QueryContext ctx = QueryContext.forData();
+
+        DefaultResultTransfomer<SpaceTimeEnvelope> transformer = t -> {
+            String id = Arrays.stream(t, 0, 2).map(String::valueOf).collect(joining(":"));
+            MinMax<DateTime> time = new MinMax<>(new DateTime((Date) t[2]), new DateTime((Date) t[3]));
+            Envelope geom = ((Geometry) t[4]).getEnvelopeInternal();
+            return new SpaceTimeEnvelope(id, time, geom);
+        };
+
+        return query(s -> {
+            Criteria mobile = s.createCriteria(Data.class)
+                    .setComment("Getting envelopes for mobile data")
+                    .createAlias(ctx.getDataPath(Data.SENSOR), ctx.getSensor())
+                    .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
+                    .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
+                    .createAlias(ctx.getPlatformPath(Platform.EXPEDITIONS), "e")
+                    .setProjection(Projections.projectionList()
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.min(ctx.getDataPath(Data.TIME)))
+                            .add(Projections.max(ctx.getDataPath(Data.TIME)))
+                            .add(SpatialProjections.extent(ctx.getDataPath(Data.GEOMETRY))))
+                    .add(ObservationFilter.getCommonCriteria(ctx))
+                    .add(Restrictions.isNotNull(ctx.getDataPath(Data.GEOMETRY)))
+                    .add(Restrictions.geProperty(ctx.getDataPath(Data.TIME), PropertyPath.of("e", Expedition.BEGIN)))
+                    .add(Restrictions.leProperty(ctx.getDataPath(Data.TIME), PropertyPath.of("e", Expedition.END)));
+            Criteria stationary = s.createCriteria(Data.class)
+                    .setComment("Getting envelopes for stationary data")
+                    .createAlias(ctx.getDataPath(Data.SENSOR), ctx.getSensor())
+                    .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
+                    .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
+                    .setProjection(Projections.projectionList()
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.min(ctx.getDataPath(Data.TIME)))
+                            .add(Projections.max(ctx.getDataPath(Data.TIME)))
+                            .add(SpatialProjections.extent(ctx.getPlatformPath(Platform.GEOMETRY))))
+                    .add(ObservationFilter.getCommonCriteria(ctx))
+                    .add(Restrictions.isEmpty(ctx.getPlatformPath(Platform.EXPEDITIONS)))
+                    .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)));
+
+            return Stream.of(mobile, stationary)
+                    .map(Functions.currySecond(Criteria::setReadOnly, true))
+                    .map(Functions.currySecond(Criteria::setResultTransformer, transformer))
+                    .map(Criteria::list)
+                    .flatMap(List<SpaceTimeEnvelope>::stream)
+                    .collect(toMap(SpaceTimeEnvelope::getIdentifier, Function.identity()));
+        });
+    }
+
+    private NRTProcedure createProcedure(JsonDevice device, NRTProcedure parent) {
+        if (device.getUrn() == null) {
+            return null;
+        }
+        NRTProcedure procedure = new NRTProcedure(device.getUrn(),
+                                                  device.getShortName(),
+                                                  device.getLongName(),
+                                                  device.getDescription(),
+                                                  parent,
+                                                  getOutputs(device));
+        List<JsonDevice> children = this.sensorApiClient.getChildren(device);
+        procedure.setChildren(getProcedures(children.stream(), procedure).collect(toSet()));
+        return procedure;
+    }
+
+    private Stream<NRTProcedure> getProcedures(Stream<JsonDevice> stream, NRTProcedure parent) {
+        return stream.map(child -> createProcedure(child, parent))
+                .filter(p -> p != null && !(p.getChildren().isEmpty() && p.getOutputs().isEmpty()));
+    }
+
+    private Optional<NRTProcedure> hasData(NRTProcedure p, Set<String> dataProcedures) {
+        String id = p.getId();
+        if (dataProcedures.contains(id)) {
+            return Optional.of(p);
+        }
+
+        Set<NRTProcedure> filteredChildren = p.getChildren().stream()
+                .map(Functions.currySecond(this::hasData, dataProcedures))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toSet());
+
+        if (filteredChildren.isEmpty()) {
+            return Optional.empty();
+        }
+
+        NRTProcedure filteredProcedure = new NRTProcedure(p.getId(),
+                                                          p.getShortName().orElse(null),
+                                                          p.getLongName().orElse(null),
+                                                          p.getDescription().orElse(null),
+                                                          p.getParent().orElse(null),
+                                                          p.getOutputs());
+        filteredProcedure.setChildren(filteredChildren);
+        return Optional.of(filteredProcedure);
+    }
+
+    private Set<NRTProcedure> getProcedures() {
+        Set<String> dataProcedures = getDbProcedures()
+                .stream().map(NRTProcedure::getId).collect(toSet());
+        List<JsonDevice> platforms = this.sensorApiClient.getPlatforms();
+        return getProcedures(platforms.stream(), null)
+                .map(Functions.currySecond(this::hasData, dataProcedures))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toSet());
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<NRTProcedure> getDbProcedures() {
+        QueryContext ctx = QueryContext.forSensor();
+        return query((Session session) -> {
+            Criteria c = session.createCriteria(Sensor.class)
+                    .setComment("Getting procedures")
+                    .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
+                    .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
+                    .setProjection(Projections.projectionList()
+                            .add(Projections.property(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.property(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.property(ctx.getSensorPath(Sensor.CODE))))
+                    .add(ObservationFilter.getCommonCriteria(ctx));
+            return ((List<Object[]>) c.list()).stream()
+                    .collect(groupingBy(
+                            t -> Arrays.stream(t, 0, 2).map(String::valueOf).map(String::toLowerCase)
+                                    .collect(joining(":")),
+                            mapping(t -> (String) t[2], mapping(o -> new NRTProcedureOutput(o, null, null), toSet()))))
+                    .entrySet()
+                    .stream()
+                    .map(e -> new NRTProcedure(e.getKey(), null, null, null, null, e.getValue()))
+                    .collect(toList());
+        });
+    }
+
+    private Set<NRTProcedureOutput> getOutputs(JsonDevice device) {
+        return this.sensorApiClient.getSensorOutputs(device).stream()
+                .map(this::toProcedureOutput).collect(toSet());
+    }
+
+    private NRTProcedureOutput toProcedureOutput(JsonSensorOutput o) {
+        NRTUnit unit = new NRTUnit(o.getUnitOfMeasurement().getLongName(),
+                                   o.getUnitOfMeasurement().getCode());
+        return new NRTProcedureOutput(o.getCode(), o.getName(), unit);
+    }
+
+    private static class NRTProcedure {
+
+        private final String id;
+        private final Optional<String> longName;
+        private final Optional<String> shortName;
+        private final Optional<String> description;
+        private final Optional<NRTProcedure> parent;
+        private Set<NRTProcedure> children = Collections.emptySet();
+        private final Set<NRTProcedureOutput> outputs;
+
+        NRTProcedure(String id, String shortName, String longName, String description, NRTProcedure parent,
+                     Set<NRTProcedureOutput> outputs) {
+            this.id = Objects.requireNonNull(Strings.emptyToNull(id));
+            this.longName = Optional.ofNullable(Strings.emptyToNull(longName));
+            this.shortName = Optional.ofNullable(Strings.emptyToNull(shortName));
+            this.description = Optional.ofNullable(Strings.emptyToNull(description));
+            this.parent = Optional.ofNullable(parent);
+            this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet);
+        }
+
+        Optional<NRTProcedure> getParent() {
+            return this.parent;
+        }
+
+        NRTProcedure getPlatform() {
+            NRTProcedure elem = this;
+            while (elem.getParent().isPresent()) {
+                elem = elem.getParent().get();
+            }
+            return elem;
+        }
+
+        Set<NRTProcedure> getChildren() {
+            return Collections.unmodifiableSet(this.children);
+        }
+
+        void setChildren(Set<NRTProcedure> children) {
+            this.children = Optional.ofNullable(children).orElseGet(Collections::emptySet);
+        }
+
+        Set<NRTProcedureOutput> getOutputs() {
+            return Collections.unmodifiableSet(this.outputs);
+        }
+
+        String getId() {
+            return id;
+        }
+
+        Optional<String> getLongName() {
+            return longName;
+        }
+
+        Optional<String> getShortName() {
+            return shortName;
+        }
+
+        Optional<String> getDescription() {
+            return description;
+        }
+    }
+
+    private static class NRTProcedureOutput {
+        private final String code;
+        private final String name;
+        private final NRTUnit unit;
+
+        NRTProcedureOutput(String code, String name, NRTUnit unit) {
+            this.code = code;
+            this.name = name;
+            this.unit = unit;
+        }
+
+        String getName() {
+            return name;
+        }
+
+        NRTUnit getUnit() {
+            return unit;
+        }
+
+        String getCode() {
+            return code;
+        }
+    }
+
+    private static class NRTUnit {
+
+        private final String name;
+        private final String unit;
+
+        NRTUnit(String name, String unit) {
+            this.name = name;
+            this.unit = unit;
+        }
+
+        String getName() {
+            return name;
+        }
+
+        String getUnit() {
+            return unit;
+        }
+    }
 }

@@ -13,39 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi;
+package org.n52.sensorweb.awi.util.hibernate;
+
+import java.util.List;
+
+import org.hibernate.transform.ResultTransformer;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class NRTProcedureOutput {
-    private final String code;
-    private final String name;
-    private final NRTUnit unit;
+@FunctionalInterface
+@SuppressWarnings("serial")
+public interface DefaultResultTransfomer<T> extends ResultTransformer {
 
-    public NRTProcedureOutput(String code, String name, NRTUnit unit) {
-        this.code = code;
-        this.name = name;
-        this.unit = unit;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public NRTUnit getUnit() {
-        return unit;
-    }
-
-    public String getCode() {
-        return code;
+    @Override
+    @SuppressWarnings("rawtypes")
+    default List transformList(List collection) {
+        return collection;
     }
 
     @Override
-    public String toString() {
-        return "NRTProcedureOutput{" + "code=" + code + ", name=" + name + ", unit=" + unit + '}';
+    default T transformTuple(Object[] tuple, String[] aliases) {
+        return transform(tuple);
     }
+
+    T transform(Object[] tuple);
 
 }

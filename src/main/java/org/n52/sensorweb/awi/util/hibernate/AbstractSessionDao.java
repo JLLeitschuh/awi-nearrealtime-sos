@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi.data;
+package org.n52.sensorweb.awi.util.hibernate;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -24,6 +24,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import org.n52.janmayen.function.ThrowingConsumer;
+import org.n52.janmayen.function.ThrowingFunction;
+
 /**
  * TODO JavaDoc
  *
@@ -31,18 +34,18 @@ import org.hibernate.Transaction;
  */
 public abstract class AbstractSessionDao {
 
-    protected final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public AbstractSessionDao(SessionFactory sessionFactory) {
         this.sessionFactory = Objects.requireNonNull(sessionFactory);
     }
 
-    protected <T, X extends Exception> Optional<T> throwingQueryOptional(Query<T, X> query) throws X {
+    protected <T, X extends Exception> Optional<T> throwingQueryOptional(ThrowingFunction<Session, T, X> query) throws X {
         T throwingQuery = throwingQuery(query);
         return Optional.ofNullable(throwingQuery);
     }
 
-    protected <T, X extends Exception> T throwingQuery(Query<T, X> query) throws X {
+    protected <T, X extends Exception> T throwingQuery(ThrowingFunction<Session, T, X> query) throws X {
         Objects.requireNonNull(query);
         Session session = this.sessionFactory.openSession();
         Transaction tx;
@@ -58,7 +61,7 @@ public abstract class AbstractSessionDao {
         }
     }
 
-    protected <X extends Exception> void throwingStatement(Statement<X> statement) throws X {
+    protected <X extends Exception> void throwingStatement(ThrowingConsumer<Session, X> statement) throws X {
         Objects.requireNonNull(statement);
         throwingQuery(s -> {
             statement.accept(s);
@@ -82,15 +85,5 @@ public abstract class AbstractSessionDao {
             statement.accept(s);
             return null;
         });
-    }
-
-    @FunctionalInterface
-    protected interface Query<T, X extends Exception> {
-        T apply(Session session) throws X;
-    }
-
-    @FunctionalInterface
-    protected interface Statement<X extends Exception> {
-        void accept(Session session) throws X;
     }
 }

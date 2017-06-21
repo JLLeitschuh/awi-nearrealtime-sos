@@ -7,18 +7,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 
-import org.n52.sensorweb.awi.data.DefaultResultTransfomer;
+import org.n52.janmayen.function.Functions;
 import org.n52.sensorweb.awi.data.entities.Data;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
+import org.n52.sensorweb.awi.util.hibernate.DefaultResultTransfomer;
 import org.n52.shetland.ogc.gml.ReferenceType;
 import org.n52.shetland.ogc.gml.time.TimePeriod;
 import org.n52.shetland.ogc.om.OmConstants;
@@ -51,6 +54,7 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
 
     private final SessionFactory sessionFactory;
 
+    @Inject
     public AWIGetDataAvailabilityHandler(SessionFactory sessionFactory) {
         super(SosConstants.SOS);
         this.sessionFactory = sessionFactory;
@@ -70,8 +74,7 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
 
     @SuppressWarnings("unchecked")
     private List<DataAvailability> getDataAvailabilities(GetDataAvailabilityRequest request) throws OwsExceptionReport {
-        QueryContext ctx
-                = new QueryContext(CriteriaSpecification.ROOT_ALIAS, "sensor", "expedition", "platform", "device");
+        QueryContext ctx = QueryContext.forData();
 
         ObservationFilter filter = ObservationFilter.builder()
                 .setProcedures(request.getProcedures())
@@ -80,7 +83,7 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                 .setProperties(request.getObservedProperties())
                 .build();
         SosContentCache cache = getCache();
-        DefaultResultTransfomer<DataAvailability> transfomer = tuple -> {
+        DefaultResultTransfomer<DataAvailability> transformer = tuple -> {
             String platform = (String) tuple[0];
             String device = (String) tuple[1];
             String sensor = (String) tuple[2];
@@ -101,31 +104,31 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
             da.setFormatDescriptor(FORMAT_DESCRIPTOR);
             return da;
         };
+
         Session session = sessionFactory.openSession();
         try {
-            List<DataAvailability> mobile
-                    = session.createCriteria(Data.class)
-                            .createAlias(Data.SENSOR, ctx.getSensor())
-                            .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
-                            .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
-                            .createAlias(ctx.getPlatformPath(Platform.EXPEDITION), ctx.getExpedition())
-                            .add(filter.isMobile(ctx))
-                            .add(filter.getFilterCriterion(cache, ctx))
-                            .setProjection(Projections.projectionList()
-                                    .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
-                                    .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
-                                    .add(Projections.groupProperty(ctx.getSensorPath(Sensor.CODE)))
-                                    .add(Projections.min(Data.TIME))
-                                    .add(Projections.max(Data.TIME))
-                                    .add(Projections.count(Data.VALUE))
-                                    .add(Projections.groupProperty(ctx.getExpeditionPath(Expedition.NAME))))
-                            .setReadOnly(true).setResultTransformer(transfomer).list();
-            List<DataAvailability> stationary = session.createCriteria(Data.class)
+            Criteria mobile = session.createCriteria(Data.class)
+                    .setComment("Getting mobile data availabilities")
                     .createAlias(Data.SENSOR, ctx.getSensor())
                     .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
                     .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
-                    .createAlias(ctx.getPlatformPath(Platform.EXPEDITION), ctx.getExpedition())
-                    .add(filter.isStationary(ctx))
+                    .add(ObservationFilter.isMobile(ctx))
+                    .add(filter.getFilterCriterion(cache, ctx))
+                    .setProjection(Projections.projectionList()
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.groupProperty(ctx.getSensorPath(Sensor.CODE)))
+                            .add(Projections.min(Data.TIME))
+                            .add(Projections.max(Data.TIME))
+                            .add(Projections.count(Data.VALUE))
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.EXPEDITIONS, Expedition.NAME))))
+                    .add(ObservationFilter.getCommonCriteria(ctx));
+            Criteria stationary = session.createCriteria(Data.class)
+                    .setComment("Getting stationary data availabilities")
+                    .createAlias(Data.SENSOR, ctx.getSensor())
+                    .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
+                    .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
+                    .add(ObservationFilter.isStationary(ctx))
                     .add(filter.getFilterCriterion(cache, ctx))
                     .setProjection(Projections.projectionList()
                             .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
@@ -134,8 +137,13 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                             .add(Projections.min(Data.TIME))
                             .add(Projections.max(Data.TIME))
                             .add(Projections.count(Data.VALUE)))
-                    .setReadOnly(true).setResultTransformer(transfomer).list();
-            return Stream.of(mobile, stationary).flatMap(List::stream).collect(toList());
+                    .add(ObservationFilter.getCommonCriteria(ctx));
+            return Stream.of(mobile, stationary)
+                    .map(Functions.currySecond(Criteria::setReadOnly, true))
+                    .map(Functions.currySecond(Criteria::setResultTransformer, transformer))
+                    .map(Criteria::list)
+                    .flatMap(List<DataAvailability>::stream)
+                    .collect(toList());
         } catch (HibernateException e) {
             throw new NoApplicableCodeException().causedBy(e);
         } finally {

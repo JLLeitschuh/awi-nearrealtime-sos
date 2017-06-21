@@ -27,7 +27,8 @@ public class Platform implements Serializable {
     public static final String CODE = "code";
     public static final String GEOMETRY = "geometry";
     public static final String DEVICES = "devices";
-    public static final String EXPEDITION = "expedition";
+    public static final String EXPEDITIONS = "expeditions";
+    public static final String PUBLISHED = "published";
 
     private static final long serialVersionUID = 763090253133294552L;
     private int id;
@@ -36,6 +37,7 @@ public class Platform implements Serializable {
     private Geometry geometry;
     private Set<Device> devices = new HashSet<>(0);
     private Set<Expedition> expeditions = new HashSet<>(0);
+    private boolean published;
 
     public int getId() {
         return this.id;
@@ -91,6 +93,14 @@ public class Platform implements Serializable {
 
     public void setExpeditions(Set<Expedition> expeditions) {
         this.expeditions = expeditions;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
 }

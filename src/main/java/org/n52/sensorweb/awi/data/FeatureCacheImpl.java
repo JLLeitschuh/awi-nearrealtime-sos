@@ -1,4 +1,4 @@
-package org.n52.sensorweb.awi.geometry;
+package org.n52.sensorweb.awi.data;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
@@ -9,16 +9,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Timer;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 
@@ -26,24 +23,25 @@ import org.n52.janmayen.function.Functions;
 import org.n52.janmayen.lifecycle.Constructable;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.util.DelegatingTimerTask;
+import org.n52.sensorweb.awi.util.IntervalMap;
 import org.n52.sensorweb.awi.util.IntervalTree;
-
+import org.n52.sensorweb.awi.util.UniversalIntervalMap;
+import org.n52.sensorweb.awi.util.hibernate.AbstractSessionDao;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class ExpeditionDaoImpl implements Constructable, ExpeditionDao {
+public class FeatureCacheImpl extends AbstractSessionDao implements Constructable, FeatureCache {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final long updateInterval;
     private final Timer timer = new Timer(true);
     private Map<String, Set<String>> byPlatform;
-    private Map<String, IntervalTree<DateTime, String>> byTime;
-    private final SessionFactory sessionFactory;
+    private Map<String, IntervalMap<DateTime, String>> byTime;
 
-    public ExpeditionDaoImpl(SessionFactory sessionFactory, long updateInterval) {
-        this.sessionFactory = sessionFactory;
+    public FeatureCacheImpl(SessionFactory sessionFactory, long updateInterval) {
+        super(sessionFactory);
         this.updateInterval = updateInterval;
     }
 
@@ -59,12 +57,13 @@ public class ExpeditionDaoImpl implements Constructable, ExpeditionDao {
     }
 
     @Override
-    public Optional<String> getFeatureId(String platform, DateTime time) {
+    public String getFeatureId(String platform, DateTime time) {
         Objects.requireNonNull(platform);
         Objects.requireNonNull(time);
         this.lock.readLock().lock();
         try {
-            return this.byTime.get(platform).get(time);
+            return this.byTime.getOrDefault(platform, UniversalIntervalMap.of(platform))
+                    .getOrDefault(time, platform);
         } finally {
             this.lock.readLock().unlock();
         }
@@ -73,7 +72,8 @@ public class ExpeditionDaoImpl implements Constructable, ExpeditionDao {
     private Stream<String> getByPlatform(String platform) {
         this.lock.readLock().lock();
         try {
-            return this.byPlatform.getOrDefault(platform, Collections.emptySet()).stream();
+
+            return this.byPlatform.getOrDefault(platform, Collections.singleton(platform)).stream();
         } finally {
             this.lock.readLock().unlock();
         }
@@ -96,32 +96,26 @@ public class ExpeditionDaoImpl implements Constructable, ExpeditionDao {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void update() {
-        List<Expedition> list;
-
-        Session session = sessionFactory.openSession();
-        try {
-            list = session.createCriteria(Expedition.class).list();
-        } finally {
-            session.close();
-        }
         this.lock.writeLock().lock();
         try {
-            Function<Expedition, String> key = e -> e.getPlatform().getCode();
-            this.byTime = list.stream().collect(groupingBy(key, Collector.of(HashSet::new, Set::add,
-                                                                             Functions.mergeLeft(Set::addAll),
-                                                                             this::createIntervalTree)));
-            this.byPlatform = list.stream().collect(groupingBy(key, mapping(Expedition::getName, toSet())));
+            @SuppressWarnings("unchecked")
+            List<Expedition> expeditions = query(s -> s.createCriteria(Expedition.class)
+                    .setComment("Caching expedition time intervals").list());
+            this.byTime = expeditions.stream()
+                    .collect(groupingBy(Expedition::getPlatform, Collector.of(HashSet::new, Set::add,
+                                                                              Functions.mergeLeft(Set::addAll),
+                                                                              this::createIntervalTree)));
+            this.byPlatform = expeditions.stream()
+                    .collect(groupingBy(Expedition::getPlatform, mapping(Expedition::getName, toSet())));
         } finally {
             this.lock.writeLock().unlock();
         }
     }
 
-    private IntervalTree<DateTime, String> createIntervalTree(Set<Expedition> t) {
+    private IntervalMap<DateTime, String> createIntervalTree(Set<Expedition> t) {
         IntervalTree<DateTime, String> tree = new IntervalTree<>();
-        t.stream()
-                .filter(x -> x.getBegin().compareTo(x.getEnd()) <= 0)
+        t.stream().filter(Expedition::isValid)
                 .forEach(feature -> tree.add(new DateTime(feature.getBegin()),
                                              new DateTime(feature.getEnd()),
                                              feature.getName()));

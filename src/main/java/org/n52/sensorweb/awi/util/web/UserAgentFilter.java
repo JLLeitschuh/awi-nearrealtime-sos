@@ -13,23 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi;
+package org.n52.sensorweb.awi.util.web;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.Objects;
+
+import javax.ws.rs.client.ClientRequestContext;
+import javax.ws.rs.client.ClientRequestFilter;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.ext.Provider;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public interface NRTDao {
+@Provider
+public class UserAgentFilter implements ClientRequestFilter {
 
-    Collection<NRTProcedure> getProcedures();
+    private final String userAgent;
 
-    Map<String, SpaceTimeEnvelope> getEnvelopes();
+    public UserAgentFilter(String userAgent) {
+        this.userAgent = Objects.requireNonNull(userAgent);
+    }
 
-    Optional<String> getDescription(String id);
+    @Override
+    public void filter(ClientRequestContext ctx) throws IOException {
+        ctx.getHeaders().add(HttpHeaders.USER_AGENT, userAgent);
+    }
 
 }

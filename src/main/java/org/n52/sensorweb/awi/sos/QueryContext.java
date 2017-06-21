@@ -1,7 +1,8 @@
 package org.n52.sensorweb.awi.sos;
 
+import org.hibernate.criterion.CriteriaSpecification;
 
-import org.n52.sensorweb.awi.data.PropertyPath;
+import org.n52.sensorweb.awi.util.hibernate.PropertyPath;
 
 /**
  * TODO JavaDoc
@@ -9,23 +10,24 @@ import org.n52.sensorweb.awi.data.PropertyPath;
  * @author Christian Autermann
  */
 public class QueryContext {
+    private static final String SENSOR = "sensor";
+    private static final String PLATFORM = "platform";
+    private static final String DEVICE = "device";
+    private static final String DATA = "data";
+    private static final String EXPEDITIONS = "expeditions";
 
     private final String data;
     private final String sensor;
-    private final String expedition;
     private final String platform;
     private final String device;
+    private final String expeditions;
 
-    public QueryContext(String data, String sensor, String expedition, String platform, String device) {
+    public QueryContext(String data, String sensor, String platform, String device, String expeditions) {
         this.data = data;
         this.sensor = sensor;
-        this.expedition = expedition;
         this.platform = platform;
         this.device = device;
-    }
-
-    public QueryContext() {
-        this("data", "sensor", "expedition", "platform", "device");
+        this.expeditions = expeditions;
     }
 
     public String getDataPath(String... path) {
@@ -36,16 +38,16 @@ public class QueryContext {
         return PropertyPath.of(this.sensor, path);
     }
 
-    public String getExpeditionPath(String... path) {
-        return PropertyPath.of(this.expedition, path);
-    }
-
     public String getPlatformPath(String... path) {
         return PropertyPath.of(this.platform, path);
     }
 
     public String getDevicePath(String... path) {
         return PropertyPath.of(this.device, path);
+    }
+
+    public String getExpeditionsPath(String... path) {
+        return PropertyPath.of(this.expeditions, path);
     }
 
     public String getData() {
@@ -56,10 +58,6 @@ public class QueryContext {
         return sensor;
     }
 
-    public String getExpedition() {
-        return expedition;
-    }
-
     public String getPlatform() {
         return platform;
     }
@@ -68,4 +66,23 @@ public class QueryContext {
         return device;
     }
 
+    public String getExpeditions() {
+        return expeditions;
+    }
+
+    public static QueryContext forSensor() {
+        return new QueryContext(DATA, CriteriaSpecification.ROOT_ALIAS, PLATFORM, DEVICE, EXPEDITIONS);
+    }
+
+    public static QueryContext forPlatform() {
+        return new QueryContext(DATA, SENSOR, CriteriaSpecification.ROOT_ALIAS, DEVICE, EXPEDITIONS);
+    }
+
+    public static QueryContext forDevice() {
+        return new QueryContext(DATA, SENSOR, PLATFORM, CriteriaSpecification.ROOT_ALIAS, EXPEDITIONS);
+    }
+
+    public static QueryContext forData() {
+        return new QueryContext(CriteriaSpecification.ROOT_ALIAS, SENSOR, PLATFORM, DEVICE, EXPEDITIONS);
+    }
 }

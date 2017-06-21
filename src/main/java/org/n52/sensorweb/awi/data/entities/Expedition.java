@@ -1,32 +1,30 @@
 package org.n52.sensorweb.awi.data.entities;
 
+import java.io.Serializable;
 import java.util.Date;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * TODO JavaDoc
  *
  * @author Christian Autermann
  */
-public class Expedition {
+public class Expedition implements Serializable {
     public static final String NAME = "name";
     public static final String BEGIN = "begin";
     public static final String END = "end";
-    public static final String GEOMETRY = "geometry";
     public static final String PLATFORM = "platform";
+    private static final long serialVersionUID = -7996822347864213643L;
 
-    private Platform platform;
+    private String platform;
     private Date begin;
     private Date end;
-    private Geometry geometry;
     private String name;
 
-    public Platform getPlatform() {
+    public String getPlatform() {
         return platform;
     }
 
-    public void setPlatform(Platform platform) {
+    public void setPlatform(String platform) {
         this.platform = platform;
     }
 
@@ -46,19 +44,15 @@ public class Expedition {
         this.end = end;
     }
 
-    public Geometry getGeometry() {
-        return geometry;
-    }
-
-    public void setGeometry(Geometry geometry) {
-        this.geometry = geometry;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isValid() {
+        return getBegin().compareTo(getEnd()) <= 0;
     }
 }

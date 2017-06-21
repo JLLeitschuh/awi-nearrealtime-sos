@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.n52.sensorweb.awi;
+package org.n52.sensorweb.awi.util;
+
+import java.util.Objects;
 
 import org.joda.time.DateTime;
 
@@ -28,17 +30,24 @@ import com.vividsolutions.jts.geom.Envelope;
  */
 public class SpaceTimeEnvelope {
 
+    private final String identifier;
     private final MinMax<DateTime> time;
     private final Envelope envelope;
 
-    public SpaceTimeEnvelope() {
-        this(new MinMax<>(), new Envelope());
+    public SpaceTimeEnvelope(String identifier,
+                             MinMax<DateTime> time,
+                             Envelope envelope) {
+        this.time = Objects.requireNonNull(time);
+        this.envelope = Objects.requireNonNull(envelope);
+        this.identifier = identifier;
     }
 
-    public SpaceTimeEnvelope(MinMax<DateTime> time,
-                             Envelope envelope) {
-        this.time = time;
-        this.envelope = envelope;
+    public SpaceTimeEnvelope(String identifier) {
+        this(identifier, new MinMax<>(), new Envelope());
+    }
+
+    public SpaceTimeEnvelope() {
+        this(null);
     }
 
     public MinMax<DateTime> getTime() {
@@ -55,5 +64,13 @@ public class SpaceTimeEnvelope {
             this.envelope.expandToInclude(envelope.getSpace());
         }
         return this;
+    }
+
+    public boolean isEmpty() {
+        return this.envelope.isNull();
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 }
