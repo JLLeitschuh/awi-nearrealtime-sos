@@ -23,6 +23,7 @@ import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.Restrictions;
 
 import org.n52.janmayen.exception.CompositeException;
+import org.n52.janmayen.function.ThrowingBiFunction;
 import org.n52.sensorweb.awi.data.entities.Data;
 import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Expedition;
@@ -109,7 +110,7 @@ public class ObservationFilter {
         CompositeException errors = new CompositeException();
         Conjunction criterion = getTemporalFilters().stream()
                 .collect(groupingBy(TemporalFilter::getValueReference,
-                                    mapping(curryFirst(errors.wrap(this::getTemporalFilterCriterion), ctx),
+                                    mapping(curryFirst(errors.wrapFunction(this::getTemporalFilterCriterion), ctx),
                                             filtering(Optional::isPresent, mapping(Optional::get, toDisjunction())))))
                 .values().stream().collect(toConjunction());
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
@@ -167,9 +168,10 @@ public class ObservationFilter {
     }
 
     public Optional<? extends Criterion> createSpatialFilterCriterion(QueryContext ctx) throws OwsExceptionReport {
+        ThrowingBiFunction<QueryContext, SpatialFilter, Criterion, OwsExceptionReport> getSpatialFilter = this::getSpatialFilterCriterion;
         CompositeException errors = new CompositeException();
         Conjunction criterion = getSpatialFilters().stream()
-                .map(errors.<SpatialFilter, Criterion, OwsExceptionReport>wrap(x -> getSpatialFilterCriterion(ctx, x)))
+                .map(errors.wrapFunction(getSpatialFilter.curryFirst(ctx)))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(toConjunction());
