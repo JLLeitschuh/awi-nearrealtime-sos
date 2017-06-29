@@ -264,7 +264,10 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                             .add(Projections.min(ctx.getDataPath(Data.TIME)))
                             .add(Projections.max(ctx.getDataPath(Data.TIME)))
                             .add(SpatialProjections.extent(ctx.getDataPath(Data.GEOMETRY))))
-                    .add(ObservationFilter.getCommonCriteria(ctx))
+                    .add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                    .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
                     .add(Restrictions.isNotNull(ctx.getDataPath(Data.GEOMETRY)))
                     .add(Restrictions.geProperty(ctx.getDataPath(Data.TIME), PropertyPath.of("e", Expedition.BEGIN)))
                     .add(Restrictions.leProperty(ctx.getDataPath(Data.TIME), PropertyPath.of("e", Expedition.END)));
@@ -279,7 +282,10 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                             .add(Projections.min(ctx.getDataPath(Data.TIME)))
                             .add(Projections.max(ctx.getDataPath(Data.TIME)))
                             .add(SpatialProjections.extent(ctx.getPlatformPath(Platform.GEOMETRY))))
-                    .add(ObservationFilter.getCommonCriteria(ctx))
+                    .add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                    .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
                     .add(Restrictions.isEmpty(ctx.getPlatformPath(Platform.EXPEDITIONS)))
                     .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)));
 
@@ -361,7 +367,10 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                             .add(Projections.property(ctx.getPlatformPath(Platform.CODE)))
                             .add(Projections.property(ctx.getDevicePath(Device.CODE)))
                             .add(Projections.property(ctx.getSensorPath(Sensor.CODE))))
-                    .add(ObservationFilter.getCommonCriteria(ctx));
+                    .add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                    .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                    .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true));
             return ((List<Object[]>) c.list()).stream()
                     .collect(groupingBy(
                             t -> Arrays.stream(t, 0, 2).map(String::valueOf).map(String::toLowerCase)

@@ -20,12 +20,6 @@
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
     </bean>
 
-    <!-- bindings -->
-    <bean class="org.n52.iceland.binding.kvp.KvpBinding"/>
-    <bean class="org.n52.iceland.binding.pox.PoxBinding"/>
-    <bean class="org.n52.iceland.binding.json.JSONBinding"/>
-    <bean class="org.n52.iceland.binding.soap.SoapBinding"/>
-
     <bean id="exceptionLogger" class="org.n52.iceland.service.ExceptionLogger"/>
 
     <bean id="featureCache" class="org.n52.sensorweb.awi.data.FeatureCacheImpl">
@@ -57,6 +51,7 @@
     <import resource="classpath*:contexts/common/*.xml" />
     <import resource="classpath*:contexts/configured.xml" />
     <import resource="classpath*:contexts/configured/*.xml" />
+    <import resource="svalbard.xml" />
 
     <mvc:default-servlet-handler />
     <mvc:annotation-driven />

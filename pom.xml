@@ -116,12 +116,6 @@
             <artifactId>iceland</artifactId>
             <version>${version.iceland}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
        
         <dependency>
@@ -129,36 +123,27 @@
             <artifactId>shetland</artifactId>
             <version>${version.shetland}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>org.n52.svalbard</groupId>
-            <artifactId>svalbard</artifactId>
+            <artifactId>svalbard-xmlbeans</artifactId>
             <version>${version.svalbard}</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
+            <scope>runtime</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.n52.svalbard</groupId>
+            <artifactId>svalbard-xmlstream</artifactId>
+            <version>${version.svalbard}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>api</artifactId>
             <version>${version.sos}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!--utilities-->
@@ -304,12 +289,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>${version.xml.apis}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${version.hibernate}</version>
@@ -343,9 +322,6 @@
             <version>${version.postgres}</version>
             <scope>runtime</scope>
         </dependency>
-        
-
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
@@ -392,82 +368,22 @@
             <artifactId>hibernate-utils</artifactId>
             <version>${version.sos}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>profile-coding</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>cache</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>gc-dao</artifactId>
-            <version>${version.sos}</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb.sos</groupId>
-            <artifactId>coding-ows-v110</artifactId>
-            <version>${version.sos}</version>
-            <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb.sos</groupId>
-            <artifactId>coding-sensorML</artifactId>
-            <version>${version.sos}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb.sos</groupId>
-            <artifactId>coding-sensorML-v101</artifactId>
-            <version>${version.sos}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb.sos</groupId>
-            <artifactId>coding-sensorML-v20</artifactId>
-            <version>${version.sos}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.n52.sensorweb.sos</groupId>
-            <artifactId>coding-sos-v20</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
         </dependency>
@@ -480,10 +396,6 @@
                 <exclusion>
                     <groupId>javax.activation</groupId>
                     <artifactId>activation</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -498,12 +410,6 @@
             <artifactId>coding-kvp</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
@@ -524,8 +430,8 @@
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -534,24 +440,12 @@
             <artifactId>gda-operation</artifactId>
             <version>${version.sos}</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.n52.sensorweb.sos</groupId>
             <artifactId>split-and-merge</artifactId>
             <version>${version.sos}</version>
             <scope>runtime</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.n52.janmayen</groupId>
-                    <artifactId>janmayen</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!--logging-->
@@ -632,7 +526,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <usedDependencies>
-                        <usedDependency>org.n52.svalbard:svalbard</usedDependency>
+                        <!--<usedDependency>org.n52.svalbard:svalbard</usedDependency>-->
                     </usedDependencies>
                 </configuration>
             </plugin>
@@ -706,6 +600,8 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.0.v20161208</version>
                 <configuration>
+                    <waitForChild>true</waitForChild>
+                    <jvmArgs>-Xmx2048m</jvmArgs>
                     <httpConnector>
                         <port>${jetty.port.http}</port>
                     </httpConnector>

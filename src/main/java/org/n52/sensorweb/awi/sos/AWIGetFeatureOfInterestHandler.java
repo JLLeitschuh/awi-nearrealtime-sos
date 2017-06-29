@@ -267,8 +267,11 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                 .setComment("Getting stationary feature ids for spatial filter")
                 .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
                 .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
-                .add(ObservationFilter.getCommonCriteria(ctx))
                 .setProjection(Projections.property(ctx.getPlatformPath(Platform.CODE)))
+                .add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
                 .add(filters.stream()
                         .map(errors.wrapFunction(getSpatialFilter.curryFirst(ctx.getPlatformPath(Platform.GEOMETRY))))
                         .filter(Optional::isPresent)
@@ -279,7 +282,10 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                 .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
                 .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
                 .setProjection(Projections.property(ctx.getPlatformPath(Platform.CODE)))
-                .add(ObservationFilter.getCommonCriteria(ctx));
+                .add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true));
 
         Criteria mobile = session.createCriteria(ExpeditionGeometry.class)
                 .setComment("Getting mobile feature ids for spatial filter")

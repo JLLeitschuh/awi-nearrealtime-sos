@@ -44,14 +44,14 @@
     </class>
 
     <class name="Data" mutable="false" table="dataview">
-        <id name="id" type="int" column="data_id" />
-        <property name="time" type="timestamp" column="date" />
-        <property name="value" type="double" column="mean" />
+        <composite-id>
+            <key-property name="time" type="timestamp" column="date" />
+            <key-property name="value" type="double" column="mean" />
+            <key-many-to-one name="sensor" class="Sensor" column="sensor_id" />
+        </composite-id>
         <property name="geometry" type="org.hibernate.spatial.GeometryType">
             <formula>ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)</formula>
         </property>
-        <property name="code" type="string" column="code" />
-        <many-to-one name="sensor" class="Sensor" column="sensor_id" fetch="join" lazy="false" />
     </class>
 
     <class name="Expedition" mutable="false" table="v_expedition" where="begin_date &lt;= end_date">
