@@ -118,8 +118,10 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                             .add(Projections.max(Data.TIME))
                             .add(Projections.count(Data.VALUE)))
                     .add(Restrictions.isNull(ctx.getPlatformPath(Platform.GEOMETRY)))
-                    .add(Restrictions.leProperty(ctx.getExpeditionsPath(Expedition.BEGIN),
-                                                 ctx.getExpeditionsPath(Expedition.END)));
+                    .add(Restrictions.leProperty(ctx.getExpeditionsPath(Expedition.BEGIN), ctx.getExpeditionsPath(Expedition.END)))
+                    .add(Restrictions.geProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.BEGIN)))
+                    .add(Restrictions.leProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.END)));
+
             Criteria stationary = session.createCriteria(Data.class)
                     .setComment("Getting stationary data availabilities")
                     .createAlias(Data.SENSOR, ctx.getSensor())
@@ -143,10 +145,7 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
 
             if (!filter.getFeatures().isEmpty()) {
                 stationary.add(Restrictions.in(ctx.getPlatformPath(Platform.CODE), filter.getFeatures()));
-                mobile.add(Restrictions.and(
-                        Restrictions.in(ctx.getExpeditionsPath(Expedition.NAME), filter.getFeatures()),
-                        Restrictions.geProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.BEGIN)),
-                        Restrictions.leProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.END))));
+                mobile.add(Restrictions.in(ctx.getExpeditionsPath(Expedition.NAME), filter.getFeatures()));
             }
 
             if (!filter.getProcedures().isEmpty()) {
