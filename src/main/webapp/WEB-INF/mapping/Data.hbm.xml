@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping schema="public" package="org.n52.sensorweb.awi.data.entities">
+    <class name="Data" mutable="false" table="dataview">
+        <composite-id>
+            <key-property name="time" type="timestamp" column="date" />
+            <key-property name="value" type="double" column="mean" />
+            <key-many-to-one name="sensor" class="Sensor" column="sensor_id" />
+        </composite-id>
+        <property name="geometry" type="org.hibernate.spatial.GeometryType">
+            <formula>ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)</formula>
+        </property>
+    </class>
+</hibernate-mapping>
+
+
+

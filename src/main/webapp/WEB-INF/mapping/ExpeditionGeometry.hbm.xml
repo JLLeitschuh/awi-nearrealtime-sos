@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping schema="public" package="org.n52.sensorweb.awi.data.entities">
+    <class name="ExpeditionGeometry" mutable="false" table="v_expedition" where="begin_date &lt;= end_date" >
+        <id name="name" type="string" column="expedition" />
+        <property name="platform" type="string">
+            <formula>(select p.type || ':' || p.code from platform as p where p.platform_id = platform_id)</formula>
+        </property>
+        <property name="begin" type="date" column="begin_date" />
+        <property name="end" type="date" column="end_date" />
+        <property name="geometry" type="org.hibernate.spatial.GeometryType" column="geom" />
+    </class>
+</hibernate-mapping>
+
+
+
