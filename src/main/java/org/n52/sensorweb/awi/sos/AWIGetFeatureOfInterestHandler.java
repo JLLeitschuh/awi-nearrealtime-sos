@@ -126,6 +126,10 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
 
             Set<String> identifiers = getFeatureIdentifiers(filter, session);
 
+            if (identifiers.isEmpty()) {
+                return new FeatureCollection();
+            }
+
             LOG.debug("Querying features: {}", identifiers);
 
             Criteria stationary = session.createCriteria(Platform.class)
@@ -215,19 +219,21 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                 .orElseGet(cache::getFeaturesOfInterest));
 
         // get the procedures offering the requested observable properties and get their respective features
-        Optional.of(filter.getProperties()).filter(Set::isEmpty).map(properties
-                -> properties.stream()
-                        .map(cache::getProceduresForObservableProperty).flatMap(Set::stream)
-                        .map(cache::getRelatedFeaturesForOffering).flatMap(Set::stream)
-                        .collect(toSet())
-        ).ifPresent(identifiers::retainAll);
+        Optional.of(filter.getProperties())
+                .filter(Predicates.not(Set::isEmpty))
+                .map(properties -> properties.stream()
+                    .map(cache::getProceduresForObservableProperty).flatMap(Set::stream)
+                    .map(cache::getRelatedFeaturesForOffering).flatMap(Set::stream)
+                    .collect(toSet()))
+                .ifPresent(identifiers::retainAll);
 
         // get the features for the requested procedures
-        Optional.of(filter.getProcedures()).filter(Set::isEmpty).map(procedures
-                -> procedures.stream()
-                        .map(cache::getRelatedFeaturesForOffering).flatMap(Set::stream)
-                        .collect(toSet())
-        ).ifPresent(identifiers::retainAll);
+        Optional.of(filter.getProcedures())
+                .filter(Predicates.not(Set::isEmpty))
+                .map(procedures -> procedures.stream()
+                    .map(cache::getRelatedFeaturesForOffering).flatMap(Set::stream)
+                    .collect(toSet()))
+                .ifPresent(identifiers::retainAll);
 
         // get the identifiers for the spatial filters
         CompositeException errors = new CompositeException();
@@ -236,7 +242,7 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                 = this::getFeatureIdentifiers;
 
         Optional.of(filter.getSpatialFilters())
-                .filter(Set::isEmpty)
+                .filter(Predicates.not(Set::isEmpty))
                 .flatMap(errors.wrapFunction(getFeatureIdentifiers.currySecond(session)))
                 .ifPresent(identifiers::retainAll);
 
