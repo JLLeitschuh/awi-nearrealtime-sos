@@ -30,10 +30,8 @@
 	<logger name="org.springframework" level="ERROR" />
     <logger name="org.apache.http" level="ERROR"/>
 
-
-    <!--<logger name="org.hibernate.hql" level="TRACE" />-->
-
-	<root level="INFO">
-		<appender-ref ref="CONSOLE" />
+    <root level="INFO">
+        <!--<appender-ref ref="CONSOLE"/>-->
+		<appender-ref ref="FILE" />
 	</root>
 </configuration>
