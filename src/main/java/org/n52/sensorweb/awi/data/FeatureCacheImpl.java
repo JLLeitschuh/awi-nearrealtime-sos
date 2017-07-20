@@ -21,7 +21,6 @@ import org.joda.time.DateTime;
 
 import org.n52.janmayen.IntervalMap;
 import org.n52.janmayen.IntervalTree;
-import org.n52.janmayen.UniversalIntervalMap;
 import org.n52.janmayen.function.Functions;
 import org.n52.janmayen.lifecycle.Constructable;
 import org.n52.sensorweb.awi.data.entities.Expedition;
@@ -62,7 +61,7 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         Objects.requireNonNull(time);
         this.lock.readLock().lock();
         try {
-            return this.byTime.getOrDefault(platform, UniversalIntervalMap.of(platform))
+            return this.byTime.getOrDefault(platform, IntervalMap.universal(platform))
                     .getOrDefault(time, platform);
         } finally {
             this.lock.readLock().unlock();
