@@ -2,7 +2,7 @@ package org.n52.sensorweb.awi.sos;
 
 import org.hibernate.criterion.CriteriaSpecification;
 
-import org.n52.sensorweb.awi.util.hibernate.PropertyPath;
+import org.n52.sos.ds.hibernate.util.PropertyPath;
 
 /**
  * TODO JavaDoc

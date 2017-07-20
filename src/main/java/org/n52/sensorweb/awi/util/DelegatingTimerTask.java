@@ -3,7 +3,7 @@ package org.n52.sensorweb.awi.util;
 import java.util.TimerTask;
 
 /**
- * Simple implementation of {@link TimerTask} that wraps a {@link Runnable}
+ * Simple implementation of {@link TimerTask} that wraps a {@link Runnable}.
  *
  * @author Christian Autermann
  */

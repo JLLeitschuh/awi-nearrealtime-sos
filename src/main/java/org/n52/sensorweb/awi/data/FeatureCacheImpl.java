@@ -19,14 +19,14 @@ import java.util.stream.Stream;
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
 
+import org.n52.janmayen.IntervalMap;
+import org.n52.janmayen.IntervalTree;
+import org.n52.janmayen.UniversalIntervalMap;
 import org.n52.janmayen.function.Functions;
 import org.n52.janmayen.lifecycle.Constructable;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.util.DelegatingTimerTask;
-import org.n52.sensorweb.awi.util.IntervalMap;
-import org.n52.sensorweb.awi.util.IntervalTree;
-import org.n52.sensorweb.awi.util.UniversalIntervalMap;
-import org.n52.sensorweb.awi.util.hibernate.AbstractSessionDao;
+import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
 
 /**
  * TODO JavaDoc
