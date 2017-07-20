@@ -18,6 +18,11 @@ package org.n52.sensorweb.awi.data.entities;
 
 import java.io.Serializable;
 
+/**
+ * Entity for the {@code sensor} table.
+ *
+ * @author Christian Autermann
+ */
 public class Sensor implements Serializable {
     public static final String ID = "id";
     public static final String DEVICE = "device";
@@ -31,42 +36,92 @@ public class Sensor implements Serializable {
     private String unit;
     private String code;
 
+    /**
+     * Get the id of this sensor.
+     *
+     * @return the id
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Sets the id of this sensor.
+     *
+     * @param id the id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Get the device of this sensor.
+     *
+     * @return the device
+     */
     public Device getDevice() {
         return this.device;
     }
 
+    /**
+     * Sets the device of this sensor.
+     *
+     * @param device the device
+     */
     public void setDevice(Device device) {
         this.device = device;
     }
 
+    /**
+     * Get the name of this sensor.
+     *
+     * @return the name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Sets the name of this sensor.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the unit of this sensor.
+     *
+     * @return the unit
+     */
     public String getUnit() {
         return this.unit;
     }
 
+    /**
+     * Sets the unit of this sensor.
+     *
+     * @param unit the unit
+     */
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
+    /**
+     * Get the code of this sensor.
+     *
+     * @return the code
+     */
     public String getCode() {
         return this.code;
     }
 
+    /**
+     * Sets the code of this sensor.
+     *
+     * @param code the code
+     */
     public void setCode(String code) {
         this.code = code;
     }

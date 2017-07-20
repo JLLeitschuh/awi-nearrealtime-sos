@@ -17,6 +17,9 @@ package org.n52.sensorweb.awi.util;
 
 import java.util.Objects;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nullable;
+
 import org.joda.time.DateTime;
 
 import org.n52.shetland.util.MinMax;
@@ -24,7 +27,7 @@ import org.n52.shetland.util.MinMax;
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
- * TODO JavaDoc
+ * A spatio-temporal envelope with an optional identifier.
  *
  * @author Christian Autermann
  */
@@ -34,7 +37,14 @@ public class SpaceTimeEnvelope {
     private final MinMax<DateTime> time;
     private final Envelope envelope;
 
-    public SpaceTimeEnvelope(String identifier,
+    /**
+     * Create a new {@code SpaceTimeEnvelope}.
+     *
+     * @param identifier the identifier
+     * @param time       the temporal component
+     * @param envelope   the spatial component
+     */
+    public SpaceTimeEnvelope(@Nullable String identifier,
                              MinMax<DateTime> time,
                              Envelope envelope) {
         this.time = Objects.requireNonNull(time);
@@ -42,22 +52,57 @@ public class SpaceTimeEnvelope {
         this.identifier = identifier;
     }
 
-    public SpaceTimeEnvelope(String identifier) {
+    /**
+     * Create a empty {@code SpaceTimeEnvelope} with an identifier.
+     *
+     * @param identifier the identifier
+     */
+    public SpaceTimeEnvelope(@Nullable String identifier) {
         this(identifier, new MinMax<>(), new Envelope());
     }
 
+    /**
+     * Creates a new {@code SpaceTimeEnvelope}.
+     *
+     * @param time  the temporal component
+     * @param space the spatial component
+     */
+    public SpaceTimeEnvelope(MinMax<DateTime> time, Envelope space) {
+        this(null, time, space);
+    }
+
+    /**
+     * Creates an empty {@code SpaceTimeEnvelope}.
+     */
     public SpaceTimeEnvelope() {
         this(null);
     }
 
+    /**
+     * Get the temporal component of this envelope.
+     *
+     * @return the temporal envelope
+     */
     public MinMax<DateTime> getTime() {
         return this.time;
     }
 
+    /**
+     * Get the spatial component of this envelope.
+     *
+     * @return the spatial envelope
+     */
     public Envelope getSpace() {
         return envelope;
     }
 
+    /**
+     * Extend this envelope to include the {@code envelope}.
+     *
+     * @param envelope the envelope
+     *
+     * @return {@code this}
+     */
     public SpaceTimeEnvelope extend(SpaceTimeEnvelope envelope) {
         this.time.extend(envelope.getTime(), DateTime::compareTo);
         if (envelope.getSpace() != null) {
@@ -66,10 +111,21 @@ public class SpaceTimeEnvelope {
         return this;
     }
 
+    /**
+     * Checks if this envelope is empty.
+     *
+     * @return if it is empty
+     */
     public boolean isEmpty() {
         return this.envelope.isNull();
     }
 
+    /**
+     * Get the identifier of this envelope.
+     *
+     * @return the identifier (may be {@code null})
+     */
+    @CheckForNull
     public String getIdentifier() {
         return identifier;
     }

@@ -18,7 +18,7 @@ package org.n52.sensorweb.awi.sensor.json;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TODO JavaDoc
+ * POJO for a JSON unit of measurement.
  *
  * @author Christian Autermann
  */

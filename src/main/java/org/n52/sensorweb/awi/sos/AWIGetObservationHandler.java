@@ -48,8 +48,6 @@ import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.sos.ds.hibernate.util.MoreRestrictions;
-import org.n52.sos.ds.hibernate.util.ScrollableObservationStream;
 import org.n52.shetland.ogc.filter.SpatialFilter;
 import org.n52.shetland.ogc.filter.TemporalFilter;
 import org.n52.shetland.ogc.gml.CodeType;
@@ -77,12 +75,14 @@ import org.n52.shetland.ogc.sos.request.GetObservationRequest;
 import org.n52.shetland.ogc.sos.response.GetObservationResponse;
 import org.n52.shetland.ogc.swe.SweConstants;
 import org.n52.sos.ds.AbstractGetObservationHandler;
+import org.n52.sos.ds.hibernate.util.MoreRestrictions;
+import org.n52.sos.ds.hibernate.util.ScrollableObservationStream;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
 import org.n52.sos.ds.hibernate.util.TemporalRestrictions;
 import org.n52.sos.exception.ows.concrete.UnsupportedValueReferenceException;
 
 /**
- * Handler for {@code GetObservation} requests.
+ * {@code GetObservation} handler for the AWI Nearrealtime database.
  *
  * @author Christian Autermann
  */
@@ -144,6 +144,16 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         return response;
     }
 
+    /**
+     * Get the data for the specified filters.
+     *
+     * @param session the session
+     * @param filter  the filters
+     *
+     * @return the observation stream
+     *
+     * @throws OwsExceptionReport in case an error occurs
+     */
     @SuppressWarnings("unchecked")
     private ObservationStream getData(Session session, ObservationFilter filter) throws OwsExceptionReport {
         QueryContext ctx = QueryContext.forData();
@@ -263,55 +273,6 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     }
 
     /**
-     * Get a criterion for the supplied temporal filter.
-     *
-     * @param ctx the query context
-     * @param tf  the temporal filter
-     *
-     * @return the criterion
-     *
-     * @throws OwsExceptionReport if the operator is not supported
-     */
-    private static Criterion getTemporalFilterCriterion(QueryContext ctx, TemporalFilter tf) throws OwsExceptionReport {
-        if (!tf.getValueReference().equals(TemporalRestrictions.PHENOMENON_TIME_VALUE_REFERENCE) &&
-            !tf.getValueReference().equals(TemporalRestrictions.RESULT_TIME_VALUE_REFERENCE)) {
-            throw new UnsupportedValueReferenceException(tf.getValueReference());
-        }
-        return TemporalRestrictions.filter(tf.getOperator(), ctx.getDataPath(Data.TIME), tf.getTime());
-    }
-
-    /**
-     * Get a criterion for the supplied procedure identifiers.
-     *
-     * @param urns the procedure identifiers
-     * @param ctx  the query context
-     *
-     * @return the criterion
-     */
-    private static Criterion getProcedureCriterion(Set<String> urns, QueryContext ctx) {
-        Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::(.+))?$");
-        return urns.stream()
-                .map(pattern::matcher)
-                .filter(Matcher::matches)
-                .map(x -> MoreRestrictions.and(
-                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
-                Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
-                .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
-    }
-
-    /**
-     * Get a criterion for the supplied procedure identifiers.
-     *
-     * @param filter the observed properties
-     * @param ctx    the query context
-     *
-     * @return the criterion
-     */
-    private static Criterion getObservedPropertyCriterion(Set<String> filter, QueryContext ctx) {
-        return Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter);
-    }
-
-    /**
      * Create a O&amp;M Observation for the data object.
      *
      * @param data         the data object
@@ -364,5 +325,55 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
 
         return observation;
     }
+
+    /**
+     * Get a criterion for the supplied temporal filter.
+     *
+     * @param ctx the query context
+     * @param tf  the temporal filter
+     *
+     * @return the criterion
+     *
+     * @throws OwsExceptionReport if the operator is not supported
+     */
+    private static Criterion getTemporalFilterCriterion(QueryContext ctx, TemporalFilter tf) throws OwsExceptionReport {
+        if (!tf.getValueReference().equals(TemporalRestrictions.PHENOMENON_TIME_VALUE_REFERENCE) &&
+            !tf.getValueReference().equals(TemporalRestrictions.RESULT_TIME_VALUE_REFERENCE)) {
+            throw new UnsupportedValueReferenceException(tf.getValueReference());
+        }
+        return TemporalRestrictions.filter(tf.getOperator(), ctx.getDataPath(Data.TIME), tf.getTime());
+    }
+
+    /**
+     * Get a criterion for the supplied procedure identifiers.
+     *
+     * @param urns the procedure identifiers
+     * @param ctx  the query context
+     *
+     * @return the criterion
+     */
+    private static Criterion getProcedureCriterion(Set<String> urns, QueryContext ctx) {
+        Pattern pattern = Pattern.compile("^([^:]+:[^:]+)(?::(.+))?$");
+        return urns.stream()
+                .map(pattern::matcher)
+                .filter(Matcher::matches)
+                .map(x -> MoreRestrictions.and(
+                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
+                .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
+    }
+
+    /**
+     * Get a criterion for the supplied procedure identifiers.
+     *
+     * @param filter the observed properties
+     * @param ctx    the query context
+     *
+     * @return the criterion
+     */
+    private static Criterion getObservedPropertyCriterion(Set<String> filter, QueryContext ctx) {
+        return Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter);
+    }
+
 
 }

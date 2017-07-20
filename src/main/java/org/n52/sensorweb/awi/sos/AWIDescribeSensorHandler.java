@@ -18,7 +18,6 @@ package org.n52.sensorweb.awi.sos;
 import javax.inject.Inject;
 
 import org.n52.sensorweb.awi.sensor.SensorAPIClient;
-import org.n52.shetland.ogc.gml.time.Time;
 import org.n52.shetland.ogc.ows.exception.InvalidParameterValueException;
 import org.n52.shetland.ogc.ows.exception.NoApplicableCodeException;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
@@ -31,7 +30,9 @@ import org.n52.shetland.ogc.sos.response.DescribeSensorResponse;
 import org.n52.sos.ds.AbstractDescribeSensorHandler;
 
 /**
- * TODO JavaDoc
+ * {@code DescribeSensor} handler for the AWI Nearrealtime database.
+ *
+ * This handler simpley retrieves the sensor description using the <a href="https://sensor.awi.de/">AWI Sensor API</a>.
  *
  * @author Christian Autermann
  */
@@ -39,6 +40,11 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
 
     private final SensorAPIClient sensorApiClient;
 
+    /**
+     * Create a new {@code AWIDescribeSensorHandler}.
+     *
+     * @param sensorApiClient the Senor API Client
+     */
     @Inject
     public AWIDescribeSensorHandler(SensorAPIClient sensorApiClient) {
         super(SosConstants.SOS);
@@ -46,32 +52,78 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
     }
 
     @Override
-    public DescribeSensorResponse getSensorDescription(
-            DescribeSensorRequest request) throws OwsExceptionReport {
-        String service = request.getService();
-        String version = request.getVersion();
-        String procedure = request.getProcedure();
-        Time validTime = request.getValidTime();
-        String format = request.getProcedureDescriptionFormat();
+    public DescribeSensorResponse getSensorDescription(DescribeSensorRequest request) throws OwsExceptionReport {
+        checkFormat(request);
+        checkValidTime(request);
 
+        SosProcedureDescriptionUnknownType description = retrieveDescription(request);
+
+        DescribeSensorResponse response = new DescribeSensorResponse(request.getService(), request.getVersion());
+        response.setOutputFormat(SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL);
+        response.addSensorDescription(description);
+        return response;
+    }
+
+    /**
+     * Checks that the right procedure description format is requested.
+     *
+     * @param request the request
+     *
+     * @throws InvalidParameterValueException if a invalid format was requested
+     */
+    private void checkFormat(DescribeSensorRequest request) throws InvalidParameterValueException {
+        String format = request.getProcedureDescriptionFormat();
         if (format != null && !format.equals(SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL)) {
             throw new InvalidParameterValueException(DescribeSensorParams.procedureDescriptionFormat, format);
         }
+    }
 
-        if (validTime != null) {
-            throw new InvalidParameterValueException(DescribeSensorParams.validTime, validTime.toString());
+    /**
+     * Check that no valid time was requested.
+     *
+     * @param request the request
+     *
+     * @throws InvalidParameterValueException if a valid time was requested
+     */
+    private void checkValidTime(DescribeSensorRequest request) throws InvalidParameterValueException {
+        // we don't support valid times of sensors
+        if (request.getValidTime() != null) {
+            throw new InvalidParameterValueException(DescribeSensorParams.validTime,
+                                                     request.getValidTime().toString());
         }
+    }
 
-        String sensorDescription = this.sensorApiClient.getSensorML(procedure)
+    /**
+     * Retrieve the SensorML description from the Sensor API.
+     *
+     * @param identifier the identifier
+     *
+     * @return the XML description
+     *
+     * @throws OwsExceptionReport if the retrieval fails
+     */
+    private String retrieveSensorML(String identifier) throws OwsExceptionReport {
+        return this.sensorApiClient.getSensorML(identifier)
                 .orElseThrow(() -> new NoApplicableCodeException()
                 .withMessage("Could not retrieve sensor description"));
+    }
 
-        DescribeSensorResponse response = new DescribeSensorResponse();
-        response.setService(service);
-        response.setVersion(version);
-        response.setOutputFormat(SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL);
-        response.addSensorDescription(new SosProcedureDescriptionUnknownType(
-                procedure, SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL, sensorDescription));
-        return response;
+    /**
+     * Retrieve the SensorML description from the Sensor API and wrap it into an
+     * {@code SosProcedureDescriptionUnknownType}.
+     *
+     * @param request the request
+     *
+     * @return the description
+     *
+     * @throws OwsExceptionReport if the retrieval fails
+     */
+    private SosProcedureDescriptionUnknownType retrieveDescription(DescribeSensorRequest request) throws
+            OwsExceptionReport {
+        String sensorDescription = retrieveSensorML(request.getProcedure());
+        SosProcedureDescriptionUnknownType description = new SosProcedureDescriptionUnknownType(request.getProcedure());
+        description.setDescriptionFormat(SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL);
+        description.setXml(sensorDescription);
+        return description;
     }
 }

@@ -63,8 +63,8 @@
 
 
     <!-- dummy stuff -->
-    <bean class="org.n52.sensorweb.awi.sos.AWIFeatureQueryHandler"/>
-    <bean class="org.n52.sensorweb.awi.sos.NoopDataConnectionProvider"/>
+    <bean class="org.n52.sensorweb.awi.sos.DummyFeatureQueryHandler"/>
+    <bean class="org.n52.sensorweb.awi.sos.DummyDataConnectionProvider"/>
 
     <!-- import SOS configurations -->
     <import resource="classpath*:common-context.xml" />

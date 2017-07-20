@@ -26,11 +26,11 @@ import org.n52.sos.ds.FeatureQueryHandler;
 import org.n52.sos.ds.FeatureQueryHandlerQueryObject;
 
 /**
- * TODO JavaDoc
+ * Dummy implementation of {@link FeatureQueryHandler}.
  *
  * @author Christian Autermann
  */
-public class AWIFeatureQueryHandler implements FeatureQueryHandler {
+public class DummyFeatureQueryHandler implements FeatureQueryHandler {
 
     private static final int EPSG_4326 = 4326;
 
@@ -45,12 +45,14 @@ public class AWIFeatureQueryHandler implements FeatureQueryHandler {
     }
 
     @Override
-    public Map<String, AbstractFeature> getFeatures(FeatureQueryHandlerQueryObject queryObject) throws OwsExceptionReport {
+    public Map<String, AbstractFeature> getFeatures(FeatureQueryHandlerQueryObject queryObject)
+            throws OwsExceptionReport {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public ReferencedEnvelope getEnvelopeForFeatureIDs(FeatureQueryHandlerQueryObject queryObject) throws OwsExceptionReport {
+    public ReferencedEnvelope getEnvelopeForFeatureIDs(FeatureQueryHandlerQueryObject queryObject)
+            throws OwsExceptionReport {
         throw new UnsupportedOperationException();
     }
 
@@ -66,7 +68,7 @@ public class AWIFeatureQueryHandler implements FeatureQueryHandler {
 
     @Override
     public int getStorage3DEPSG() {
-        return EPSG_4326;
+        return -1;
     }
 
     @Override
@@ -76,7 +78,7 @@ public class AWIFeatureQueryHandler implements FeatureQueryHandler {
 
     @Override
     public int getDefaultResponse3DEPSG() {
-        return EPSG_4326;
+        return -1;
     }
 
     @Override

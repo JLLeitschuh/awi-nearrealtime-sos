@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
- * TODO JavaDoc
+ * {@code Provider} for {@code ObjectMapper}.
  *
  * @author Christian Autermann
  */
@@ -36,6 +36,11 @@ public class JSONConfiguration implements ContextResolver<ObjectMapper> {
 
     private final ObjectMapper mapper;
 
+    /**
+     * Creates a new JSONConfiguration using the specfied date format
+     *
+     * @param dateFormat the date format string
+     */
     public JSONConfiguration(String dateFormat) {
         this.mapper = new ObjectMapper();
         this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -47,10 +52,20 @@ public class JSONConfiguration implements ContextResolver<ObjectMapper> {
         this.mapper.setDateFormat(getDateFormat(dateFormat));
     }
 
+    /**
+     * Creates a new {@code JSONConfiguration}.
+     */
     public JSONConfiguration() {
         this("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     }
 
+    /**
+     * Get the date format.
+     *
+     * @param format the format string
+     *
+     * @return the date format
+     */
     private SimpleDateFormat getDateFormat(String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format);
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

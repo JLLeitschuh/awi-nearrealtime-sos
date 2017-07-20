@@ -25,11 +25,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * TODO JavaDoc
+ * Provider for {@link SSLContext} that does not validate certificates.
  *
  * @author Christian Autermann
  */
 public class NonValidatingSSLContextProvider implements Provider<SSLContext> {
+
     @Override
     public SSLContext get() {
         try {
@@ -41,6 +42,9 @@ public class NonValidatingSSLContextProvider implements Provider<SSLContext> {
         }
     }
 
+    /**
+     * X509 trust manager implemnetation that does not validate certificates.
+     */
     private static class NonValidatingTrustManager implements X509TrustManager {
         @Override
         public X509Certificate[] getAcceptedIssuers() {

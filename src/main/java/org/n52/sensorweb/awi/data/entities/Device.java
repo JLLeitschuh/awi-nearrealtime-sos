@@ -19,6 +19,11 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity for the {@code device} table.
+ *
+ * @author Christian Autermann
+ */
 public class Device implements Serializable {
     public static final String ID = "id";
     public static final String PLATFORM = "platform";
@@ -31,45 +36,94 @@ public class Device implements Serializable {
     private Platform platform;
     private String name;
     private String code;
-    private String urn;
     private Set<Sensor> sensors = new HashSet<>(0);
 
+    /**
+     * Get the id of this device.
+     *
+     * @return the id
+     */
     public int getId() {
         return this.id;
     }
 
+    /**
+     * Set the id of this device.
+     *
+     * @param id the id
+     */
     public void setId(int id) {
         this.id = id;
     }
 
+    /**
+     * Get the platform of this device
+     *
+     * @return the platform
+     */
     public Platform getPlatform() {
         return this.platform;
     }
 
+    /**
+     * Set the platform of this device.
+     *
+     * @param platform
+     */
     public void setPlatform(Platform platform) {
         this.platform = platform;
     }
 
+    /**
+     * Get the name of this device.
+     *
+     * @return the name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Set the name of this device.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get the code of this device.
+     *
+     * @return the code
+     */
     public String getCode() {
         return this.code;
     }
 
+    /**
+     * Set the code of this device.
+     *
+     * @param code the code
+     */
     public void setCode(String code) {
         this.code = code;
     }
 
+    /**
+     * Get the sensors of this device.
+     *
+     * @return the sensors
+     */
     public Set<Sensor> getSensors() {
         return this.sensors;
     }
 
+    /**
+     * Set the sensors of this device.
+     *
+     * @param sensors the sensors
+     */
     public void setSensors(Set<Sensor> sensors) {
         this.sensors = sensors;
     }

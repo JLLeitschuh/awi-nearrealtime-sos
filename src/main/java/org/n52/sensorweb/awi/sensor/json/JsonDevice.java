@@ -20,7 +20,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TODO JavaDoc
+ * POJO for a JSON device.
  *
  * @author Christian Autermann
  */

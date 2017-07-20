@@ -28,8 +28,6 @@ import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.Expedition;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
-import org.n52.sos.ds.hibernate.util.MoreRestrictions;
 import org.n52.shetland.ogc.gml.ReferenceType;
 import org.n52.shetland.ogc.gml.time.TimePeriod;
 import org.n52.shetland.ogc.om.OmConstants;
@@ -44,10 +42,12 @@ import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.FormatDescriptor
 import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.ObservationFormatDescriptor;
 import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.ProcedureDescriptionFormatDescriptor;
 import org.n52.sos.cache.SosContentCache;
+import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
+import org.n52.sos.ds.hibernate.util.MoreRestrictions;
 import org.n52.sos.gda.AbstractGetDataAvailabilityHandler;
 
 /**
- * TODO JavaDoc
+ * {@code GetDataAvailability} handler for the AWI Nearrealtime database.
  *
  * @author Christian Autermann
  */
@@ -62,6 +62,11 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
 
     private final SessionFactory sessionFactory;
 
+    /**
+     * Create a new {@code AWIGetDataAvailabilityHandler}.
+     *
+     * @param sessionFactory the session factory
+     */
     @Inject
     public AWIGetDataAvailabilityHandler(SessionFactory sessionFactory) {
         super(SosConstants.SOS);
@@ -80,8 +85,18 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
         return response;
     }
 
+    /**
+     * Get the data availabilities for the specified request.
+     *
+     * @param request the request
+     *
+     * @return the data availabilities
+     *
+     * @throws OwsExceptionReport in case an error occurs
+     */
     @SuppressWarnings("unchecked")
-    private List<DataAvailability> getDataAvailabilities(GetDataAvailabilityRequest request) throws OwsExceptionReport {
+    private List<DataAvailability> getDataAvailabilities(GetDataAvailabilityRequest request)
+            throws OwsExceptionReport {
         QueryContext ctx = QueryContext.forData();
 
         ObservationFilter filter = ObservationFilter.builder()
@@ -100,7 +115,6 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                                           (Date) tuple[5], // end
                                           (long) tuple[6]);  // count
         };
-
         Session session = sessionFactory.openSession();
         try {
             Criteria mobile = session.createCriteria(Data.class)
@@ -118,9 +132,12 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                             .add(Projections.max(Data.TIME))
                             .add(Projections.count(Data.VALUE)))
                     .add(Restrictions.isNull(ctx.getPlatformPath(Platform.GEOMETRY)))
-                    .add(Restrictions.leProperty(ctx.getExpeditionsPath(Expedition.BEGIN), ctx.getExpeditionsPath(Expedition.END)))
-                    .add(Restrictions.geProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.BEGIN)))
-                    .add(Restrictions.leProperty(ctx.getDataPath(Data.TIME), ctx.getExpeditionsPath(Expedition.END)));
+                    .add(Restrictions.leProperty(ctx.getExpeditionsPath(Expedition.BEGIN),
+                                                 ctx.getExpeditionsPath(Expedition.END)))
+                    .add(Restrictions.geProperty(ctx.getDataPath(Data.TIME),
+                                                 ctx.getExpeditionsPath(Expedition.BEGIN)))
+                    .add(Restrictions.leProperty(ctx.getDataPath(Data.TIME),
+                                                 ctx.getExpeditionsPath(Expedition.END)));
 
             Criteria stationary = session.createCriteria(Data.class)
                     .setComment("Getting stationary data availabilities")
@@ -157,7 +174,8 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
             }
 
             if (!filter.getProperties().isEmpty()) {
-                Stream.of(mobile, stationary).forEach(c -> c.add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter.getProperties())));
+                Stream.of(mobile, stationary)
+                        .forEach(c -> c.add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter.getProperties())));
             }
 
             return Stream.of(mobile, stationary)
@@ -216,8 +234,9 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                 .map(pattern::matcher)
                 .filter(Matcher::matches)
                 .map(x -> MoreRestrictions.and(
-                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
-                Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
+                        Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                        Optional.ofNullable(x.group(2))
+                                .map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
                 .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
     }
 }

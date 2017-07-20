@@ -20,7 +20,7 @@ import java.net.URI;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TODO JavaDoc
+ * POJO for a JSON type.
  *
  * @author Christian Autermann
  */

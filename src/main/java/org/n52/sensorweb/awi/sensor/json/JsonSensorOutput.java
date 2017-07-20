@@ -18,7 +18,7 @@ package org.n52.sensorweb.awi.sensor.json;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * TODO JavaDoc
+ * POJO for a JSON sensor output.
  *
  * @author Christian Autermann
  */

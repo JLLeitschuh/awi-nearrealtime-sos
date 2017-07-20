@@ -20,6 +20,9 @@ public class DelegatingTimerTask extends TimerTask {
         this.runnable = runnable;
     }
 
+    /**
+     * Executes the {@link Runnable} of this tasks.
+     */
     @Override
     public void run() {
         this.runnable.run();

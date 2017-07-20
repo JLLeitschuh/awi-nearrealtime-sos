@@ -6,7 +6,7 @@ import java.util.Date;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * TODO JavaDoc
+ * Entity for the {@code dataview} table.
  *
  * @author Christian Autermann
  */
@@ -18,60 +18,106 @@ public class Data implements Serializable {
     public static final String GEOMETRY = "geometry";
 
     private static final long serialVersionUID = 2023558780951333945L;
-    private String code;
     private Date time;
     private double value;
     private Sensor sensor;
     private Geometry geometry;
 
+    /**
+     * Get the time of this data point.
+     *
+     * @return the time
+     */
     public Date getTime() {
         return time;
     }
 
+    /**
+     * Set the time of this data point.
+     *
+     * @param time the time
+     */
     public void setTime(Date time) {
         this.time = time;
     }
 
+    /**
+     * Get the value of this data point.
+     *
+     * @return the value
+     */
     public double getValue() {
         return value;
     }
 
+    /**
+     * Set the value of this data point.
+     *
+     * @param value the value
+     */
     public void setValue(double value) {
         this.value = value;
     }
 
+    /**
+     * Get the sensor of this data point.
+     *
+     * @return the sensor
+     */
     public Sensor getSensor() {
         return sensor;
     }
 
+    /**
+     * Set the sensor of this data point
+     *
+     * @param sensor the sensor
+     */
     public void setSensor(Sensor sensor) {
         this.sensor = sensor;
     }
 
+    /**
+     * Get the device of this data point.
+     *
+     * @return the device
+     */
     public Device getDevice() {
         return getSensor().getDevice();
     }
 
+    /**
+     * Get the platform of this data point.
+     *
+     * @return the platform
+     */
     public Platform getPlatform() {
         return getDevice().getPlatform();
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
+    /**
+     * Get the geometry of this data point.
+     *
+     * @return the geometry
+     */
     public Geometry getGeometry() {
         return geometry;
     }
 
+    /**
+     * Set the geometry of this data point
+     *
+     * @param geometry the geometry
+     */
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
 
+    /**
+     * Check if this data points is observed by a mobile platform.
+     *
+     * @return if this data points is observed by a mobile platform.
+     */
     public boolean isMobile() {
         return getSensor().getDevice().getPlatform().isMobile();
     }

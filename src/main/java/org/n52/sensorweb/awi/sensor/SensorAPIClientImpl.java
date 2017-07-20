@@ -31,9 +31,8 @@ import org.n52.sensorweb.awi.util.web.JSONConfiguration;
 import org.n52.sensorweb.awi.util.web.LoggingFilter;
 import org.n52.sensorweb.awi.util.web.UserAgentFilter;
 
-
 /**
- * TODO JavaDoc
+ * JAX-RS implementation of {@link SensorAPIClient}.
  *
  * @author Christian Autermann
  */
@@ -41,6 +40,11 @@ public class SensorAPIClientImpl implements SensorAPIClient {
     private final SensorAPI api;
     private final ResteasyClient client;
 
+    /**
+     * Creates a new {@link SensorAPIClient}.
+     *
+     * @param uri the base URI of the API
+     */
     public SensorAPIClientImpl(URI uri) {
         LightweightBrowserCache cache = new LightweightBrowserCache();
         cache.setMaxBytes(1024 * 1024 * 50);

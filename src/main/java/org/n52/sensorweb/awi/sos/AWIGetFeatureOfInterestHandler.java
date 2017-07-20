@@ -53,7 +53,6 @@ import org.n52.sensorweb.awi.data.entities.Device;
 import org.n52.sensorweb.awi.data.entities.ExpeditionGeometry;
 import org.n52.sensorweb.awi.data.entities.Platform;
 import org.n52.sensorweb.awi.data.entities.Sensor;
-import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.shetland.ogc.filter.SpatialFilter;
 import org.n52.shetland.ogc.gml.AbstractFeature;
 import org.n52.shetland.ogc.gml.CodeWithAuthority;
@@ -73,6 +72,7 @@ import org.n52.shetland.ogc.sos.response.GetFeatureOfInterestResponse;
 import org.n52.shetland.ogc.swe.RangeValue;
 import org.n52.sos.cache.SosContentCache;
 import org.n52.sos.ds.AbstractGetFeatureOfInterestHandler;
+import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
 
 import com.vividsolutions.jts.geom.Geometry;

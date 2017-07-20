@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
 import org.n52.janmayen.function.Functions;
 
 /**
- * TODO JavaDoc
+ * JAX-RS filter that logs requests and responses.
  *
  * @author Christian Autermann
  */
@@ -74,6 +74,9 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
     private final AtomicLong id = new AtomicLong(0);
     private final int maxEntitySize = 0;
 
+    /**
+     * Creates a new {@code LoggingFilter}.
+     */
     public LoggingFilter() {
     }
 

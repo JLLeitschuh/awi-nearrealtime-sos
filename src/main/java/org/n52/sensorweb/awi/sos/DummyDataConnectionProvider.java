@@ -19,11 +19,11 @@ import org.n52.iceland.ds.ConnectionProviderException;
 import org.n52.iceland.ds.DataConnectionProvider;
 
 /**
- * TODO JavaDoc
+ * Dummy implementation of {@link DataConnectionProvider}.
  *
  * @author Christian Autermann
  */
-public class NoopDataConnectionProvider implements DataConnectionProvider {
+public class DummyDataConnectionProvider implements DataConnectionProvider {
 
     @Override
     public Object getConnection() throws ConnectionProviderException {

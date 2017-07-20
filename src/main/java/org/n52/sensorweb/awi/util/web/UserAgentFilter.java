@@ -24,7 +24,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
 
 /**
- * TODO JavaDoc
+ * {@code ClientRequestFilter} that adds a configurable {@code User-Agent} header to every request.
  *
  * @author Christian Autermann
  */
@@ -33,6 +33,11 @@ public class UserAgentFilter implements ClientRequestFilter {
 
     private final String userAgent;
 
+    /**
+     * Create a new {@code UserAgentFilter}.
+     *
+     * @param userAgent the value of the {@code User-Agent} header
+     */
     public UserAgentFilter(String userAgent) {
         this.userAgent = Objects.requireNonNull(userAgent);
     }

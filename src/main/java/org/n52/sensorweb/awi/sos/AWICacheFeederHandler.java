@@ -59,9 +59,6 @@ import org.n52.sensorweb.awi.sensor.SensorAPIClient;
 import org.n52.sensorweb.awi.sensor.json.JsonDevice;
 import org.n52.sensorweb.awi.sensor.json.JsonSensorOutput;
 import org.n52.sensorweb.awi.util.SpaceTimeEnvelope;
-import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
-import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
-import org.n52.sos.ds.hibernate.util.PropertyPath;
 import org.n52.shetland.ogc.om.OmConstants;
 import org.n52.shetland.ogc.om.features.SfConstants;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
@@ -72,13 +69,16 @@ import org.n52.sos.cache.SosContentCache.ComponentAggregation;
 import org.n52.sos.cache.SosContentCache.TypeInstance;
 import org.n52.sos.cache.SosWritableContentCache;
 import org.n52.sos.ds.CacheFeederHandler;
+import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
+import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
+import org.n52.sos.ds.hibernate.util.PropertyPath;
 
 import com.google.common.base.Strings;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
 /**
- * TODO JavaDoc
+ * {@link CacheFeederHandler} for the AWI Nearrealtime database.
  *
  * @author Christian Autermann
  */
@@ -90,15 +90,22 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
     private static final String PROCEDURE_DESCRIPTION_TYPE = SensorML20Constants.SENSORML_20_OUTPUT_FORMAT_URL;
     private static final String FEATURE_ROLE = SfConstants.SAMPLING_FEAT_TYPE_SF_SPATIAL_SAMPLING_FEATURE;
 
-    private final FeatureCache expeditionDao;
+    private final FeatureCache featureCache;
     private final SensorAPIClient sensorApiClient;
 
+    /**
+     * Create a new {@code AWICacheFeederHandler}.
+     *
+     * @param sessionFactory  the session factory
+     * @param featureCache    the feature cache
+     * @param sensorAPIClient the sensor API client
+     */
     @Inject
     public AWICacheFeederHandler(SessionFactory sessionFactory,
-                                 FeatureCache expeditionDao,
+                                 FeatureCache featureCache,
                                  SensorAPIClient sensorAPIClient) {
         super(sessionFactory);
-        this.expeditionDao = expeditionDao;
+        this.featureCache = featureCache;
         this.sensorApiClient = sensorAPIClient;
     }
 
@@ -130,6 +137,13 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         cache.setLastUpdateTime(DateTime.now());
     }
 
+    /**
+     * Add the procedure to the cache.
+     *
+     * @param cache     the cache
+     * @param procedure the procedure
+     * @param envelopes the collection of all envelopes
+     */
     private void addProcedure(SosWritableContentCache cache,
                               NRTProcedure procedure,
                               Map<String, SpaceTimeEnvelope> envelopes) {
@@ -201,6 +215,15 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         procedure.getChildren().forEach(child -> addProcedure(cache, child, envelopes));
     }
 
+    /**
+     * Get the envelope for the specified procedure. This will check if the procedure has an envelope, if it's children
+     * have envelopes and if it's parents have envelopes.
+     *
+     * @param envelopes   the envelopes
+     * @param procedureId the procedure identifier
+     *
+     * @return the envelope
+     */
     private Optional<SpaceTimeEnvelope> getEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedureId) {
         return Optionals.or(
                 () -> Optional.ofNullable(envelopes.get(procedureId)),
@@ -208,6 +231,14 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                 () -> getParentEnvelope(envelopes, procedureId));
     }
 
+    /**
+     * Get the envelope for all children of the specified procedure.
+     *
+     * @param envelopes all envelopes
+     * @param procedure the procedure
+     *
+     * @return the envelope
+     */
     private Optional<SpaceTimeEnvelope> getChildEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedure) {
         return Optional.of(envelopes.entrySet().stream()
                 .filter(e -> e.getKey().startsWith(procedure))
@@ -218,10 +249,25 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                 .filter(Predicates.not(SpaceTimeEnvelope::isEmpty));
     }
 
+    /**
+     * Get the envelope of the parent of this procedure.
+     *
+     * @param envelopes all envelopes
+     * @param procedure the procedure
+     *
+     * @return the envelope
+     */
     private Optional<SpaceTimeEnvelope> getParentEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedure) {
         return getParentProcedure(procedure).flatMap(parent -> getEnvelope(envelopes, parent));
     }
 
+    /**
+     * Get the parent procedure from the procedure identifier.
+     *
+     * @param procedure the identifier
+     *
+     * @return the parent procedure
+     */
     private Optional<String> getParentProcedure(String procedure) {
         int idx = procedure.lastIndexOf(':');
         if (idx > 0 && idx < procedure.length() - 1) {
@@ -231,9 +277,16 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         }
     }
 
+    /**
+     * Get the features of interest for the specified procedure.
+     *
+     * @param procedure the procedure
+     *
+     * @return the features of interest
+     */
     private Set<String> getFeaturesOfInterest(NRTProcedure procedure) {
         String platform = procedure.getPlatform().getId();
-        Set<String> featureIds = this.expeditionDao.getFeatureIds(platform);
+        Set<String> featureIds = this.featureCache.getFeatureIds(platform);
         if (featureIds.isEmpty()) {
             return Collections.singleton(platform);
         } else {
@@ -241,6 +294,11 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         }
     }
 
+    /**
+     * Get the spatio-temporal envelope for all procedures with data in the database.
+     *
+     * @return the envelopes
+     */
     public Map<String, SpaceTimeEnvelope> getEnvelopes() {
         QueryContext ctx = QueryContext.forData();
 
@@ -298,6 +356,14 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         });
     }
 
+    /**
+     * Create a child procedure out of the device.
+     *
+     * @param device the device
+     * @param parent the parent procedure
+     *
+     * @return the procedure
+     */
     private NRTProcedure createProcedure(JsonDevice device, NRTProcedure parent) {
         if (device.getUrn() == null) {
             return null;
@@ -313,11 +379,27 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         return procedure;
     }
 
+    /**
+     * Create child procedures from the stream of devices.
+     *
+     * @param stream the stream of child devices
+     * @param parent the parent procedure
+     *
+     * @return the stream of procedures
+     */
     private Stream<NRTProcedure> getProcedures(Stream<JsonDevice> stream, NRTProcedure parent) {
         return stream.map(child -> createProcedure(child, parent))
                 .filter(p -> p != null && !(p.getChildren().isEmpty() && p.getOutputs().isEmpty()));
     }
 
+    /**
+     * Checks if the procedure {@code p} has data in the database.
+     *
+     * @param p              the procedure
+     * @param dataProcedures the procedure identifiers with data
+     *
+     * @return the procedure
+     */
     private Optional<NRTProcedure> hasData(NRTProcedure p, Set<String> dataProcedures) {
         String id = p.getId();
         if (dataProcedures.contains(id)) {
@@ -344,6 +426,12 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         return Optional.of(filteredProcedure);
     }
 
+    /**
+     * Get the procedures that have a SensorML description in the sensor API as well as data in the database. Including
+     * any parent procedures whose children have data.
+     *
+     * @return the procedures
+     */
     private Set<NRTProcedure> getProcedures() {
         Set<String> dataProcedures = getDbProcedures()
                 .stream().map(NRTProcedure::getId).collect(toSet());
@@ -355,6 +443,11 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                 .collect(toSet());
     }
 
+    /**
+     * Get the procedures from the database.
+     *
+     * @return the procedures
+     */
     @SuppressWarnings("unchecked")
     private List<NRTProcedure> getDbProcedures() {
         QueryContext ctx = QueryContext.forSensor();
@@ -388,12 +481,22 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                 .map(this::toProcedureOutput).collect(toSet());
     }
 
+    /**
+     * Create a {@code NRTProcedureOutput} for the {@code JsonSensorOutput}.
+     *
+     * @param o the sensor output
+     *
+     * @return the procedure output
+     */
     private NRTProcedureOutput toProcedureOutput(JsonSensorOutput o) {
         NRTUnit unit = new NRTUnit(o.getUnitOfMeasurement().getLongName(),
                                    o.getUnitOfMeasurement().getCode());
         return new NRTProcedureOutput(o.getCode(), o.getName(), unit);
     }
 
+    /**
+     * A procedure that can have a parent procedure and multiple child procedures and outputs.
+     */
     private static class NRTProcedure {
 
         private final String id;
@@ -404,6 +507,16 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         private Set<NRTProcedure> children = Collections.emptySet();
         private final Set<NRTProcedureOutput> outputs;
 
+        /**
+         * Create a new {@code NRTProcedure}.
+         *
+         * @param id          the id
+         * @param shortName   the short name
+         * @param longName    the long name
+         * @param description the description
+         * @param parent      the parent procedure
+         * @param outputs     the outputs of this procedure
+         */
         NRTProcedure(String id, String shortName, String longName, String description, NRTProcedure parent,
                      Set<NRTProcedureOutput> outputs) {
             this.id = Objects.requireNonNull(Strings.emptyToNull(id));
@@ -414,10 +527,20 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
             this.outputs = Optional.ofNullable(outputs).orElseGet(Collections::emptySet);
         }
 
+        /**
+         * Get the parent of this procedure.
+         *
+         * @return the parent
+         */
         Optional<NRTProcedure> getParent() {
             return this.parent;
         }
 
+        /**
+         * Get the platform of this procedure.
+         *
+         * @return the platform
+         */
         NRTProcedure getPlatform() {
             NRTProcedure elem = this;
             while (elem.getParent().isPresent()) {
@@ -426,73 +549,152 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
             return elem;
         }
 
+        /**
+         * Get the children of this procedure.
+         *
+         * @return the children
+         */
         Set<NRTProcedure> getChildren() {
             return Collections.unmodifiableSet(this.children);
         }
 
+        /**
+         * Set the children of this procedure-
+         *
+         * @param children the children
+         */
         void setChildren(Set<NRTProcedure> children) {
             this.children = Optional.ofNullable(children).orElseGet(Collections::emptySet);
         }
 
+        /**
+         * Get the outputs of this procedure.
+         *
+         * @return the outputs
+         */
         Set<NRTProcedureOutput> getOutputs() {
             return Collections.unmodifiableSet(this.outputs);
         }
 
+        /**
+         * Get the id of this procedure.
+         *
+         * @return the id
+         */
         String getId() {
             return id;
         }
 
+        /**
+         * Get the long name of this procedure.
+         *
+         * @return the long name
+         */
         Optional<String> getLongName() {
             return longName;
         }
 
+        /**
+         * Get the short name of this procedure.
+         *
+         * @return the short name
+         */
         Optional<String> getShortName() {
             return shortName;
         }
 
+        /**
+         * Get the description of this procedure.
+         *
+         * @return the description
+         */
         Optional<String> getDescription() {
             return description;
         }
     }
 
+    /**
+     * The output of an procudure.
+     */
     private static class NRTProcedureOutput {
         private final String code;
         private final String name;
         private final NRTUnit unit;
 
+        /**
+         * Create a new {@code NRTProcedureOutput}.
+         *
+         * @param code the code
+         * @param name the name
+         * @param unit the unit
+         */
         NRTProcedureOutput(String code, String name, NRTUnit unit) {
             this.code = code;
             this.name = name;
             this.unit = unit;
         }
 
+        /**
+         * Get the name.
+         *
+         * @return the name
+         */
         String getName() {
             return name;
         }
 
+        /**
+         * Get the unit.
+         *
+         * @return the unit
+         */
         NRTUnit getUnit() {
             return unit;
         }
 
+        /**
+         * Get the code.
+         *
+         * @return the code
+         */
         String getCode() {
             return code;
         }
     }
 
+    /**
+     * The unit of an output.
+     */
     private static class NRTUnit {
 
         private final String name;
         private final String unit;
 
+        /**
+         * Create a new unit.
+         *
+         * @param name the name
+         * @param unit the unit
+         */
         NRTUnit(String name, String unit) {
             this.name = name;
             this.unit = unit;
         }
 
+        /**
+         * Get the name.
+         *
+         * @return the name
+         */
         String getName() {
             return name;
         }
 
+        /**
+         * Get the unit.
+         *
+         * @return the unit
+         */
         String getUnit() {
             return unit;
         }

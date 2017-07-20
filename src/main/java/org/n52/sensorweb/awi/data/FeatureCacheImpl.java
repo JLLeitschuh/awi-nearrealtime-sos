@@ -28,7 +28,8 @@ import org.n52.sensorweb.awi.util.DelegatingTimerTask;
 import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
 
 /**
- * TODO JavaDoc
+ * {@code FeatureCache} implemnetation that reads all feature identifiers from the database and keeps the in an
+ * {@link IntervalMap}.
  *
  * @author Christian Autermann
  */
@@ -39,6 +40,12 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
     private Map<String, Set<String>> byPlatform;
     private Map<String, IntervalMap<DateTime, String>> byTime;
 
+    /**
+     * Creates a new {@code FeatureCache}.
+     *
+     * @param sessionFactory the session factory
+     * @param updateInterval the interval to update the cache
+     */
     public FeatureCacheImpl(SessionFactory sessionFactory, long updateInterval) {
         super(sessionFactory);
         this.updateInterval = updateInterval;
@@ -68,10 +75,16 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         }
     }
 
+    /**
+     * Get a stream of feature identifiers for the specified platform.
+     *
+     * @param platform the platform
+     *
+     * @return the feature identifiers
+     */
     private Stream<String> getByPlatform(String platform) {
         this.lock.readLock().lock();
         try {
-
             return this.byPlatform.getOrDefault(platform, Collections.singleton(platform)).stream();
         } finally {
             this.lock.readLock().unlock();
@@ -87,6 +100,9 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         }
     }
 
+    /**
+     * Update the cache and schedule a new update.
+     */
     private void updateAndSchedule() {
         try {
             update();
@@ -95,6 +111,9 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         }
     }
 
+    /**
+     * Update the cache.
+     */
     private void update() {
         this.lock.writeLock().lock();
         try {
@@ -104,7 +123,7 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
             this.byTime = expeditions.stream()
                     .collect(groupingBy(Expedition::getPlatform, Collector.of(HashSet::new, Set::add,
                                                                               Functions.mergeLeft(Set::addAll),
-                                                                              this::createIntervalTree)));
+                                                                              this::createIntervalMap)));
             this.byPlatform = expeditions.stream()
                     .collect(groupingBy(Expedition::getPlatform, mapping(Expedition::getName, toSet())));
         } finally {
@@ -112,7 +131,14 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         }
     }
 
-    private IntervalMap<DateTime, String> createIntervalTree(Set<Expedition> t) {
+    /**
+     * Create a {@link IntervalMap} for the expeditions.
+     *
+     * @param t the expeditions
+     *
+     * @return the interval map
+     */
+    private IntervalMap<DateTime, String> createIntervalMap(Set<Expedition> t) {
         IntervalTree<DateTime, String> tree = new IntervalTree<>();
         t.stream().filter(Expedition::isValid)
                 .forEach(feature -> tree.add(new DateTime(feature.getBegin()),
