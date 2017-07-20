@@ -367,6 +367,10 @@
     "operation.gda.forceValueCount" : {
       "type" : "boolean",
       "value" : false
+    },
+    "service.cacheFileFolder" : {
+      "type" : "file",
+      "value" : null
     }
   },
   "capabiltiesExtensions" : { },
