@@ -83,12 +83,12 @@
         <version.javax.servlet>3.1.0</version.javax.servlet>
         <version.javax.ws.rs>2.0.1</version.javax.ws.rs>
         <version.jboss.logging>3.1.4.GA</version.jboss.logging>
-        <version.joda>2.9.4</version.joda>
+        <version.joda>2.9.9</version.joda>
         <version.jts>1.13</version.jts>
         <version.logback>1.1.7</version.logback>
         <version.resteasy>3.0.18.Final</version.resteasy>
-        <version.slf4j>1.7.21</version.slf4j>
-        <version.spring>4.2.3.RELEASE</version.spring>
+        <version.slf4j>1.7.25</version.slf4j>
+        <version.spring>4.3.10.RELEASE</version.spring>
         <version.xml.apis>1.4.01</version.xml.apis>
         
         <jetty.port.http>3000</jetty.port.http>
