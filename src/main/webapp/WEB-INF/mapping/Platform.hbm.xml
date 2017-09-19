@@ -11,10 +11,6 @@
             <formula>ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)</formula>
         </property>
         <property name="published" type="boolean" column="public" />
-        <set name="devices" table="device" where="code is not null" fetch="join" lazy="false">
-            <key column="platform_id" />
-            <one-to-many class="Device" />
-        </set>
         <set name="expeditions" table="v_expedition" where="begin_date &lt;= end_date" fetch="select" lazy="true">
             <key column="platform_id" />
             <one-to-many class="Expedition" />

@@ -275,7 +275,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     /**
      * Create a O&amp;M Observation for the data object.
      *
-     * @param data         the data object
+     * @param data the data object
      *
      * @return the observation
      */
@@ -318,9 +318,9 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         observation.setValue(observationValue);
 
         if (platform.isMobile()) {
-            GeometryValue parameterValue = new GeometryValue(data.getGeometry());
-            ReferenceType parameterName = new ReferenceType(Sos2Constants.HREF_PARAMETER_SPATIAL_FILTERING_PROFILE);
-            observation.addParameter(new NamedValue<>(parameterName, parameterValue));
+            observation.addParameter(new NamedValue<>(
+                    new ReferenceType(Sos2Constants.HREF_PARAMETER_SPATIAL_FILTERING_PROFILE),
+                    new GeometryValue(data.getGeometry())));
         }
 
         return observation;
@@ -357,10 +357,11 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         return urns.stream()
                 .map(pattern::matcher)
                 .filter(Matcher::matches)
-                .map(x -> MoreRestrictions.and(
-                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
-                Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
-                .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
+                .map(x -> MoreRestrictions.and(Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                                               Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(toDisjunction());
     }
 
     /**

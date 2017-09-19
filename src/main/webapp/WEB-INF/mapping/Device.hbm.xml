@@ -8,10 +8,6 @@
         </many-to-one>
         <property name="name" type="string" column="device" />
         <property name="code" type="string" column="code" />
-        <set name="sensors" table="sensor" where="code is not null" fetch="join" lazy="false">
-            <key column="device_id" />
-            <one-to-many class="Sensor" />
-        </set>
     </class>
 </hibernate-mapping>
 

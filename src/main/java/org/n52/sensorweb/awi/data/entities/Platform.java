@@ -31,7 +31,6 @@ public class Platform implements Serializable {
     public static final String NAME = "name";
     public static final String CODE = "code";
     public static final String GEOMETRY = "geometry";
-    public static final String DEVICES = "devices";
     public static final String EXPEDITIONS = "expeditions";
     public static final String PUBLISHED = "published";
 
@@ -40,7 +39,6 @@ public class Platform implements Serializable {
     private String name;
     private String code;
     private Geometry geometry;
-    private Set<Device> devices = new HashSet<>(0);
     private Set<Expedition> expeditions = new HashSet<>(0);
     private boolean published;
 
@@ -96,24 +94,6 @@ public class Platform implements Serializable {
      */
     public void setCode(String code) {
         this.code = code;
-    }
-
-    /**
-     * Get the devices of this platform.
-     *
-     * @return the devices
-     */
-    public Set<Device> getDevices() {
-        return this.devices;
-    }
-
-    /**
-     * Set the devices of this platform.
-     *
-     * @param devices the devices
-     */
-    public void setDevices(Set<Device> devices) {
-        this.devices = devices;
     }
 
     /**

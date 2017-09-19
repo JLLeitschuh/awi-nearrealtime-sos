@@ -16,8 +16,6 @@
 package org.n52.sensorweb.awi.data.entities;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Entity for the {@code device} table.
@@ -29,14 +27,12 @@ public class Device implements Serializable {
     public static final String PLATFORM = "platform";
     public static final String NAME = "name";
     public static final String CODE = "code";
-    public static final String SENSORS = "sensors";
 
     private static final long serialVersionUID = -5686273001528029648L;
     private int id;
     private Platform platform;
     private String name;
     private String code;
-    private Set<Sensor> sensors = new HashSet<>(0);
 
     /**
      * Get the id of this device.
@@ -108,24 +104,6 @@ public class Device implements Serializable {
      */
     public void setCode(String code) {
         this.code = code;
-    }
-
-    /**
-     * Get the sensors of this device.
-     *
-     * @return the sensors
-     */
-    public Set<Sensor> getSensors() {
-        return this.sensors;
-    }
-
-    /**
-     * Set the sensors of this device.
-     *
-     * @param sensors the sensors
-     */
-    public void setSensors(Set<Sensor> sensors) {
-        this.sensors = sensors;
     }
 
 }
