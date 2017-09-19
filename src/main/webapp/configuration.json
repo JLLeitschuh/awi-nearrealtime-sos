@@ -226,7 +226,7 @@
     },
     "service.serviceURL" : {
       "type" : "uri",
-      "value" : "https://sos.awi.de/SOS"
+      "value" : "https://sos.awi.de/SOS/service"
     },
     "misc.srsNamePrefixSosV1" : {
       "type" : "string",
