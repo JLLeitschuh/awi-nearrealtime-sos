@@ -105,7 +105,22 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                 .setOfferings(request.getOfferings())
                 .setProperties(request.getObservedProperties())
                 .build();
+
         SosContentCache cache = getCache();
+
+        Set<String> features = filter.getFeatures().isEmpty()
+                                       ? cache.getFeaturesOfInterest()
+                                       : filter.getFeatures();
+        Set<String> procedures = filter.getProcedures().isEmpty()
+                                         ? cache.getProcedures()
+                                         : filter.getProcedures();
+        Set<String> offerings = filter.getOfferings().isEmpty()
+                                        ? cache.getOfferings()
+                                        : filter.getOfferings();
+        Set<String> properties = filter.getProperties().isEmpty()
+                                         ? cache.getObservableProperties()
+                                         : filter.getProperties();
+
         DefaultResultTransfomer<DataAvailability> transformer = tuple -> {
             return createDataAvailability((String) tuple[0], // platform
                                           (String) tuple[1], // platformName
@@ -164,29 +179,17 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                             .add(Projections.count(Data.VALUE)))
                     .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)));
 
-            Stream.of(mobile, stationary).forEach(criteria ->
-                criteria.add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
-                        .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
-                        .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
-                        .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true)));
+            Stream.of(mobile, stationary).forEach(criteria
+                    -> criteria.add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                            .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                            .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
+                            .add(getProcedureCriterion(procedures, ctx))
+                            .add(getProcedureCriterion(offerings, ctx))
+                            .add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), properties)));
 
-            if (!filter.getFeatures().isEmpty()) {
-                stationary.add(Restrictions.in(ctx.getPlatformPath(Platform.CODE), filter.getFeatures()));
-                mobile.add(Restrictions.in(ctx.getExpeditionsPath(Expedition.NAME), filter.getFeatures()));
-            }
-
-            if (!filter.getProcedures().isEmpty()) {
-                Stream.of(mobile, stationary).forEach(c -> c.add(getProcedureCriterion(filter.getProcedures(), ctx)));
-            }
-
-            if (!filter.getOfferings().isEmpty()) {
-                Stream.of(mobile, stationary).forEach(c -> c.add(getProcedureCriterion(filter.getOfferings(), ctx)));
-            }
-
-            if (!filter.getProperties().isEmpty()) {
-                Stream.of(mobile, stationary)
-                        .forEach(c -> c.add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter.getProperties())));
-            }
+            stationary.add(Restrictions.in(ctx.getPlatformPath(Platform.CODE), features));
+            mobile.add(Restrictions.in(ctx.getExpeditionsPath(Expedition.NAME), features));
 
             return Stream.of(mobile, stationary)
                     .map(Functions.currySecond(Criteria::setReadOnly, true))
