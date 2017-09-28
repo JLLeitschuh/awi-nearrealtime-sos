@@ -11,10 +11,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
+
+import javax.inject.Singleton;
 
 import org.hibernate.SessionFactory;
 import org.joda.time.DateTime;
@@ -33,6 +36,7 @@ import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
  *
  * @author Christian Autermann
  */
+@Singleton
 public class FeatureCacheImpl extends AbstractSessionDao implements Constructable, FeatureCache {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private final long updateInterval;
@@ -107,7 +111,8 @@ public class FeatureCacheImpl extends AbstractSessionDao implements Constructabl
         try {
             update();
         } finally {
-            this.timer.schedule(new DelegatingTimerTask(this::updateAndSchedule), this.updateInterval);
+            long delay = TimeUnit.MINUTES.toMillis(this.updateInterval);
+            this.timer.schedule(new DelegatingTimerTask(this::updateAndSchedule), delay);
         }
     }
 
