@@ -18,7 +18,6 @@ package org.n52.sensorweb.awi.sos;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
@@ -33,6 +32,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
@@ -400,30 +400,19 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
      *
      * @return the procedure
      */
-    private Optional<NRTProcedure> hasData(NRTProcedure p, Set<String> dataProcedures) {
+    private boolean hasData(NRTProcedure p, Map<String, Set<String>> dataProcedures) {
         String id = p.getId();
-        if (dataProcedures.contains(id)) {
-            return Optional.of(p);
+
+        if (!dataProcedures.containsKey(id)) {
+            p.clearOutputs();
+        } else {
+            Set<String> outputs = dataProcedures.get(id);
+            p.filterOutputs(output -> outputs.contains(output.getCode()));
         }
 
-        Set<NRTProcedure> filteredChildren = p.getChildren().stream()
-                .map(Functions.currySecond(this::hasData, dataProcedures))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(toSet());
+        p.filterChildren(child -> hasData(child, dataProcedures));
 
-        if (filteredChildren.isEmpty()) {
-            return Optional.empty();
-        }
-
-        NRTProcedure filteredProcedure = new NRTProcedure(p.getId(),
-                                                          p.getShortName().orElse(null),
-                                                          p.getLongName().orElse(null),
-                                                          p.getDescription().orElse(null),
-                                                          p.getParent().orElse(null),
-                                                          p.getOutputs());
-        filteredProcedure.setChildren(filteredChildren);
-        return Optional.of(filteredProcedure);
+        return !p.getChildren().isEmpty() || !p.getOutputs().isEmpty();
     }
 
     /**
@@ -433,23 +422,20 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
      * @return the procedures
      */
     private Set<NRTProcedure> getProcedures() {
-        Set<String> dataProcedures = getDbProcedures()
-                .stream().map(NRTProcedure::getId).collect(toSet());
+        Map<String, Set<String>> dataProcedures = getDbProcedures();
         List<JsonDevice> platforms = this.sensorApiClient.getPlatforms();
         return getProcedures(platforms.stream(), null)
-                .map(Functions.currySecond(this::hasData, dataProcedures))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .filter(p -> hasData(p, dataProcedures))
                 .collect(toSet());
     }
 
     /**
      * Get the procedures from the database.
      *
-     * @return the procedures
+     * @return the procedures and their outputs
      */
     @SuppressWarnings("unchecked")
-    private List<NRTProcedure> getDbProcedures() {
+    private Map<String, Set<String>> getDbProcedures() {
         QueryContext ctx = QueryContext.forSensor();
         return query((Session session) -> {
             Criteria c = session.createCriteria(Sensor.class)
@@ -464,15 +450,11 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                     .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
                     .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
                     .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true));
-            return ((List<Object[]>) c.list()).stream()
-                    .collect(groupingBy(
+            return ((List<Object[]>) c.list())
+                    .stream().collect(groupingBy(
                             t -> Arrays.stream(t, 0, 2).map(String::valueOf).map(String::toLowerCase)
                                     .collect(joining(":")),
-                            mapping(t -> (String) t[2], mapping(o -> new NRTProcedureOutput(o, null, null), toSet()))))
-                    .entrySet()
-                    .stream()
-                    .map(e -> new NRTProcedure(e.getKey(), null, null, null, null, e.getValue()))
-                    .collect(toList());
+                            mapping(t -> (String) t[2], toSet())));
         });
     }
 
@@ -505,7 +487,7 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         private final Optional<String> description;
         private final Optional<NRTProcedure> parent;
         private Set<NRTProcedure> children = Collections.emptySet();
-        private final Set<NRTProcedureOutput> outputs;
+        private Set<NRTProcedureOutput> outputs;
 
         /**
          * Create a new {@code NRTProcedure}.
@@ -574,6 +556,22 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
          */
         Set<NRTProcedureOutput> getOutputs() {
             return Collections.unmodifiableSet(this.outputs);
+        }
+
+        void clearOutputs() {
+            this.outputs = Collections.emptySet();
+        }
+
+        void filterOutputs(Predicate<NRTProcedureOutput> predicate) {
+            if (!this.outputs.isEmpty()) {
+                this.outputs.removeIf(predicate.negate());
+            }
+        }
+
+        void filterChildren(Predicate<NRTProcedure> predicate) {
+            if (!this.children.isEmpty()) {
+                this.children.removeIf(predicate.negate());
+            }
         }
 
         /**
