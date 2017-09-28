@@ -46,7 +46,7 @@
 
     <bean id="featureCache" class="org.n52.sensorweb.awi.data.FeatureCacheImpl">
         <constructor-arg ref="sessionFactory" />
-        <constructor-arg name="updateInterval" value="-1" />
+        <constructor-arg name="updateInterval" value="120" />
     </bean>
 
     <bean class="org.n52.sensorweb.awi.sensor.SensorAPIClientImpl">
