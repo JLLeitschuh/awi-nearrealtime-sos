@@ -108,12 +108,16 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
         SosContentCache cache = getCache();
         DefaultResultTransfomer<DataAvailability> transformer = tuple -> {
             return createDataAvailability((String) tuple[0], // platform
-                                          (String) tuple[1], // device
-                                          (String) tuple[2], // sensor
-                                          (String) tuple[3], // feature
-                                          (Date) tuple[4], // begin
-                                          (Date) tuple[5], // end
-                                          (long) tuple[6]);  // count
+                                          (String) tuple[1], // platformName
+                                          (String) tuple[2], // device
+                                          (String) tuple[3], // device
+                                          (String) tuple[4], // sensor
+                                          (String) tuple[5], // sensorName
+                                          (String) tuple[6], // feature
+                                          (String) tuple[6], // featureName
+                                          (Date) tuple[7], // begin
+                                          (Date) tuple[8], // end
+                                          (long) tuple[9]);  // count
         };
         Session session = sessionFactory.openSession();
         try {
@@ -125,8 +129,11 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                     .createAlias(ctx.getPlatformPath(Platform.EXPEDITIONS), ctx.getExpeditions())
                     .setProjection(Projections.projectionList()
                             .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.NAME)))
                             .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.groupProperty(ctx.getDevicePath(Device.NAME)))
                             .add(Projections.groupProperty(ctx.getSensorPath(Sensor.CODE)))
+                            .add(Projections.groupProperty(ctx.getSensorPath(Sensor.NAME)))
                             .add(Projections.groupProperty(ctx.getExpeditionsPath(Expedition.NAME)))
                             .add(Projections.min(Data.TIME))
                             .add(Projections.max(Data.TIME))
@@ -146,8 +153,11 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                     .createAlias(ctx.getDevicePath(Device.PLATFORM), ctx.getPlatform())
                     .setProjection(Projections.projectionList()
                             .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
+                            .add(Projections.groupProperty(ctx.getPlatformPath(Platform.NAME)))
                             .add(Projections.groupProperty(ctx.getDevicePath(Device.CODE)))
+                            .add(Projections.groupProperty(ctx.getDevicePath(Device.NAME)))
                             .add(Projections.groupProperty(ctx.getSensorPath(Sensor.CODE)))
+                            .add(Projections.groupProperty(ctx.getSensorPath(Sensor.NAME)))
                             .add(Projections.groupProperty(ctx.getPlatformPath(Platform.CODE)))
                             .add(Projections.min(Data.TIME))
                             .add(Projections.max(Data.TIME))
@@ -195,24 +205,32 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
     /**
      * Create a data availability from the supplied values.
      *
-     * @param platform the platform code
-     * @param device   the device code
-     * @param sensor   the sensor code
-     * @param feature  the feature code
-     * @param begin    the begin time
-     * @param end      the end time
-     * @param count    the count of observations
+     * @param platform     the platform code
+     * @param platformName the platform name
+     * @param device       the device code
+     * @param deviceName   the device name
+     * @param sensor       the sensor code
+     * @param sensorName   the sensor name
+     * @param feature      the feature code
+     * @param featureName  the feature name
+     * @param begin        the begin time
+     * @param end          the end time
+     * @param count        the count of observations
      *
      * @return the data availability
      */
-    private DataAvailability createDataAvailability(String platform, String device, String sensor,
-                                                    String feature, Date begin, Date end, long count) {
+    private DataAvailability createDataAvailability(String platform, String platformName,
+                                                    String device, String deviceName,
+                                                    String sensor, String sensorName,
+                                                    String feature, String featureName,
+                                                    Date begin, Date end, long count) {
         TimePeriod time = new TimePeriod(begin, end);
         String procedure = String.format("%s:%s", platform, device);
-        DataAvailability da = new DataAvailability(new ReferenceType(procedure),
-                                                   new ReferenceType(sensor),
-                                                   new ReferenceType(feature),
-                                                   new ReferenceType(procedure),
+        String procedureName = String.format("%s - %s", platformName, deviceName);
+        DataAvailability da = new DataAvailability(new ReferenceType(procedure, procedureName),
+                                                   new ReferenceType(sensor, sensorName),
+                                                   new ReferenceType(feature, featureName),
+                                                   new ReferenceType(procedure, procedureName),
                                                    time,
                                                    count);
 
