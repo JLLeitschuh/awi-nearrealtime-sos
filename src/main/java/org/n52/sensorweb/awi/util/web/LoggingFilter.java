@@ -84,6 +84,7 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
     public void filter(ClientRequestContext request) throws IOException {
         long currentId = this.id.incrementAndGet();
         if (!LOG.isDebugEnabled()) {
+            LOG.info("{} {}", request.getMethod(), request.getUri());
             return;
         }
         request.setProperty(LOGGING_ID_PROPERTY, currentId);
