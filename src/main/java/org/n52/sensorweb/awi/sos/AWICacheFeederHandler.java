@@ -188,7 +188,7 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                                                        .singleton(FEATURE_ROLE))));
 
         procedure.getOutputs().forEach(output -> {
-            String observableProperty = output.getName();
+            String observableProperty = output.getCode();
             // output <-> procedure
             cache.addObservablePropertyForProcedure(procedureId, observableProperty);
             cache.addProcedureForObservableProperty(observableProperty, procedureId);
