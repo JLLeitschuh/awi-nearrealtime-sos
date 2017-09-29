@@ -326,7 +326,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
 
         if (platform.isMobile()) {
             observation.addParameter(new NamedValue<>(
-                    new ReferenceType(Sos2Constants.HREF_PARAMETER_SPATIAL_FILTERING_PROFILE),
+                    new ReferenceType(OmConstants.PARAM_NAME_SAMPLING_GEOMETRY),
                     new GeometryValue(data.getGeometry())));
         }
 
