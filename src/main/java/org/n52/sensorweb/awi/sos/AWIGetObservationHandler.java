@@ -36,6 +36,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
@@ -191,6 +192,12 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         if (!filter.getFeatures().isEmpty()) {
             criteria.add(getFeatureCriterion(session, filter.getFeatures(), ctx));
         }
+
+        criteria.addOrder(Order.asc(ctx.getPlatformPath(Platform.CODE)));
+        criteria.addOrder(Order.asc(ctx.getDevicePath(Device.CODE)));
+        criteria.addOrder(Order.asc(ctx.getSensorPath(Sensor.CODE)));
+        criteria.addOrder(Order.asc(Data.TIME));
+
         ScrollableResults results = criteria.setReadOnly(true).scroll(ScrollMode.FORWARD_ONLY);
         return new ScrollableObservationStream(results, session, r -> createObservation((Data) r.get()[0]));
     }
