@@ -260,4 +260,9 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                                 .map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
                 .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
     }
+
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
 }

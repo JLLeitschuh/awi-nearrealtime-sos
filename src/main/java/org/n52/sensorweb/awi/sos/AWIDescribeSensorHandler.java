@@ -126,4 +126,11 @@ public class AWIDescribeSensorHandler extends AbstractDescribeSensorHandler {
         description.setXml(sensorDescription);
         return description;
     }
+
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+
+
 }

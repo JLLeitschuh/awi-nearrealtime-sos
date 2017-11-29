@@ -105,6 +105,11 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     }
 
     @Override
+    public boolean isSupported() {
+        return true;
+    }
+
+    @Override
     public GetObservationResponse getObservation(GetObservationRequest request) throws OwsExceptionReport {
         String service = request.getService();
         String version = request.getVersion();

@@ -317,6 +317,12 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                 .collect(toSet());
     }
 
+
+    @Override
+    public boolean isSupported() {
+        return true;
+    }
+    
     /**
      * Returns a {@code Collector} that accumulates {@linkplain AbstractFeature features} to a
      * {@link FeatureCollection}.

@@ -91,7 +91,7 @@
         <version.spring>4.3.10.RELEASE</version.spring>
         <version.xml.apis>1.4.01</version.xml.apis>
         
-        <jetty.port.http>3000</jetty.port.http>
+        <jetty.port.http>3010</jetty.port.http>
         <jetty.port.stop>3001</jetty.port.stop>
     </properties>
     <dependencies>
