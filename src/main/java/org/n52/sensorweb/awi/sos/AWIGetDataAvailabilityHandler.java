@@ -42,9 +42,9 @@ import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.FormatDescriptor
 import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.ObservationFormatDescriptor;
 import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.ProcedureDescriptionFormatDescriptor;
 import org.n52.sos.cache.SosContentCache;
+import org.n52.sos.ds.AbstractGetDataAvailabilityHandler;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.MoreRestrictions;
-import org.n52.sos.gda.AbstractGetDataAvailabilityHandler;
 
 /**
  * {@code GetDataAvailability} handler for the AWI Nearrealtime database.

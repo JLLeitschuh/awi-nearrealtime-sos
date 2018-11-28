@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.n52.shetland.ogc.gml.AbstractFeature;
-import org.n52.shetland.ogc.om.features.samplingFeatures.SamplingFeature;
+import org.n52.shetland.ogc.om.features.samplingFeatures.AbstractSamplingFeature;
 import org.n52.shetland.ogc.ows.exception.OwsExceptionReport;
 import org.n52.shetland.util.ReferencedEnvelope;
 import org.n52.sos.ds.FeatureQueryHandler;
@@ -57,7 +57,7 @@ public class DummyFeatureQueryHandler implements FeatureQueryHandler {
     }
 
     @Override
-    public String insertFeature(SamplingFeature samplingFeature, Object connection) throws OwsExceptionReport {
+    public String insertFeature(AbstractSamplingFeature samplingFeature, Object connection) throws OwsExceptionReport {
         throw new UnsupportedOperationException();
     }
 
@@ -68,16 +68,6 @@ public class DummyFeatureQueryHandler implements FeatureQueryHandler {
 
     @Override
     public int getStorage3DEPSG() {
-        return -1;
-    }
-
-    @Override
-    public int getDefaultResponseEPSG() {
-        return EPSG_4326;
-    }
-
-    @Override
-    public int getDefaultResponse3DEPSG() {
         return -1;
     }
 

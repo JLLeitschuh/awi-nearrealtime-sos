@@ -21,10 +21,11 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.joda.time.DateTime;
+import org.locationtech.jts.geom.Envelope;
 
 import org.n52.shetland.util.MinMax;
 
-import com.vividsolutions.jts.geom.Envelope;
+
 
 /**
  * A spatio-temporal envelope with an optional identifier.

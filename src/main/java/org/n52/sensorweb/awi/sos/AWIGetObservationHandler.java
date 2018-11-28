@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.n52.janmayen.function.Functions.curryFirst;
 import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toDisjunction;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -322,7 +323,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         observationConstellation.setObservableProperty(observableProperty);
 
         QuantityValue value = new QuantityValue(data.getValue(), sensor.getUnit());
-        SingleObservationValue<Double> observationValue = new SingleObservationValue<>(phenomenonTime, value);
+        SingleObservationValue<BigDecimal> observationValue = new SingleObservationValue<>(phenomenonTime, value);
 
         OmObservation observation = new OmObservation();
         observation.setResultTime(resultTime);

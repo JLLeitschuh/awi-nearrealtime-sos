@@ -34,4 +34,9 @@ public class DummyDataConnectionProvider implements DataConnectionProvider {
     public void returnConnection(Object o) {
     }
 
+    @Override
+    public int getMaxConnections() {
+        return Integer.MAX_VALUE;
+    }
+
 }

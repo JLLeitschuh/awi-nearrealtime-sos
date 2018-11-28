@@ -3,7 +3,7 @@ package org.n52.sensorweb.awi.data.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.vividsolutions.jts.geom.Geometry;
+import org.locationtech.jts.geom.Geometry;
 
 /**
  * Entity for the {@code dataview} table.

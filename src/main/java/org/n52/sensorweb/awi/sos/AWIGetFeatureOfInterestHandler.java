@@ -41,6 +41,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,8 +75,6 @@ import org.n52.sos.cache.SosContentCache;
 import org.n52.sos.ds.AbstractGetFeatureOfInterestHandler;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Handler for {@code GetFeatureOfInterest} requests.
@@ -322,7 +321,7 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
     public boolean isSupported() {
         return true;
     }
-    
+
     /**
      * Returns a {@code Collector} that accumulates {@linkplain AbstractFeature features} to a
      * {@link FeatureCollection}.

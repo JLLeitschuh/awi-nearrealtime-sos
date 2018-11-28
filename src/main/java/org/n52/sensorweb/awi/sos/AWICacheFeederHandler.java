@@ -44,6 +44,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.spatial.criterion.SpatialProjections;
 import org.joda.time.DateTime;
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.Geometry;
 
 import org.n52.janmayen.Optionals;
 import org.n52.janmayen.function.Consumers;
@@ -74,8 +76,6 @@ import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.PropertyPath;
 
 import com.google.common.base.Strings;
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * {@link CacheFeederHandler} for the AWI Nearrealtime database.
