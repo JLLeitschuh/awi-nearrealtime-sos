@@ -225,10 +225,9 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
      * @return the envelope
      */
     private Optional<SpaceTimeEnvelope> getEnvelope(Map<String, SpaceTimeEnvelope> envelopes, String procedureId) {
-        return Optionals.or(
-                () -> Optional.ofNullable(envelopes.get(procedureId)),
-                () -> getChildEnvelope(envelopes, procedureId),
-                () -> getParentEnvelope(envelopes, procedureId));
+        return Optionals.or(() -> Optional.ofNullable(envelopes.get(procedureId)),
+                            () -> getChildEnvelope(envelopes, procedureId),
+                            () -> getParentEnvelope(envelopes, procedureId));
     }
 
     /**
@@ -393,6 +392,20 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
     }
 
     /**
+     * Get the procedures that have a SensorML description in the sensor API as well as data in the database. Including
+     * any parent procedures whose children have data.
+     *
+     * @return the procedures
+     */
+    private Set<NRTProcedure> getProcedures() {
+        Map<String, Set<String>> dataProcedures = getDbProcedures();
+        List<JsonDevice> platforms = this.sensorApiClient.getPlatforms();
+        return getProcedures(platforms.stream(), null)
+                .filter(p -> hasData(p, dataProcedures))
+                .collect(toSet());
+    }
+
+    /**
      * Checks if the procedure {@code p} has data in the database.
      *
      * @param p              the procedure
@@ -413,20 +426,6 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         p.filterChildren(child -> hasData(child, dataProcedures));
 
         return !p.getChildren().isEmpty() || !p.getOutputs().isEmpty();
-    }
-
-    /**
-     * Get the procedures that have a SensorML description in the sensor API as well as data in the database. Including
-     * any parent procedures whose children have data.
-     *
-     * @return the procedures
-     */
-    private Set<NRTProcedure> getProcedures() {
-        Map<String, Set<String>> dataProcedures = getDbProcedures();
-        List<JsonDevice> platforms = this.sensorApiClient.getPlatforms();
-        return getProcedures(platforms.stream(), null)
-                .filter(p -> hasData(p, dataProcedures))
-                .collect(toSet());
     }
 
     /**
@@ -451,10 +450,9 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
                     .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
                     .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true));
             return ((List<Object[]>) c.list())
-                    .stream().collect(groupingBy(
-                            t -> Arrays.stream(t, 0, 2).map(String::valueOf).map(String::toLowerCase)
-                                    .collect(joining(":")),
-                            mapping(t -> (String) t[2], toSet())));
+                    .stream().collect(groupingBy(t -> Arrays.stream(t, 0, 2).map(String::valueOf)
+                    .map(String::toLowerCase)
+                    .collect(joining(":")), mapping(t -> (String) t[2], toSet())));
         });
     }
 

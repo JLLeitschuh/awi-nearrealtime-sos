@@ -125,7 +125,7 @@ public class JsonDevice {
         if (this.id != other.id) {
             return false;
         }
-        if (this.parentId != other.parentId) {
+        if (!Objects.equals(this.parentId, other.parentId)) {
             return false;
         }
         if (!Objects.equals(this.shortName, other.shortName)) {

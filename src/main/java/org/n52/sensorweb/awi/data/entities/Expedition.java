@@ -3,6 +3,8 @@ package org.n52.sensorweb.awi.data.entities;
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Entity for the {@code expedition} table.
  *
@@ -44,6 +46,7 @@ public class Expedition implements Serializable {
      *
      * @return the begin date
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public Date getBegin() {
         return begin;
     }
@@ -53,6 +56,7 @@ public class Expedition implements Serializable {
      *
      * @param begin the begin date
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public void setBegin(Date begin) {
         this.begin = begin;
     }
@@ -62,6 +66,7 @@ public class Expedition implements Serializable {
      *
      * @return the end date
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public Date getEnd() {
         return end;
     }
@@ -71,6 +76,7 @@ public class Expedition implements Serializable {
      *
      * @param end the end date
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public void setEnd(Date end) {
         this.end = end;
     }

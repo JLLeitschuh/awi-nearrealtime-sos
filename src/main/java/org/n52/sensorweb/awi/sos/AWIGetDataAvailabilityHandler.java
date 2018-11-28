@@ -1,7 +1,6 @@
 package org.n52.sensorweb.awi.sos;
 
 import static java.util.stream.Collectors.toList;
-import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toDisjunction;
 
 import java.util.Collections;
 import java.util.Date;
@@ -44,6 +43,7 @@ import org.n52.shetland.ogc.sos.gda.GetDataAvailabilityResponse.ProcedureDescrip
 import org.n52.sos.cache.SosContentCache;
 import org.n52.sos.ds.AbstractGetDataAvailabilityHandler;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
+import org.n52.sos.ds.hibernate.util.HibernateCollectors;
 import org.n52.sos.ds.hibernate.util.MoreRestrictions;
 
 /**
@@ -122,17 +122,29 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                                          : filter.getProperties();
 
         DefaultResultTransfomer<DataAvailability> transformer = tuple -> {
-            return createDataAvailability((String) tuple[0], // platform
-                                          (String) tuple[1], // platformName
-                                          (String) tuple[2], // device
-                                          (String) tuple[3], // device
-                                          (String) tuple[4], // sensor
-                                          (String) tuple[5], // sensorName
-                                          (String) tuple[6], // feature
-                                          (String) tuple[6], // featureName
-                                          (Date) tuple[7], // begin
-                                          (Date) tuple[8], // end
-                                          (long) tuple[9]);  // count
+            return createDataAvailability(
+                    // platform
+                    (String) tuple[0],
+                    // platformName
+                    (String) tuple[1],
+                    // device
+                    (String) tuple[2],
+                    // deviceName
+                    (String) tuple[3],
+                    // sensor
+                    (String) tuple[4],
+                    // sensorName
+                    (String) tuple[5],
+                    // feature
+                    (String) tuple[6],
+                    // featureName
+                    (String) tuple[6],
+                    // begin
+                    (Date) tuple[7],
+                    // end
+                    (Date) tuple[8],
+                    // count
+                    (long) tuple[9]);
         };
         Session session = sessionFactory.openSession();
         try {
@@ -179,14 +191,14 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                             .add(Projections.count(Data.VALUE)))
                     .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.GEOMETRY)));
 
-            Stream.of(mobile, stationary).forEach(criteria
-                    -> criteria.add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
-                            .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
-                            .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
-                            .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
-                            .add(getProcedureCriterion(procedures, ctx))
-                            .add(getProcedureCriterion(offerings, ctx))
-                            .add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), properties)));
+            Stream.of(mobile, stationary)
+                    .forEach(criteria -> criteria.add(Restrictions.isNotNull(ctx.getSensorPath(Sensor.CODE)))
+                                                 .add(Restrictions.isNotNull(ctx.getDevicePath(Device.CODE)))
+                                                 .add(Restrictions.isNotNull(ctx.getPlatformPath(Platform.CODE)))
+                                                 .add(Restrictions.eq(ctx.getPlatformPath(Platform.PUBLISHED), true))
+                                                 .add(getProcedureCriterion(procedures, ctx))
+                                                 .add(getProcedureCriterion(offerings, ctx))
+                                                 .add(Restrictions.in(ctx.getSensorPath(Sensor.CODE), properties)));
 
             stationary.add(Restrictions.in(ctx.getPlatformPath(Platform.CODE), features));
             mobile.add(Restrictions.in(ctx.getExpeditionsPath(Expedition.NAME), features));
@@ -255,10 +267,10 @@ public class AWIGetDataAvailabilityHandler extends AbstractGetDataAvailabilityHa
                 .map(pattern::matcher)
                 .filter(Matcher::matches)
                 .map(x -> MoreRestrictions.and(
-                        Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
-                        Optional.ofNullable(x.group(2))
-                                .map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
-                .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
+                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                Optional.ofNullable(x.group(2))
+                        .map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
+                .filter(Optional::isPresent).map(Optional::get).collect(HibernateCollectors.toDisjunction());
     }
 
     @Override

@@ -16,8 +16,6 @@
 package org.n52.sensorweb.awi.sos;
 
 import static java.util.stream.Collectors.toSet;
-import static org.n52.janmayen.function.Functions.curryFirst;
-import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toDisjunction;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,6 +40,7 @@ import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
 import org.n52.janmayen.exception.CompositeException;
+import org.n52.janmayen.function.Functions;
 import org.n52.janmayen.function.Predicates;
 import org.n52.janmayen.function.ThrowingBiFunction;
 import org.n52.sensorweb.awi.data.FeatureCache;
@@ -77,6 +76,7 @@ import org.n52.shetland.ogc.sos.request.GetObservationRequest;
 import org.n52.shetland.ogc.sos.response.GetObservationResponse;
 import org.n52.shetland.ogc.swe.SweConstants;
 import org.n52.sos.ds.AbstractGetObservationHandler;
+import org.n52.sos.ds.hibernate.util.HibernateCollectors;
 import org.n52.sos.ds.hibernate.util.MoreRestrictions;
 import org.n52.sos.ds.hibernate.util.ScrollableObservationStream;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
@@ -221,10 +221,10 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     private Disjunction getTemporalFiltersCriterion(Set<TemporalFilter> filter, QueryContext ctx) throws
             OwsExceptionReport {
         CompositeException errors = new CompositeException();
-        Disjunction criterion
-                = filter.stream()
-                        .map(curryFirst(errors.wrapFunction(AWIGetObservationHandler::getTemporalFilterCriterion), ctx))
-                        .filter(Optional::isPresent).map(Optional::get).collect(toDisjunction());
+        Disjunction criterion = filter.stream()
+                .map(Functions
+                        .curryFirst(errors.wrapFunction(AWIGetObservationHandler::getTemporalFilterCriterion), ctx))
+                .filter(Optional::isPresent).map(Optional::get).collect(HibernateCollectors.toDisjunction());
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
                 .at(Sos2Constants.GetObservationParams.temporalFilter).causedBy(e));
         return criterion;
@@ -249,7 +249,7 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
                 filters.stream().map(errors.wrapFunction(get.curryFirst(ctx.getPlatformPath(Platform.GEOMETRY)))))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(toDisjunction());
+                .collect(HibernateCollectors.toDisjunction());
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
                 .at(Sos2Constants.GetObservationParams.spatialFilter).causedBy(e));
         return criterion;
@@ -370,11 +370,13 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         return urns.stream()
                 .map(pattern::matcher)
                 .filter(Matcher::matches)
-                .map(x -> MoreRestrictions.and(Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
-                                               Optional.ofNullable(x.group(2)).map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
+                .map(x -> MoreRestrictions.and(
+                Optional.of(Restrictions.eq(ctx.getPlatformPath(Platform.CODE), x.group(1))),
+                Optional.ofNullable(x.group(2))
+                        .map(device -> Restrictions.eq(ctx.getDevicePath(Device.CODE), device))))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(toDisjunction());
+                .collect(HibernateCollectors.toDisjunction());
     }
 
     /**
@@ -388,6 +390,5 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
     private static Criterion getObservedPropertyCriterion(Set<String> filter, QueryContext ctx) {
         return Restrictions.in(ctx.getSensorPath(Sensor.CODE), filter);
     }
-
 
 }

@@ -24,11 +24,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class JsonSensorOutput {
 
-    @JsonProperty(value = "id")
+    @JsonProperty("id")
     private int id;
-    @JsonProperty(value = "name")
+    @JsonProperty("name")
     private String name;
-    @JsonProperty(value = "unitOfMeasurement")
+    @JsonProperty("unitOfMeasurement")
     private JsonUnitOfMeasurement unitOfMeasurement;
 
     public int getId() {
@@ -44,7 +44,7 @@ public class JsonSensorOutput {
     }
 
     public void setName(String name) {
-        this.name = name == null ? name : name.toLowerCase();
+        this.name = name == null ? null : name.toLowerCase();
     }
 
     public String getCode() {

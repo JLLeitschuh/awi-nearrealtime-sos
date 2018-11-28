@@ -5,6 +5,9 @@ import java.util.Date;
 
 import org.locationtech.jts.geom.Geometry;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
+
 /**
  * Entity for the {@code dataview} table.
  *
@@ -28,6 +31,7 @@ public class Data implements Serializable {
      *
      * @return the time
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP")
     public Date getTime() {
         return time;
     }
@@ -37,6 +41,7 @@ public class Data implements Serializable {
      *
      * @param time the time
      */
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public void setTime(Date time) {
         this.time = time;
     }

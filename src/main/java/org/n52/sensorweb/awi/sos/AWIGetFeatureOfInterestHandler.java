@@ -16,7 +16,6 @@
 package org.n52.sensorweb.awi.sos;
 
 import static java.util.stream.Collectors.toSet;
-import static org.n52.sos.ds.hibernate.util.HibernateCollectors.toDisjunction;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -74,6 +73,7 @@ import org.n52.shetland.ogc.swe.RangeValue;
 import org.n52.sos.cache.SosContentCache;
 import org.n52.sos.ds.AbstractGetFeatureOfInterestHandler;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
+import org.n52.sos.ds.hibernate.util.HibernateCollectors;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
 
 /**
@@ -281,7 +281,7 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                         .map(errors.wrapFunction(getSpatialFilter.curryFirst(ctx.getPlatformPath(Platform.GEOMETRY))))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(toDisjunction()));
+                        .collect(HibernateCollectors.toDisjunction()));
 
         DetachedCriteria validPlatforms = DetachedCriteria.forClass(Sensor.class)
                 .createAlias(ctx.getSensorPath(Sensor.DEVICE), ctx.getDevice())
@@ -301,7 +301,7 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
                                 .getPlatformPath(ExpeditionGeometry.GEOMETRY))))
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .collect(toDisjunction()));
+                        .collect(HibernateCollectors.toDisjunction()));
 
         errors.throwIfNotEmpty(e -> new InvalidParameterValueException()
                 .at(Sos2Constants.GetObservationParams.spatialFilter).causedBy(e));

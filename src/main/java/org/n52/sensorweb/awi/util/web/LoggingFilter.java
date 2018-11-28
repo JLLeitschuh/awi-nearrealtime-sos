@@ -57,20 +57,21 @@ import org.n52.janmayen.function.Functions;
  */
 public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, ClientResponseFilter {
 
-    private final static String REQUEST_PREFIX = "> ";
-    private final static String RESPONSE_PREFIX = "< ";
-    private final static String NOTIFICATION_PREFIX = "* ";
-    private final static String ENTITY_LOGGER_PROPERTY = LoggingFilter.class.getName() + ".entityLogger";
-    private final static String LOGGING_ID_PROPERTY = LoggingFilter.class.getName() + ".id";
+    private static final String REQUEST_PREFIX = "> ";
+    private static final String RESPONSE_PREFIX = "< ";
+    private static final String NOTIFICATION_PREFIX = "* ";
+    private static final String ENTITY_LOGGER_PROPERTY = LoggingFilter.class.getName() + ".entityLogger";
+    private static final String LOGGING_ID_PROPERTY = LoggingFilter.class.getName() + ".id";
 
-    private final static Set<MediaType> READABLE_APP_MEDIA_TYPES = new HashSet<>(Arrays.asList(
+    private static final Set<MediaType> READABLE_APP_MEDIA_TYPES = new HashSet<>(Arrays.asList(
             MediaType.APPLICATION_XML_TYPE,
             MediaType.APPLICATION_JSON_TYPE,
             new MediaType("text", MediaType.MEDIA_TYPE_WILDCARD)));
-    private final static Comparator<Entry<String, List<String>>> COMPARATOR
+    private static final Comparator<Entry<String, List<String>>> COMPARATOR
             = Comparator.comparing(Entry::getKey, String::compareToIgnoreCase);
 
     private static final Logger LOG = LoggerFactory.getLogger(LoggingFilter.class);
+    private static final String MORE = "...more...";
     private final AtomicLong id = new AtomicLong(0);
     private final int maxEntitySize = 0;
 
@@ -92,7 +93,7 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
         printRequestLine(builder, "Sending client request", currentId, request.getMethod(), request.getUri());
         printPrefixedHeaders(builder, currentId, REQUEST_PREFIX, request.getStringHeaders());
         if (request.hasEntity() && isReadable(request.getMediaType())) {
-            OutputStream stream = new LoggingStream(builder, request.getEntityStream());
+            OutputStream stream = new LoggingStream(maxEntitySize, builder, request.getEntityStream());
             request.setEntityStream(stream);
             request.setProperty(ENTITY_LOGGER_PROPERTY, stream);
         } else {
@@ -144,21 +145,21 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
     }
 
     private void printRequestLine(StringBuilder builder, String note, long id, String method, URI uri) {
-        appendNotificationPrefix(builder, id).append(note).append(" on thread ")
-                .append(Thread.currentThread().getName()).append('\n');
-        appendRequestPrefix(builder, id).append(method).append(" ").append(uri.toASCIIString()).append('\n');
+        appendThreadPrefix(builder, id, note);
+        appendRequestPrefix(builder, id);
+        builder.append(method).append(" ").append(uri.toASCIIString()).append('\n');
     }
 
     private void printResponseLine(StringBuilder builder, String note, long id, int status) {
-        appendNotificationPrefix(builder, id).append(note).append(" on thread ")
-                .append(Thread.currentThread().getName()).append('\n');
-        appendResponsePrefix(builder, id).append(Integer.toString(status)).append('\n');
+        appendThreadPrefix(builder, id, note);
+        appendResponsePrefix(builder, id);
+        builder.append(Integer.toString(status)).append('\n');
     }
 
     private void printPrefixedHeaders(StringBuilder builder, long id, String prefix,
                                       MultivaluedMap<String, String> headers) {
-        headers.entrySet().stream().sorted(COMPARATOR).forEach(entry
-                -> printPrefixedHeader(builder, id, prefix, entry.getKey(), entry.getValue()));
+        headers.entrySet().stream().sorted(COMPARATOR)
+                .forEach(entry -> printPrefixedHeader(builder, id, prefix, entry.getKey(), entry.getValue()));
     }
 
     private InputStream logInboundEntity(StringBuilder builder, InputStream stream, Charset charset)
@@ -171,7 +172,7 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
         int entitySize = stream.read(entity);
         builder.append(new String(entity, 0, Math.min(entitySize, maxEntitySize), charset));
         if (entitySize > maxEntitySize) {
-            builder.append("...more...");
+            builder.append(MORE);
         }
         builder.append('\n');
         stream.reset();
@@ -201,10 +202,15 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
         b.append('\n');
     }
 
+    private StringBuilder appendThreadPrefix(StringBuilder builder, long id1, String note) {
+        return appendNotificationPrefix(builder, id1).append(note).append(" on thread ")
+                .append(Thread.currentThread().getName()).append('\n');
+    }
+
     private static Charset getCharset(MediaType mt) {
         return Optional.ofNullable(mt)
                 .map(MediaType::getParameters)
-                .map(Functions.currySecond(Map<String,String>::get, MediaType.CHARSET_PARAMETER))
+                .map(Functions.currySecond(Map<String, String>::get, MediaType.CHARSET_PARAMETER))
                 .map(Charset::forName)
                 .orElse(StandardCharsets.UTF_8);
     }
@@ -213,13 +219,15 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
         return mediaType != null && READABLE_APP_MEDIA_TYPES.stream().anyMatch(mt -> mt.isCompatible(mediaType));
     }
 
-    private class LoggingStream extends FilterOutputStream {
+    private static class LoggingStream extends FilterOutputStream {
         private final StringBuilder b;
+        private final int maxEntitySize;
         private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        LoggingStream(StringBuilder b, OutputStream inner) {
+        LoggingStream(int maxEntitySize, StringBuilder b, OutputStream inner) {
             super(inner);
             this.b = b;
+            this.maxEntitySize = maxEntitySize;
         }
 
         StringBuilder getStringBuilder(Charset charset) {
@@ -227,7 +235,7 @@ public class LoggingFilter implements WriterInterceptor, ClientRequestFilter, Cl
             byte[] entity = baos.toByteArray();
             b.append(new String(entity, 0, Math.min(entity.length, maxEntitySize), charset));
             if (entity.length > maxEntitySize) {
-                b.append("...more...");
+                b.append(MORE);
             }
             b.append('\n');
             return b;

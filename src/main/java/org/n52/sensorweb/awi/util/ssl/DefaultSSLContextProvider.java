@@ -101,8 +101,9 @@ public class DefaultSSLContextProvider implements Provider<SSLContext> {
                     Optional<String> provider = getTrustManagerFactoryProvider(props);
                     try {
                         TrustManagerFactory factory = provider.isPresent()
-                                ? TrustManagerFactory.getInstance(algorithm, provider.get())
-                                : TrustManagerFactory.getInstance(algorithm);
+                                                              ? TrustManagerFactory.getInstance(algorithm, provider
+                                                                                                .get())
+                                                              : TrustManagerFactory.getInstance(algorithm);
                         factory.init(store);
                         return Optional.of(factory);
                     } catch (GeneralSecurityException e) {
@@ -124,18 +125,18 @@ public class DefaultSSLContextProvider implements Provider<SSLContext> {
                            getKeyStoreFile(props),
                            getKeyStorePass(props))
                 .flatMap(store -> getKeyStorePass(props).flatMap(pass -> {
-            Optional<String> provider = getKeyManagerFactoryProvider(props);
-            String algorithm = getKeyManagerFactoryAlgorithm(props);
-            try {
-                KeyManagerFactory factory = provider.isPresent()
-                        ? KeyManagerFactory.getInstance(algorithm, provider.get())
-                        : KeyManagerFactory.getInstance(algorithm);
-                factory.init(store, pass);
-                return Optional.of(factory);
-            } catch (GeneralSecurityException e) {
-                throw new IllegalStateException(e);
-            }
-        }));
+                    Optional<String> provider = getKeyManagerFactoryProvider(props);
+                    String algorithm = getKeyManagerFactoryAlgorithm(props);
+                    try {
+                        KeyManagerFactory factory = provider.isPresent()
+                                                            ? KeyManagerFactory.getInstance(algorithm, provider.get())
+                                                            : KeyManagerFactory.getInstance(algorithm);
+                        factory.init(store, pass);
+                        return Optional.of(factory);
+                    } catch (GeneralSecurityException e) {
+                        throw new IllegalStateException(e);
+                    }
+                }));
     }
 
     /**

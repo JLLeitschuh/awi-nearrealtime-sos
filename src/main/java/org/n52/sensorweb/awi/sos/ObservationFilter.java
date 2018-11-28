@@ -1,10 +1,9 @@
 package org.n52.sensorweb.awi.sos;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -15,12 +14,13 @@ import org.n52.janmayen.function.Predicates;
 import org.n52.shetland.ogc.filter.SpatialFilter;
 import org.n52.shetland.ogc.filter.TemporalFilter;
 
+
 /**
  * Aggregate of various filters.
  *
  * @author Christian Autermann
  */
-public class ObservationFilter {
+public final class ObservationFilter {
 
     private final Set<String> procedures;
     private final Set<String> features;
@@ -42,12 +42,12 @@ public class ObservationFilter {
     private ObservationFilter(Set<String> procedures, Set<String> features, Set<String> offerings,
                               Set<String> properties, Set<TemporalFilter> temporalFilters,
                               Set<SpatialFilter> spatialFilters) {
-        this.procedures = requireNonNull(procedures);
-        this.features = requireNonNull(features);
-        this.offerings = requireNonNull(offerings);
-        this.properties = requireNonNull(properties);
-        this.temporalFilters = requireNonNull(temporalFilters);
-        this.spatialFilters = requireNonNull(spatialFilters);
+        this.procedures = Objects.requireNonNull(procedures);
+        this.features = Objects.requireNonNull(features);
+        this.offerings = Objects.requireNonNull(offerings);
+        this.properties = Objects.requireNonNull(properties);
+        this.temporalFilters = Objects.requireNonNull(temporalFilters);
+        this.spatialFilters = Objects.requireNonNull(spatialFilters);
     }
 
     /**
@@ -127,7 +127,7 @@ public class ObservationFilter {
     /**
      * Builder for {@code ObservationFilter}.
      */
-    public static class Builder {
+    public static final class Builder {
         private Set<String> procedures = Collections.emptySet();
         private Set<String> features = Collections.emptySet();
         private Set<String> offerings = Collections.emptySet();

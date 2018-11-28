@@ -99,6 +99,11 @@ public class SensorAPIClientImpl implements SensorAPIClient {
     }
 
     @Override
+    public Optional<String> getSensorML(String urn) {
+        return getDevice(urn).flatMap(this::getSensorML);
+    }
+
+    @Override
     public List<JsonDevice> getPlatforms() {
         return this.api.platforms().all();
     }
@@ -143,10 +148,4 @@ public class SensorAPIClientImpl implements SensorAPIClient {
     public void close() {
         this.client.close();
     }
-
-    @Override
-    public Optional<String> getSensorML(String urn) {
-        return getDevice(urn).flatMap(this::getSensorML);
-    }
-
 }

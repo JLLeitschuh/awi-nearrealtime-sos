@@ -64,7 +64,7 @@ public class Device implements Serializable {
     /**
      * Set the platform of this device.
      *
-     * @param platform
+     * @param platform the platform
      */
     public void setPlatform(Platform platform) {
         this.platform = platform;
