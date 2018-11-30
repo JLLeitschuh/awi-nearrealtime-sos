@@ -73,7 +73,7 @@
         <version.postgres>42.2.5</version.postgres>
         <version.postgis>2.3.0</version.postgis>
         
-        <version.arctic-sea>5.1.0-SNAPSHOT</version.arctic-sea>
+        <version.arctic-sea>5.1.0</version.arctic-sea>
         <version.sos>5.0.2-SNAPSHOT</version.sos>
         
         <version.jackson>2.9.7</version.jackson>
@@ -82,7 +82,7 @@
         <version.javax.servlet>3.1.0</version.javax.servlet>
         <version.javax.ws.rs>2.0.1</version.javax.ws.rs>
         <version.jboss.logging>3.1.4.GA</version.jboss.logging>
-        <version.joda>2.10</version.joda>
+        <version.joda>2.10.1</version.joda>
         <version.jts>1.16.0</version.jts>
         <version.logback>1.2.3</version.logback>
         <version.resteasy>3.0.18.Final</version.resteasy>
