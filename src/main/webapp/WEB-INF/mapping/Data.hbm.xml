@@ -7,7 +7,7 @@
             <key-property name="value" type="double" column="mean" />
             <key-many-to-one name="sensor" class="Sensor" column="sensor_id" />
         </composite-id>
-        <property name="geometry" type="org.hibernate.spatial.GeometryType">
+        <property name="geometry" type="jts_geometry">
             <formula>ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)</formula>
         </property>
     </class>

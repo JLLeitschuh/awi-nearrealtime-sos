@@ -3,7 +3,7 @@ package org.n52.sensorweb.awi.data.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.locationtech.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 

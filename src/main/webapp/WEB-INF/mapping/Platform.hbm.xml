@@ -7,7 +7,7 @@
         <property name="code" type="string">
             <formula>(type || ':' || code)</formula>
         </property>
-        <property name="geometry" type="org.hibernate.spatial.GeometryType">
+        <property name="geometry" type="jts_geometry">
             <formula>ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)</formula>
         </property>
         <property name="published" type="boolean" column="public" />

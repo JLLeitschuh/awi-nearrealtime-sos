@@ -18,7 +18,7 @@
     <bean class="org.n52.iceland.config.spring.ConfiguringBeanPostProcessor" />
     <bean class="org.n52.iceland.util.http.HttpUtils"/>
 
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="mappingDirectoryLocations" value="/WEB-INF/mapping" />
         <property name="hibernateProperties">
             <props>
@@ -26,7 +26,7 @@
                 <prop key="hibernate.connection.url">jdbc:postgresql://${db.host}:${db.port}/${db.name}</prop>
                 <prop key="hibernate.connection.username">${db.user}</prop>
                 <prop key="hibernate.connection.password">${db.pass}</prop>
-                <prop key="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisPG95Dialect</prop>
                 <prop key="hibernate.c3p0.min_size">5</prop>
                 <prop key="hibernate.c3p0.max_size">20</prop>
                 <prop key="hibernate.c3p0.timeout">300</prop>

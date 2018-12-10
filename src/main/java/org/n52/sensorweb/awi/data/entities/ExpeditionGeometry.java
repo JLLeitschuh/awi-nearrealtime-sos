@@ -1,6 +1,6 @@
 package org.n52.sensorweb.awi.data.entities;
 
-import org.locationtech.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Entity for the {@code expedtion} table that also includes the geometry.

@@ -8,7 +8,7 @@
         </property>
         <property name="begin" type="date" column="begin_date" />
         <property name="end" type="date" column="end_date" />
-        <property name="geometry" type="org.hibernate.spatial.GeometryType" column="geom" />
+        <property name="geometry" type="jts_geometry" column="geom" />
     </class>
 </hibernate-mapping>
 

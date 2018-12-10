@@ -44,8 +44,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.spatial.criterion.SpatialProjections;
 import org.joda.time.DateTime;
-import org.locationtech.jts.geom.Envelope;
-import org.locationtech.jts.geom.Geometry;
 
 import org.n52.janmayen.Optionals;
 import org.n52.janmayen.function.Consumers;
@@ -74,8 +72,11 @@ import org.n52.sos.ds.CacheFeederHandler;
 import org.n52.sos.ds.hibernate.util.AbstractSessionDao;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.PropertyPath;
+import org.n52.sos.util.JTSConverter;
 
 import com.google.common.base.Strings;
+import com.vividsolutions.jts.geom.Envelope;
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * {@link CacheFeederHandler} for the AWI Nearrealtime database.
@@ -305,7 +306,7 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
             String id = Arrays.stream(t, 0, 2).map(String::valueOf).collect(joining(":"));
             MinMax<DateTime> time = new MinMax<>(new DateTime((Date) t[2]), new DateTime((Date) t[3]));
             Envelope geom = ((Geometry) t[4]).getEnvelopeInternal();
-            return new SpaceTimeEnvelope(id, time, geom);
+            return new SpaceTimeEnvelope(id, time, JTSConverter.convert(geom));
         };
 
         return query(s -> {

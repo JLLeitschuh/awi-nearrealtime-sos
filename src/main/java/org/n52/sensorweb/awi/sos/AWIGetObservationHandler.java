@@ -82,6 +82,7 @@ import org.n52.sos.ds.hibernate.util.ScrollableObservationStream;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
 import org.n52.sos.ds.hibernate.util.TemporalRestrictions;
 import org.n52.sos.exception.ows.concrete.UnsupportedValueReferenceException;
+import org.n52.sos.util.JTSConverter;
 
 /**
  * {@code GetObservation} handler for the AWI Nearrealtime database.
@@ -330,10 +331,11 @@ public class AWIGetObservationHandler extends AbstractGetObservationHandler {
         observation.setObservationConstellation(observationConstellation);
         observation.setValue(observationValue);
 
+
         if (platform.isMobile()) {
             observation.addParameter(new NamedValue<>(
                     new ReferenceType(OmConstants.PARAM_NAME_SAMPLING_GEOMETRY),
-                    new GeometryValue(data.getGeometry())));
+                    new GeometryValue(JTSConverter.convert(data.getGeometry()))));
         }
 
         return observation;
