@@ -14,10 +14,6 @@
 
     <ctx:property-placeholder location="/WEB-INF/hibernate.properties" />
 
-    <bean class="org.n52.iceland.config.spring.LifecycleBeanPostProcessor" />
-    <bean class="org.n52.iceland.config.spring.ConfiguringBeanPostProcessor" />
-    <bean class="org.n52.iceland.util.http.HttpUtils"/>
-
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="mappingDirectoryLocations" value="/WEB-INF/mapping" />
         <property name="hibernateProperties">
@@ -42,8 +38,6 @@
         </property>
     </bean>
 
-    <bean id="exceptionLogger" class="org.n52.iceland.service.ExceptionLogger"/>
-
     <bean id="featureCache" class="org.n52.sensorweb.awi.data.FeatureCacheImpl">
         <constructor-arg ref="sessionFactory" />
         <constructor-arg name="updateInterval" value="120" />
@@ -66,19 +60,19 @@
     <bean class="org.n52.sensorweb.awi.sos.DummyFeatureQueryHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.DummyDataConnectionProvider"/>
 
-    <!-- import SOS configurations -->
+    <!-- import SOS configurations: common context -->
     <import resource="classpath*:common-context.xml" />
-    <import resource="classpath*:configured-context.xml" />
     <import resource="classpath*:contexts/common.xml" />
     <import resource="classpath*:contexts/common/*.xml" />
+
+    <!-- import SOS configurations: configured context -->
+    <import resource="classpath*:configured-context.xml" />
     <import resource="classpath*:contexts/configured.xml" />
     <import resource="classpath*:contexts/configured/*.xml" />
-    <import resource="svalbard.xml" />
+
+    <!-- import svalbard configuration -->
+    <import resource="classpath*:svalbard-*-context.xml" />
 
     <mvc:default-servlet-handler />
     <mvc:annotation-driven />
-
-    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
-    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-
 </beans>
