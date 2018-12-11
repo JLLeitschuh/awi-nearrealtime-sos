@@ -153,10 +153,13 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
         Set<String> featureIds = getFeaturesOfInterest(procedure);
 
         cache.addProcedure(procedureId);
+        cache.addPublishedProcedure(procedureId);
+
         cache.addTypeInstanceProcedure(TypeInstance.INSTANCE, procedureId);
 
         // offering
         cache.addOffering(offeringId);
+        cache.addPublishedOffering(offeringId);
 
         // we only have measurements
         cache.addObservationTypesForOffering(offeringId, OBSERVATION_TYPE);
@@ -179,6 +182,7 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
 
         // feature of interest
         cache.addFeaturesOfInterest(featureIds);
+        cache.addPublishedFeaturesOfInterest(featureIds);
 
         // feature <-> offering
         featureIds.stream()
@@ -196,6 +200,8 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
             // output <-> offering
             cache.addOfferingForObservableProperty(observableProperty, offeringId);
             cache.addObservablePropertyForOffering(offeringId, observableProperty);
+
+            cache.addPublishedObservableProperty(observableProperty);
         });
 
         getEnvelope(envelopes, procedureId).ifPresent(e -> {
