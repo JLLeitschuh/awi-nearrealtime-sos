@@ -54,7 +54,7 @@
     <bean class="org.n52.sensorweb.awi.sos.AWIGetFeatureOfInterestHandler"/>
     <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler" />
     <bean class="org.n52.sensorweb.awi.sos.AWIGetDataAvailabilityHandler" />
-
+    <bean class="org.n52.sos.ds.CacheBasedSosGetCapabilitesHandler"/>
 
     <!-- dummy stuff -->
     <bean class="org.n52.sensorweb.awi.sos.DummyFeatureQueryHandler"/>

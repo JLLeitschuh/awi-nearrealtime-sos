@@ -214,8 +214,10 @@ public class AWICacheFeederHandler extends AbstractSessionDao implements CacheFe
             // result time <-> offering
             cache.setMinResultTimeForOffering(offeringId, e.getTime().getMinimum());
             cache.setMaxResultTimeForOffering(offeringId, e.getTime().getMaximum());
+            ReferencedEnvelope envelope = new ReferencedEnvelope(e.getSpace(), EPSG_4326);
             // envelope <-> offering
-            cache.setEnvelopeForOffering(offeringId, new ReferencedEnvelope(e.getSpace(), EPSG_4326));
+            cache.setEnvelopeForOffering(offeringId, envelope);
+            cache.setSpatialFilteringProfileEnvelopeForOffering(offeringId, envelope);
         });
 
         // add the child procedures
