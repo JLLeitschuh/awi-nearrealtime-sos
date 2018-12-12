@@ -40,7 +40,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +74,9 @@ import org.n52.sos.ds.AbstractGetFeatureOfInterestHandler;
 import org.n52.sos.ds.hibernate.util.DefaultResultTransfomer;
 import org.n52.sos.ds.hibernate.util.HibernateCollectors;
 import org.n52.sos.ds.hibernate.util.SpatialRestrictions;
+import org.n52.sos.util.JTSConverter;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 /**
  * Handler for {@code GetFeatureOfInterest} requests.
@@ -179,7 +181,7 @@ public class AWIGetFeatureOfInterestHandler extends AbstractGetFeatureOfInterest
      */
     private SamplingFeature createSamplingFeature(String identifier, Geometry geometry) {
         SamplingFeature feature = new SamplingFeature(new CodeWithAuthority(identifier));
-        feature.setGeometry(geometry);
+        feature.setGeometry(JTSConverter.convert(geometry));
         return feature;
     }
 
