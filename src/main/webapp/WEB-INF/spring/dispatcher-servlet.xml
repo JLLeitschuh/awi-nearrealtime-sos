@@ -55,7 +55,7 @@
     <bean class="org.n52.sensorweb.awi.sos.AWIGetObservationHandler" />
     <bean class="org.n52.sensorweb.awi.sos.AWIGetDataAvailabilityHandler" />
     <bean class="org.n52.sos.ds.CacheBasedSosGetCapabilitesHandler"/>
-    
+
     <!-- missing from coding-kvp -->
     <bean class="org.n52.sos.decode.kvp.v2.GetDataAvailabilityKvpDecoder"/>
 
