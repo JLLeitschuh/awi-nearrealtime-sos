@@ -9,7 +9,7 @@
 
     <groupId>org.n52.awi</groupId>
     <artifactId>nrt-sos</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <name>52°North AWI NRT SOS</name>
@@ -65,7 +65,7 @@
         <url>https://github.com/52North/awi-nearrealtime-sos</url>
         <connection>scm:git:https://github.com/52North/awi-nearrealtime-sos.git</connection>
         <developerConnection>scm:git:https://github.com/52North/awi-nearrealtime-sos.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.0.0</tag>
     </scm>
 
     <issueManagement>
