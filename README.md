@@ -1,6 +1,11 @@
 # AWI Nearrealtime SOS
 
-Custom backend of the [52°North SOS](https://github.com/52North/SOS) for the AWI NearRealTime database.
+Custom backend of the [52°North SOS](https://github.com/52North/SOS) for the AWI NearRealTime database with support for the following operations:
+* `GetCapabilities`
+* `DescribeSensor`
+* `GetFeatureOfInterest`
+* `GetObservation`
+* `GetDataAvailability`
 
 ## Configuration
 
