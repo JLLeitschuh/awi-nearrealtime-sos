@@ -83,7 +83,7 @@
     </licenses>
 
     <properties>
-        <version.c3p0>0.9.5.2</version.c3p0>
+        <version.c3p0>0.9.5.4</version.c3p0>
         <version.commons.io>2.6</version.commons.io>
         <version.corsFilter>2.5</version.corsFilter>
         <version.guava>27.0-jre</version.guava>
