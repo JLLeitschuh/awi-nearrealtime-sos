@@ -99,7 +99,7 @@
         <version.javax.activation>1.1.1</version.javax.activation>
         <version.javax.inject>1</version.javax.inject>
         <version.javax.servlet>3.1.0</version.javax.servlet>
-        <version.javax.ws.rs>2.0.1</version.javax.ws.rs>
+        <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
         <version.jboss.logging>3.3.0.Final</version.jboss.logging>
         <version.joda>2.10.1</version.joda>
         <version.jts.locationtech>1.16.0</version.jts.locationtech>
