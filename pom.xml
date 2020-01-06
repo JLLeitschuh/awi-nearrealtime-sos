@@ -95,7 +95,7 @@
         <version.arctic-sea>5.1.0</version.arctic-sea>
         <version.sos>5.0.0-alpha.2</version.sos>
 
-        <version.jackson>2.9.7</version.jackson>
+        <version.jackson>2.10.2</version.jackson>
         <version.javax.activation>1.1.1</version.javax.activation>
         <version.javax.inject>1</version.javax.inject>
         <version.javax.servlet>3.1.0</version.javax.servlet>
