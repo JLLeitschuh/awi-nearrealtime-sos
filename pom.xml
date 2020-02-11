@@ -29,7 +29,7 @@
         <repository>
             <id>52n-snapshots</id>
             <name>52n snapshots</name>
-            <url>http://52north.org/maven/repo/snapshots</url>
+            <url>https://52north.org/maven/repo/snapshots</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
@@ -41,7 +41,7 @@
         <repository>
             <id>52n-releases</id>
             <name>52n plugin releases</name>
-            <url>http://52north.org/maven/repo/releases</url>
+            <url>https://52north.org/maven/repo/releases</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
